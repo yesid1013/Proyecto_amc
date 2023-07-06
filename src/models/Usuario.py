@@ -2,7 +2,7 @@ from utils.db import db
 from sqlalchemy.sql import func
 
 class Usuario(db.Model):
-    __tablename__ = 'usuarios'
+    __tablename__ = 'usuario'
     id_usuario = db.Column(db.String(36), primary_key=True)
     correo = db.Column(db.String(50), unique= True, nullable = False)
     contrasena = db.Column(db.String(50), nullable = True)
@@ -10,6 +10,9 @@ class Usuario(db.Model):
     direccion = db.Column(db.String(100), nullable = True)
     telefono = db.Column(db.String(10), nullable = True)
     perfil = db.Column(db.Integer,nullable = False, default = 1)
+
+    servicio = db.relationship('Servicio', backref='usuario', lazy=True)
+    activo = db.relationship('Activo', backref='usuario', lazy=True)
 
     def __init__(self,id_usuario,correo,contrasena,nombre,direccion,telefono):
         self.id_usuario = id_usuario
