@@ -2,7 +2,7 @@ from utils.db import db
 
 class Usuario(db.Model):
     __tablename__ = 'usuario'
-    id_usuario = db.Column(db.String(36), primary_key=True)
+    id_usuario = db.Column(db.Binary(16), primary_key=True)
     correo = db.Column(db.String(50), unique= True, nullable = False)
     contrasena = db.Column(db.String(50), nullable = True)
     nombre = db.Column(db.String(100), nullable = False)
