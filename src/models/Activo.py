@@ -11,12 +11,12 @@ class Activo(db.Model):
     ubicacion = db.Column(db.String(45),nullable = False)
     tipo_de_equipo = db.Column(db.String(55),nullable = False)
     fabricante = db.Column(db.String(45),nullable = False)
-    modelo = db.Column(db.String(45),nullable = False)
-    num_serie = db.Column(db.String(45),nullable = False)
-    datos_relevantes = db.Column(db.String(45),nullable = False)
-    imagen_equipo = db.Column(db.String(255),nullable = False)
+    modelo = db.Column(db.String(45))
+    num_serie = db.Column(db.String(45))
+    datos_relevantes = db.Column(db.String(45))
+    imagen_equipo = db.Column(db.String(255),nullable = True)
     id_subcliente = db.Column(db.Binary(16), db.ForeignKey('subcliente.id_subcliente'), nullable=False)
-    ficha_tecnica = db.Column(db.String(255),nullable = False)
+    ficha_tecnica = db.Column(db.String(255),nullable = True)
 
     def __init__(self,id_activo,id_qr,id_primario,id_secundario,id_usuario,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen_equipo,id_subcliente,ficha_tecnica):
         self.id_activo = id_activo
