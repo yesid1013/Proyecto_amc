@@ -1,5 +1,4 @@
 from utils.db import db
-from sqlalchemy.sql import func
 
 class Usuario(db.Model):
     __tablename__ = 'usuario'
@@ -9,7 +8,7 @@ class Usuario(db.Model):
     nombre = db.Column(db.String(100), nullable = False)
     direccion = db.Column(db.String(100), nullable = True)
     telefono = db.Column(db.String(10), nullable = True)
-    perfil = db.Column(db.Integer,nullable = False, default = 1)
+    perfil = db.Column(db.SmallInteger,nullable = False, default = 1)
 
     servicio = db.relationship('Servicio', backref='usuario', lazy=True)
     activo = db.relationship('Activo', backref='usuario', lazy=True)
