@@ -2,8 +2,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
-import secrets
-
+from routes.usuario import usuario
 app = Flask(__name__)
 
 CORS(app)
@@ -15,8 +14,9 @@ app.config["JWT_COOKIE_SECURE"] = False
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.config["JWT_SECRET_KEY"] = "9fdb92015ffc4bdabb52c1dc158b12c6"
 
-
 jwt = JWTManager(app)
+
+app.register_blueprint(usuario)
 
 def pagina_no_encontrada(error):
     return jsonify({"message" : "Pagina no encontrada"})
