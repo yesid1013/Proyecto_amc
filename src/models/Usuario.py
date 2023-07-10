@@ -1,4 +1,6 @@
 from utils.db import db
+from models.Servicio import Servicio
+from models.Activo import Activo
 
 class Usuario(db.Model):
     __tablename__ = 'usuario'

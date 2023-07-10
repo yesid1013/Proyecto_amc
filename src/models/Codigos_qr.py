@@ -1,4 +1,5 @@
 from utils.db import db
+from models.Activo import Activo
 
 class Codigos_qr(db.Model):
     __tablename__ = 'codigo'

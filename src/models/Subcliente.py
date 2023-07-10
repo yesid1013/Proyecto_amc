@@ -1,4 +1,5 @@
 from utils.db import db
+from models.Activo import Activo
 
 class Subcliente(db.Model):
     __tablename__ = 'subcliente'
