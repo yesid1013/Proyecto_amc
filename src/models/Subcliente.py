@@ -2,7 +2,7 @@ from utils.db import db
 
 class Subcliente(db.Model):
     __tablename__ = 'subcliente'
-    id_subcliente = db.Column(db.Binary(16), primary_key=True)
+    id_subcliente = db.Column(db.BINARY(16), primary_key=True)
     nombre = db.Column(db.String(100),nullable=False)
     contacto = db.Column(db.String(50))
     direccion = db.Column(db.String(100),nullable=False)

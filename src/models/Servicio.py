@@ -2,10 +2,10 @@ from utils.db import db
 
 class Servicio(db.Model):
     __tablename__ = 'servicio'
-    id_servicio = db.Column(db.Binary(16), primary_key=True)
-    id_activo = db.Column(db.Binary(16), db.ForeignKey('activo.id_activo'), nullable=False)
+    id_servicio = db.Column(db.BINARY(16), primary_key=True)
+    id_activo = db.Column(db.BINARY(16), db.ForeignKey('activo.id_activo'), nullable=False)
     fecha_ejecucion = db.Column(db.DateTime,nullable = False)
-    id_usuario = db.Column(db.Binary(16), db.ForeignKey('usuario.id_usuario'), nullable=False)
+    id_usuario = db.Column(db.BINARY(16), db.ForeignKey('usuario.id_usuario'), nullable=False)
     id_tipo_servicio = db.Column(db.Integer, db.ForeignKey('tipo_servicio.id_tipo_servicio'), nullable=False)
     descripcion = db.Column(db.String(60), nullable = False)
     observaciones = db.Column(db.String(60))

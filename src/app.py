@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
+from utils.db import db
 from routes.usuario import usuario
 app = Flask(__name__)
 
@@ -15,6 +16,7 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 app.config["JWT_SECRET_KEY"] = "9fdb92015ffc4bdabb52c1dc158b12c6"
 
 jwt = JWTManager(app)
+db.init_app(app)
 
 app.register_blueprint(usuario)
 

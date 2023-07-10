@@ -2,8 +2,8 @@ from utils.db import db
 
 class Novedad(db.Model):
     __tablename__ = 'novedad'
-    id_novedad = db.Column(db.Binary(16), primary_key=True)
-    id_activo = db.Column(db.Binary(16), db.ForeignKey('activo.id_activo'), nullable=False)
+    id_novedad = db.Column(db.BINARY(16), primary_key=True)
+    id_activo = db.Column(db.BINARY(16), db.ForeignKey('activo.id_activo'), nullable=False)
     fecha = db.Column(db.TIMESTAMP)
     nombre_reporta = db.Column(db.String(100),nullable=False)
     nombre_empresa = db.Column(db.String(100),nullable=False)
