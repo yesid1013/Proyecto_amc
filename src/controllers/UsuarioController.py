@@ -1,11 +1,10 @@
 from flask import jsonify, request
 from models.Usuario import *
 import uuid
-
+import binascii
 def crear_usuario():
     try:
-        new_uuid = uuid.uuid4().bytes #Generar una nueva UUID y convertirla a formato binario
-        id_usuario = new_uuid.hex()
+        id_usuario = uuid.uuid4().bytes #Generar una nueva UUID y convertirla a formato binario
         correo = request.json["correo"]
         contrasena = request.json["contrasena"]
         nombre = request.json["nombre"]
@@ -23,6 +22,35 @@ def crear_usuario():
             return jsonify({"message": "El usuario ya se encuentra registrado", "status" : 400}) , 400
     
     except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+def listar_usuarios():
+    try:
+        users = db.session.query(Usuario).all()
+        for user in users:
+            id_hex = binascii.hexlify(user.id_usuario).decode() #Convierto el id binario que me da la base de datos a hexadecimal
+            return jsonify({"id" : id_hex})
+    
+    except Exception as e:
         return jsonify({"Ha ocurrido un error" : str(e)})
+
+def buscar_usuario(id_usuario):
+    try:
+        id_bytes = binascii.unhexlify(id_usuario) # el id hexadecimal que se pasa por la url lo convierto a binario
+        
+        usuario = Usuario.query.get(id_bytes)
+        if not usuario:
+            return jsonify({"message" : "Usuario no encontrado"}) , 404
+        else:
+            return jsonify ({"correo" : usuario.correo, "nombre" : usuario.nombre, "direccion" : usuario.direccion, "telefono" : usuario.telefono})
+    
+    except Exception as e: 
+        print (str(e))
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+        
+    
+
+
+        
 
 

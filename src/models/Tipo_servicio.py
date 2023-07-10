@@ -1,4 +1,5 @@
 from utils.db import db
+from models.Servicio import Servicio
 
 class Tipo_servicio (db.Model):
     __tablename__ = 'tipo_servicio'

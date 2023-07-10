@@ -19,4 +19,4 @@ def login():
                 
 
     except Exception as e:
-        return jsonify({"Ha ocurrido un error " : str(e) })
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e) })
