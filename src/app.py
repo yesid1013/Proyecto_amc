@@ -4,6 +4,7 @@ from flask_jwt_extended import JWTManager
 from datetime import timedelta
 from utils.db import db
 from routes.usuario import usuario
+from routes.login import login
 app = Flask(__name__)
 
 CORS(app)
@@ -19,6 +20,7 @@ jwt = JWTManager(app)
 db.init_app(app)
 
 app.register_blueprint(usuario)
+app.register_blueprint(login)
 
 def pagina_no_encontrada(error):
     return jsonify({"message" : "Pagina no encontrada"})
