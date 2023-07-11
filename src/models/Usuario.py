@@ -1,6 +1,7 @@
 from utils.db import db
 from models.Servicio import Servicio
 from models.Activo import Activo
+from werkzeug.security import check_password_hash
 
 class Usuario(db.Model):
     __tablename__ = 'usuario'
@@ -23,6 +24,10 @@ class Usuario(db.Model):
         self.direccion = direccion
         self.telefono = telefono
         self.perfil = 1
+    
+    def verif_contrasena(self,contrasena):
+        return check_password_hash(self.contrasena,contrasena)
+
     
     def getDatos (self):
         return {
