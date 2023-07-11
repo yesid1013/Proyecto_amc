@@ -10,7 +10,7 @@ def login():
 
         usuario = Usuario.query.filter_by(correo=correo,contrasena=contrasena).first()
         if not usuario:
-            return jsonify({"message" : "Correo o contraseña incorrecta" , "status" : 404}) , 404
+            return jsonify({"message" : "Correo o contraseña incorrecta" , "status" : 401}) , 401
         
         else:
             id_hex = binascii.hexlify(usuario.id_usuario).decode()

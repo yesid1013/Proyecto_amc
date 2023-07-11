@@ -6,7 +6,7 @@ class Usuario(db.Model):
     __tablename__ = 'usuario'
     id_usuario = db.Column(db.BINARY(16), primary_key=True)
     correo = db.Column(db.String(50), unique= True, nullable = False)
-    contrasena = db.Column(db.String(50), nullable = True)
+    contrasena = db.Column(db.String(105), nullable = True)
     nombre = db.Column(db.String(100), nullable = False)
     direccion = db.Column(db.String(100), nullable = True)
     telefono = db.Column(db.String(10), nullable = True)
