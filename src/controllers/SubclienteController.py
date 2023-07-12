@@ -6,7 +6,7 @@ import binascii
 def crear_subcliente():
     try:
         id_subcliente = uuid.uuid4().bytes
-        nombre = request.json["subcliente"]
+        nombre = request.json["nombre"]
         contacto = request.json["contacto"]
         direccion = request.json["direccion"]
 
@@ -14,7 +14,7 @@ def crear_subcliente():
         db.session.add(new_subcliente)
         db.session.commit()
 
-        return jsonify({"message": "Usuario creado correctamente", "status" : 200})
+        return jsonify({"message": "Subcliente creado correctamente", "status" : 200})
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})

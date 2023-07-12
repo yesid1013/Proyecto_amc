@@ -5,6 +5,7 @@ from datetime import timedelta
 from utils.db import db
 from routes.usuario import usuario
 from routes.login import login
+from routes.subcliente import subcliente
 app = Flask(__name__)
 
 CORS(app)
@@ -21,6 +22,7 @@ db.init_app(app)
 
 app.register_blueprint(usuario)
 app.register_blueprint(login)
+app.register_blueprint(subcliente)
 
 def pagina_no_encontrada(error):
     return jsonify({"message" : "Pagina no encontrada"})
