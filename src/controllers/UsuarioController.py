@@ -39,7 +39,7 @@ def listar_usuarios():
         return jsonify(lista)
     
     except Exception as e:
-        return jsonify({"Ha ocurrido un error" : str(e)})
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
 
 def buscar_usuario(id_usuario):
     try:

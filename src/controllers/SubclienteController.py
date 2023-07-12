@@ -18,3 +18,18 @@ def crear_subcliente():
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+def listar_subclientes():
+    try:
+
+        lista = []
+        subclientes = db.session.query(Subcliente).all()
+        for subcliente in subclientes:
+            id_hex = binascii.hexlify(subcliente.id_subcliente).decode()
+            datos = {"id_subcliente" : id_hex, "nombre" : subcliente.nombre, "contacto" : subcliente.contacto, "direccion" : subcliente.direccion}
+            lista.append(datos)
+            
+        return jsonify(lista)
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
