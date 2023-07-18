@@ -2,6 +2,7 @@ from utils.db import db
 from models import Novedad,Servicio
 from models.Subcliente import Subcliente
 from models.Codigos_qr import Codigos_qr
+from sqlalchemy.sql import func
 
 class Activo(db.Model):
     __tablename__ = 'activo'
@@ -10,7 +11,7 @@ class Activo(db.Model):
     id_primario = db.Column(db.String(6),nullable = False,unique= True)
     id_secundario = db.Column(db.String(7),nullable = True,unique= True)
     id_usuario = db.Column(db.BINARY(16), db.ForeignKey('usuario.id_usuario'), nullable=False)
-    fecha_registro = db.Column(db.TIMESTAMP)
+    fecha_registro = db.Column(db.TIMESTAMP(timezone=True),nullable=False,server_default=func.now())
     ubicacion = db.Column(db.String(45),nullable = False)
     tipo_de_equipo = db.Column(db.String(55),nullable = False)
     fabricante = db.Column(db.String(45),nullable = False)
