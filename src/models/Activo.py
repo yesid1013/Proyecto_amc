@@ -3,6 +3,7 @@ from models import Novedad,Servicio
 from models.Subcliente import Subcliente
 from models.Codigos_qr import Codigos_qr
 from sqlalchemy.sql import func
+import binascii
 
 class Activo(db.Model):
     __tablename__ = 'activo'
@@ -46,11 +47,11 @@ class Activo(db.Model):
     
     def getDatos(self):
         return {
-            "id_activo" : self.id_activo,
+            "id_activo" : binascii.hexlify(self.id_activo).decode() ,
             "id_qr" : self.id_qr,
             "id_primario" : self.id_primario,
             "id_secundario" : self.id_secundario,
-            "id_usuario" : self.id_usuario,
+            "id_usuario" : binascii.hexlify(self.id_usuario).decode() ,
             "fecha_registro" : self.fecha_registro,
             "ubicacion" : self.ubicacion,
             "tipo_de_equipo" : self.tipo_de_equipo,
@@ -59,7 +60,7 @@ class Activo(db.Model):
             "num_serie" : self.num_serie,
             "datos_relevantes" : self.datos_relevantes,
             "imagen_equipo" : self.imagen_equipo,
-            "id_subcliente" : self.id_subcliente,
+            "id_subcliente" : binascii.hexlify(self.id_subcliente).decode() ,
             "ficha_tecnica" : self.ficha_tecnica
 
         }

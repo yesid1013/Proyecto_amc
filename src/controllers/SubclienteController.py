@@ -25,7 +25,7 @@ def listar_subclientes():
         lista = []
         subclientes = db.session.query(Subcliente).all()
         for subcliente in subclientes:
-            id_hex = binascii.hexlify(subcliente.id_subcliente).decode()
+            id_hex = binascii.hexlify(subcliente.id_subcliente).decode() #Convierto el id binario que me da la base de datos a hexadecimal
             datos = {"id_subcliente" : id_hex, "nombre" : subcliente.nombre, "contacto" : subcliente.contacto, "direccion" : subcliente.direccion}
             lista.append(datos)
             

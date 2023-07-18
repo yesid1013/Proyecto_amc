@@ -11,3 +11,9 @@ activo = Blueprint('activo', __name__)
 def crear_activo():
     current_user_id = get_jwt_identity()
     return ActivoController.crear_activo(current_user_id)
+
+@cross_origin()
+@activo.route('/listar_activos')
+@jwt_required()
+def listar_activos():
+    return ActivoController.listar_activos()

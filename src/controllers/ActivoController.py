@@ -31,5 +31,18 @@ def crear_activo(id_usuario):
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+
+def listar_activos():
+    try:
+        activos = db.session.query(Activo).all()
+        if not activos:
+            return jsonify({"message" : "No se encontraron activos" , "status" : 404}) , 404
+        else:
+            toactivos = [activo.getDatos() for activo in activos]
+            return jsonify(toactivos)
+
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
         
     
