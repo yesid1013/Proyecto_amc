@@ -62,5 +62,18 @@ def listar_activos():
 
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
-        
     
+def activos_de_subcliente(id_subcliente): # Listar los activos de un subcliente
+    try:
+        id_subcliente_bytes = binascii.unhexlify(id_subcliente) #el id hexadecimal que se pasa por la url lo convierto a binario
+        activos = Activo.query.filter_by(id_subcliente=id_subcliente_bytes).all()
+
+        if not activos:
+            return jsonify({"message" : "No se encontraron activos" , "status" : 404}) , 404
+        else:
+            toactivos = [activo.getDatos() for activo in activos]
+            return jsonify(toactivos)
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+

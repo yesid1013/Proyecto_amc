@@ -17,3 +17,9 @@ def crear_activo():
 @jwt_required()
 def listar_activos():
     return ActivoController.listar_activos()
+
+@cross_origin()
+@activo.route('/listar_activos_subcliente/<id_subcliente>')
+@jwt_required()
+def listar_activos_subcliente(id_subcliente):
+    return ActivoController.activos_de_subcliente(id_subcliente)
