@@ -20,6 +20,24 @@ def crear_activo(id_usuario):
         id_subcliente = request.json["id_subcliente"]
         ficha_tecnica = request.json["ficha_tecnica"]
 
+        if id_secundario == "":
+            id_secundario = None
+        
+        if modelo == "":
+            modelo = None
+        
+        if num_serie == "":
+            num_serie = None
+        
+        if datos_relevantes == "":
+            datos_relevantes = None
+        
+        if imagen_equipo == "":
+            imagen_equipo == None
+        
+        if ficha_tecnica == "":
+            ficha_tecnica == None
+
         id_usuario_bytes = binascii.unhexlify(id_usuario) #El id_usuario de hexadecimal a binario
         id_subcliente_bytes = binascii.unhexlify(id_subcliente) #El id_subcliente de hexadecimal a binario
 
