@@ -8,7 +8,7 @@ import binascii
 class Activo(db.Model):
     __tablename__ = 'activo'
     id_activo = db.Column(db.BINARY(16), primary_key=True)
-    id_qr = db.Column(db.Integer, db.ForeignKey('codigos_qr.id_qr'), nullable=False)
+    id_qr = db.Column(db.Integer, db.ForeignKey('codigos_qr.id_qr'), nullable=False,unique= True)
     id_primario = db.Column(db.String(6),nullable = False,unique= True)
     id_secundario = db.Column(db.String(7),nullable = True,unique= True)
     id_usuario = db.Column(db.BINARY(16), db.ForeignKey('usuario.id_usuario'), nullable=False)
