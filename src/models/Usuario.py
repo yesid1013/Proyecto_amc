@@ -1,6 +1,6 @@
 from utils.db import db
-from models.Servicio import Servicio
-from models.Activo import Activo
+from models import Servicio
+from models import Activo
 from werkzeug.security import check_password_hash
 
 class Usuario(db.Model):

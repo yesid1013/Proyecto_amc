@@ -1,5 +1,5 @@
 from utils.db import db
-from models.Servicio import Servicio
+from models import Servicio
 
 class Costo_servicio(db.Model):
     __tablename__ = 'costo_servicio'

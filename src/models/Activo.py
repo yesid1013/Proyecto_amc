@@ -1,8 +1,9 @@
 from utils.db import db
-from models import Novedad,Servicio
-from models.Subcliente import Subcliente
-from models.Codigos_qr import Codigos_qr
-from models.Usuario import Usuario
+from models import Novedad
+from models import Servicio
+from models import Subcliente
+from models import Codigos_qr
+from models import Usuario
 from sqlalchemy.sql import func
 import binascii
 

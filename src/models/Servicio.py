@@ -1,8 +1,8 @@
 from utils.db import db
 from models.Costo_servicio import Costo_servicio
-from models.Activo import Activo
-from models.Usuario import Usuario
-from models.Tipo_servicio import Tipo_servicio
+from models import Activo
+from models import Usuario
+from models import Tipo_servicio
 
 class Servicio(db.Model):
     __tablename__ = 'servicio'

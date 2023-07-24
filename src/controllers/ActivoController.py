@@ -81,4 +81,8 @@ def activos_de_subcliente(id_subcliente): # Listar los activos de un subcliente
         
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+def editar_activo():
+    pass
+
 

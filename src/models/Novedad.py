@@ -1,5 +1,5 @@
 from utils.db import db
-from models.Activo import Activo
+from models import Activo
 
 class Novedad(db.Model):
     __tablename__ = 'novedad'
