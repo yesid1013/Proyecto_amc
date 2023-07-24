@@ -1,5 +1,6 @@
 from utils.db import db
 from models import Activo
+from models import Empresa
 
 class Subcliente(db.Model):
     __tablename__ = 'subcliente'
@@ -13,8 +14,9 @@ class Subcliente(db.Model):
     empresa = db.relationship('Empresa', back_populates="subcliente", uselist=False, single_parent=True)
 
 
-    def __init__ (self,id_subcliente,nombre,contacto,direccion):
+    def __init__ (self,id_subcliente,id_empresa,nombre,contacto,direccion):
         self.id_subcliente = id_subcliente
+        self.id_empresa = id_empresa
         self.nombre = nombre
         self.contacto = contacto
         self.direccion = direccion

@@ -6,11 +6,14 @@ import binascii
 def crear_subcliente():
     try:
         id_subcliente = uuid.uuid4().bytes
+        id_empresa = request.json["id_empresa"]
         nombre = request.json["nombre"]
         contacto = request.json["contacto"]
         direccion = request.json["direccion"]
 
-        new_subcliente = Subcliente(id_subcliente,nombre,contacto,direccion)
+        id_empresa_bytes = binascii.unhexlify(id_empresa) #El id_empresa de hexadecimal a binario
+
+        new_subcliente = Subcliente(id_subcliente,id_empresa_bytes,nombre,contacto,direccion)
         db.session.add(new_subcliente)
         db.session.commit()
 

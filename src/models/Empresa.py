@@ -1,5 +1,6 @@
 from utils.db import db
 import binascii
+from models import Subcliente
 
 class Empresa (db.Model):
     __tablename__ = 'empresa'
