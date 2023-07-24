@@ -7,6 +7,7 @@ from routes.usuario import usuario
 from routes.login import login
 from routes.subcliente import subcliente
 from routes.activo import activo
+from routes.empresa import empresa
 app = Flask(__name__)
 
 CORS(app)
@@ -25,9 +26,10 @@ app.register_blueprint(usuario)
 app.register_blueprint(login)
 app.register_blueprint(subcliente)
 app.register_blueprint(activo)
+app.register_blueprint(empresa)
 
 def pagina_no_encontrada(error):
-    return jsonify({"message" : "Pagina no encontrada"})
+    return jsonify({"message" : "Pagina no encontrada"}), 404
 
 if __name__=="__main__":
     app.register_error_handler(404 , pagina_no_encontrada)
