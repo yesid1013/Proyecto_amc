@@ -4,11 +4,14 @@ from models import Activo
 class Subcliente(db.Model):
     __tablename__ = 'subcliente'
     id_subcliente = db.Column(db.BINARY(16), primary_key=True)
+    id_empresa = db.Column(db.Integer, db.ForeignKey('empresa.id_empresa'),nullable=False)
     nombre = db.Column(db.String(100),nullable=False)
     contacto = db.Column(db.String(50))
     direccion = db.Column(db.String(100),nullable=False)
-
+    
     activo = db.relationship("Activo", back_populates="subcliente",cascade="all, delete-orphan")
+    empresa = db.relationship('Empresa', back_populates="subcliente", uselist=False, single_parent=True)
+
 
     def __init__ (self,id_subcliente,nombre,contacto,direccion):
         self.id_subcliente = id_subcliente
