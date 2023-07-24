@@ -1,4 +1,5 @@
 from utils.db import db
+from models.Activo import Activo
 
 class Novedad(db.Model):
     __tablename__ = 'novedad'
@@ -11,6 +12,9 @@ class Novedad(db.Model):
     descripcion_reporte = db.Column(db.String(100),nullable=False)
     imagenes = db.Column(db.String(255))
     estado = db.Column(db.SmallInteger,nullable = False, default = 1)
+
+    activo = db.relationship('Activo', back_populates="novedad", uselist=False, single_parent=True)
+
 
     def __init__(self,id_novedad,id_activo,nombre_reporta,nombre_empresa,cargo,descripcion_reporte,imagenes):
         self.id_novedad = id_novedad

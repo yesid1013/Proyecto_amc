@@ -13,8 +13,8 @@ class Usuario(db.Model):
     telefono = db.Column(db.String(10), nullable = True)
     perfil = db.Column(db.SmallInteger,nullable = False, default = 1)
 
-    servicio = db.relationship('Servicio', backref='usuario', lazy=True)
-    activo = db.relationship('Activo', backref='usuario', lazy=True)
+    servicio = db.relationship('Servicio', back_populates='usuario',cascade="all, delete-orphan" )
+    activo = db.relationship('Activo', back_populates='usuario', cascade="all,delete-orphan")
 
     def __init__(self,id_usuario,correo,contrasena,nombre,direccion,telefono):
         self.id_usuario = id_usuario

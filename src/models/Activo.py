@@ -2,6 +2,7 @@ from utils.db import db
 from models import Novedad,Servicio
 from models.Subcliente import Subcliente
 from models.Codigos_qr import Codigos_qr
+from models.Usuario import Usuario
 from sqlalchemy.sql import func
 import binascii
 
@@ -26,9 +27,11 @@ class Activo(db.Model):
 
     subcliente = db.relationship('Subcliente', back_populates="activo", uselist=False, single_parent=True)
     codigos_qr = db.relationship('Codigos_qr', back_populates="activo", single_parent=True, cascade="all,delete-orphan")
+    usuario = db.relationship('Usuario', back_populates="activo", uselist=False, single_parent=True)
 
-    #novedad = db.relationship('Novedad', backref='activo', lazy=True)
-    #servicio = db.relationship('Servicio', backref='activo', lazy=True)
+
+    novedad = db.relationship('Novedad', back_populates='activo', cascade="all,delete-orphan")
+    servicio = db.relationship('Servicio', back_populates='activo', cascade="all,delete-orphan")
 
     def __init__(self,id_activo,id_qr,id_primario,id_secundario,id_usuario,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen_equipo,id_subcliente,ficha_tecnica):
         self.id_activo = id_activo

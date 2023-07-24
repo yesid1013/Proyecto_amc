@@ -1,5 +1,8 @@
 from utils.db import db
 from models.Costo_servicio import Costo_servicio
+from models.Activo import Activo
+from models.Usuario import Usuario
+from models.Tipo_servicio import Tipo_servicio
 
 class Servicio(db.Model):
     __tablename__ = 'servicio'
@@ -14,7 +17,11 @@ class Servicio(db.Model):
     informe = db.Column(db.String(255))
     estado = db.Column(db.SmallInteger,nullable = False, default = 1)
 
-    costo_servicio = db.relationship('Costo_servicio', backref='servicio', lazy=True)
+    activo = db.relationship('Activo', back_populates="servicio", uselist=False, single_parent=True)
+    usuario = db.relationship('Usuario', back_populates="servicio", uselist=False, single_parent=True)
+    tipo_servicio = db.relationship('Tipo_servicio', back_populates="servicio", uselist=False, single_parent=True)
+
+    costo_servicio = db.relationship('Costo_servicio', back_populates='servicio',cascade="all,delete-orphan")
 
     def __init__ (self,id_servicio,id_activo,fecha_ejecucion,id_usuario,id_tipo_servicio,descripcion,observaciones,imagenes,informe):
         self.id_servicio = id_servicio
