@@ -17,3 +17,18 @@ def crear_empresa():
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+
+def listar_empresas():
+    try:
+        empresas = db.session.query(Empresa).all()
+
+        if not empresas:
+            return jsonify({"message" : "No se encontraron empresas" , "status" : 404}) , 404
+        
+        else:
+            to_empresas= [empresa.getDatos() for empresa in empresas]
+            return jsonify(to_empresas)
+        
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})

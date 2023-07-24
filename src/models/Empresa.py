@@ -1,4 +1,5 @@
 from utils.db import db
+import binascii
 
 class Empresa (db.Model):
     __tablename__ = 'empresa'
@@ -17,4 +18,8 @@ class Empresa (db.Model):
     
 
     def getDatos (self) :
-        return {"id_empresa" : self.id_empresa, "nombre" : self.nombre, "telefono" : self.telefono, "direccion" : self.direccion}
+        return {
+            "id_empresa" : binascii.hexlify(self.id_empresa).decode(), 
+            "nombre" : self.nombre, 
+            "telefono" : self.telefono, 
+            "direccion" : self.direccion}

@@ -10,3 +10,9 @@ empresa = Blueprint("empresa", __name__)
 @jwt_required()
 def crear_empresa():
     return EmpresaController.crear_empresa()
+
+@cross_origin()
+@empresa.route('/listar_empresas')
+@jwt_required()
+def listar_empresas():
+    return EmpresaController.listar_empresas()
