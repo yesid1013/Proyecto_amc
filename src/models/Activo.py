@@ -22,6 +22,7 @@ class Activo(db.Model):
     imagen_equipo = db.Column(db.String(255),nullable = True)
     id_subcliente = db.Column(db.BINARY(16), db.ForeignKey('subcliente.id_subcliente'), nullable=False)
     ficha_tecnica = db.Column(db.String(255),nullable = True)
+    estado = db.Column(db.SmallInteger,nullable = False, default = 1)
 
     subcliente = db.relationship('Subcliente', back_populates="activo", uselist=False, single_parent=True)
     codigos_qr = db.relationship('Codigos_qr', back_populates="activo", single_parent=True, cascade="all,delete-orphan")
@@ -44,6 +45,7 @@ class Activo(db.Model):
         self.imagen_equipo = imagen_equipo
         self.id_subcliente = id_subcliente
         self.ficha_tecnica = ficha_tecnica
+        self.estado = 1
     
     def getDatos(self):
         return {

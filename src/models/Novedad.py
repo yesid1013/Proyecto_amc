@@ -10,6 +10,7 @@ class Novedad(db.Model):
     cargo = db.Column(db.String(50),nullable=False)
     descripcion_reporte = db.Column(db.String(100),nullable=False)
     imagenes = db.Column(db.String(255))
+    estado = db.Column(db.SmallInteger,nullable = False, default = 1)
 
     def __init__(self,id_novedad,id_activo,nombre_reporta,nombre_empresa,cargo,descripcion_reporte,imagenes):
         self.id_novedad = id_novedad
@@ -19,6 +20,7 @@ class Novedad(db.Model):
         self.cargo = cargo
         self.descripcion_reporte = descripcion_reporte
         self.imagenes = imagenes
+        self.estado = 1
     
     def getDatos (self):
         return {

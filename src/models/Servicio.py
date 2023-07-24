@@ -12,6 +12,7 @@ class Servicio(db.Model):
     observaciones = db.Column(db.String(60))
     imagenes = db.Column(db.String(255))
     informe = db.Column(db.String(255))
+    estado = db.Column(db.SmallInteger,nullable = False, default = 1)
 
     costo_servicio = db.relationship('Costo_servicio', backref='servicio', lazy=True)
 
@@ -25,6 +26,7 @@ class Servicio(db.Model):
         self.observaciones = observaciones
         self.imagenes = imagenes
         self.informe = informe
+        self.estado = 1
 
     def getDatos(self):
         return {

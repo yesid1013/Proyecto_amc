@@ -6,12 +6,14 @@ class Costo_servicio(db.Model):
     id_servicio = db.Column(db.BINARY(16), db.ForeignKey('servicio.id_servicio'), nullable=False)
     costo = db.Column(db.Integer, nullable=False)
     documento_cotizacion = db.Column(db.String(255))
+    estado = db.Column(db.SmallInteger,nullable = False, default = 1)
 
     def __init__(self,id_costo_servicio,id_servicio,costo,documento_cotizacion):
         self.id_costo_servicio = id_costo_servicio
         self.id_servicio = id_servicio
         self.costo = costo
         self.documento_cotizacion = documento_cotizacion
+        self.estado = 1
     
     def getDatos(self):
         return {
