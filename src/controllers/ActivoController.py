@@ -82,7 +82,30 @@ def activos_de_subcliente(id_subcliente): # Listar los activos de un subcliente
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
     
-def editar_activo():
-    pass
+def editar_activo(id_activo):
+    try:
+        id_activo_bytes = binascii.unhexlify(id_activo)
+        activo = Activo.query.get(id_activo_bytes)
+
+        if not activo:
+            return jsonify({"message" : "Activo no encontrado", "status" : 404}) , 404
+        
+        else:
+            activo.id_primario = request.json["id_primario"]
+            activo.id_secundario = request.json["id_secundario"]
+            activo.ubicacion = request.json["ubicacion"]
+            activo.tipo_de_equipo = request.json["tipo_de_equipo"]
+            activo.fabricante = request.json["fabricante"]
+            activo.modelo = request.json["modelo"]
+            activo.num_serie = request.json["num_serie"]
+            activo.datos_relevantes = request.json["datos_relevantes"]
+            #Pendiente de poder actualizar imagen y ficha tecnica
+
+            db.session.commit()
+            return jsonify({"message" : "Activo actualizado exitosamente", "status" : 200}) , 200
+        
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
 
 

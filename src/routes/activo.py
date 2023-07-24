@@ -23,3 +23,9 @@ def listar_activos():
 @jwt_required()
 def listar_activos_subcliente(id_subcliente):
     return ActivoController.activos_de_subcliente(id_subcliente)
+
+@cross_origin()
+@activo.route('/editar_activo/<id_activo>',methods=['PUT'])
+@jwt_required()
+def editar_activo(id_activo):
+    return ActivoController.editar_activo(id_activo)
