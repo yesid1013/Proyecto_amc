@@ -1,11 +1,12 @@
 from utils.db import db
 from models import Activo
+from sqlalchemy.sql import func
 
 class Novedad(db.Model):
     __tablename__ = 'novedad'
     id_novedad = db.Column(db.BINARY(16), primary_key=True)
     id_activo = db.Column(db.BINARY(16), db.ForeignKey('activo.id_activo'), nullable=False)
-    fecha = db.Column(db.TIMESTAMP)
+    fecha = db.Column(db.TIMESTAMP(timezone=True),nullable=False,server_default=func.now())
     nombre_reporta = db.Column(db.String(100),nullable=False)
     nombre_empresa = db.Column(db.String(100),nullable=False)
     cargo = db.Column(db.String(50),nullable=False)
