@@ -21,3 +21,35 @@ def crear_novedad(id_activo):
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+def listar_novedades_de_un_activo(id_activo):
+    try:
+        id_activo_bytes = binascii.unhexlify(id_activo)
+        novedades = db.session.query(Novedad).filter_by(id_activo = id_activo_bytes, estado = 1).all()
+        toNovedades = [novedad.getDatos() for novedad in novedades]
+        return jsonify(toNovedades)
+
+
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+def editar_novedad(id_novedad):
+    try:
+        id_novedad_bytes = binascii.unhexlify(id_novedad) # Convierto el id hexadecimal a binario
+        novedad = Novedad.query.get(id_novedad_bytes)
+
+        if not novedad:
+            return jsonify({"message" : "Novedad no encontrada", "status" : 200})
+        else:
+            novedad.nombre_reporta = request.json["nombre_reporta"]
+            novedad.nombre_empresa = request.json["nombre_empresa"]
+            novedad.cargo = request.json["cargo"]
+            novedad.descripcion_reporte = request.json["descripcion_reporte"]
+            novedad.imagenes = request.json["imagenes"]
+
+            db.session.commit()
+
+            return jsonify({"message" : "Novedad actualizada exitosamente", "status" : 200})
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})

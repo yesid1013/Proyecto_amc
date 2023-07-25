@@ -1,6 +1,7 @@
 from utils.db import db
 from models import Activo
 from sqlalchemy.sql import func
+import binascii
 
 class Novedad(db.Model):
     __tablename__ = 'novedad'
@@ -29,8 +30,8 @@ class Novedad(db.Model):
     
     def getDatos (self):
         return {
-            "id_novedad" : self.id_novedad,
-            "id_activo" : self.id_activo,
+            "id_novedad" : binascii.hexlify(self.id_novedad).decode() ,
+            "id_activo" : binascii.hexlify(self.id_activo).decode(),
             "fecha" : self.fecha,
             "nombre_reporta" : self.nombre_reporta,
             "nombre_empresa" : self.nombre_empresa,
