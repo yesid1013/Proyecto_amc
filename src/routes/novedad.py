@@ -22,3 +22,9 @@ def listar_novedad(id_activo):
 @novedad.route('/editar_novedad/<id_novedad>', methods=['PUT'])
 def editar_novedad(id_novedad):
     return NovedadController.editar_novedad(id_novedad)
+
+@cross_origin()
+@jwt_required()
+@novedad.route('/eliminar_novedad/<id_novedad>', methods=['DELETE'])
+def eliminar_novedad(id_novedad):
+    return NovedadController.eliminar_novedad(id_novedad)

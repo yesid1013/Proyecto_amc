@@ -39,7 +39,7 @@ def editar_novedad(id_novedad):
         novedad = Novedad.query.get(id_novedad_bytes)
 
         if not novedad:
-            return jsonify({"message" : "Novedad no encontrada", "status" : 200})
+            return jsonify({"message" : "Novedad no encontrada", "status" : 404}), 404
         else:
             novedad.nombre_reporta = request.json["nombre_reporta"]
             novedad.nombre_empresa = request.json["nombre_empresa"]
@@ -51,5 +51,20 @@ def editar_novedad(id_novedad):
 
             return jsonify({"message" : "Novedad actualizada exitosamente", "status" : 200})
     
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+def eliminar_novedad(id_novedad):
+    try:
+        id_novedad_bytes = binascii.unhexlify(id_novedad)
+        novedad = Novedad.query.get(id_novedad_bytes)
+
+        if not novedad:
+            return jsonify({"message" : "Novedad no encontrada", "status" : 404}), 404
+        else:
+            novedad.estado = 0
+            db.session.commit()
+            return jsonify({"message" : "Novedad eliminada", "status" : 200})
+        
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
