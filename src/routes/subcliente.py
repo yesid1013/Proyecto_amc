@@ -13,3 +13,8 @@ def crear_subcliente():
 @subcliente.route('/listar_subclientes')
 def listar_subclientes():
     return SubclienteController.listar_subclientes()
+
+@cross_origin()
+@subcliente.route('/subclientes_de_empresa/<id_empresa>')
+def subclientes_de_empresa(id_empresa):
+    return SubclienteController.subclientes_de_empresa(id_empresa)

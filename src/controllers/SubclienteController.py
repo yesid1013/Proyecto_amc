@@ -2,6 +2,7 @@ from flask import jsonify, request
 from models.Subcliente import *
 import uuid
 import binascii
+from models.Empresa import Empresa
 
 def crear_subcliente():
     try:
@@ -32,6 +33,25 @@ def listar_subclientes():
             datos = {"id_subcliente" : id_hex, "nombre" : subcliente.nombre, "contacto" : subcliente.contacto, "direccion" : subcliente.direccion}
             lista.append(datos)
             
+        return jsonify(lista)
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+
+def subclientes_de_empresa(id_empresa): #Listar los subclientes de una empresa
+    try:
+        lista = []
+        id_empresa_bytes = binascii.unhexlify(id_empresa)
+
+        subclientes = db.session.query(Subcliente.id_subcliente,Subcliente.nombre).filter_by(id_empresa=id_empresa_bytes).all()
+
+        for subcliente in subclientes:
+            id_subcliente_hex = binascii.hexlify(subcliente.id_subcliente).decode()
+            datos = {"id_subcliente" : id_subcliente_hex, "nombre" : subcliente.nombre}
+            lista.append(datos)
+        
+
         return jsonify(lista)
     
     except Exception as e:
