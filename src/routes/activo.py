@@ -29,3 +29,15 @@ def listar_activos_subcliente(id_subcliente):
 @jwt_required()
 def editar_activo(id_activo):
     return ActivoController.editar_activo(id_activo)
+
+@cross_origin()
+@activo.route('/eliminar_activo/<id_activo>',methods=['DELETE'])
+@jwt_required()
+def eliminar_activo(id_activo):
+    return ActivoController.eliminar_activo(id_activo)
+
+@cross_origin()
+@activo.route('/restaurar_activo/<id_activo>',methods=['PUT'])
+@jwt_required()
+def restaurar_activo(id_activo):
+    return ActivoController.restaurar_activo(id_activo)

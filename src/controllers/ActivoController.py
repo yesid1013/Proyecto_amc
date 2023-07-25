@@ -67,7 +67,8 @@ def activos_de_subcliente(id_subcliente): # Listar los activos de un subcliente
     try:
         lista = []
         id_subcliente_bytes = binascii.unhexlify(id_subcliente) #el id hexadecimal que se pasa por la url lo convierto a binario
-        activos = db.session.query(Activo.id_activo,Activo.id_primario,Activo.id_secundario,Activo.tipo_de_equipo,Activo.fabricante, Activo.modelo, Activo.num_serie, Activo.ubicacion, Activo.imagen_equipo).filter_by(id_subcliente=id_subcliente_bytes).all()
+
+        activos = db.session.query(Activo.id_activo,Activo.id_primario,Activo.id_secundario,Activo.tipo_de_equipo,Activo.fabricante, Activo.modelo, Activo.num_serie, Activo.ubicacion, Activo.imagen_equipo).filter_by(id_subcliente=id_subcliente_bytes, estado = 1).all()
         
 
         if not activos:
@@ -106,6 +107,37 @@ def editar_activo(id_activo):
         
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
 
 
+def eliminar_activo(id_activo):
+    try:
+        id_activo_bytes = binascii.unhexlify(id_activo)
+        activo = Activo.query.get(id_activo_bytes)
 
+        if not activo:
+            return jsonify({"message" : "Activo no encontrado", "status" : 404}) , 404
+
+        else:
+            activo.estado = 0
+            db.session.commit()
+            return jsonify({"message" : "Activo eliminado", "status" : 200})
+        
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+def restaurar_activo(id_activo):
+    try:
+        id_activo_bytes = binascii.unhexlify(id_activo)
+        activo = Activo.query.get(id_activo_bytes)
+
+        if not activo:
+            return jsonify({"message" : "Activo no encontrado", "status" : 404}) , 404
+        
+        else:
+            activo.estado = 1
+            db.session.commit()
+            return jsonify({"message" : "Activo restaurado", "status" : 200})
+        
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
