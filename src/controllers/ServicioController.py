@@ -39,18 +39,42 @@ def serivicios_de_un_activo(id_activo):
 
         servicios = db.session.query(Servicio.id_servicio, Servicio.id_activo, Servicio.fecha_ejecucion,Tipo_servicio.tipo,Servicio.descripcion,Servicio.observaciones,Servicio.imagenes,Servicio.informe).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Servicio.id_activo == id_activo_bytes).all()
 
-        print(servicios)
-
         for servicio in servicios:
             datos = {"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "fecha_ejecucion" : servicio.fecha_ejecucion, "tipo" : servicio.tipo, "descripcion" : servicio.descripcion, "observaciones" : servicio.observaciones, "imagenes" : servicio.imagenes, "informe" : servicio.informe}
             lista.append(datos)
             
-        
-
         return jsonify(lista)
 
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+    
+def editar_servicio(id_servicio):
+    try:
+        id_servicio_bytes = binascii.unhexlify(id_servicio)
+
+        servicio = Servicio.query.get(id_servicio_bytes)
+        if not servicio:
+            return jsonify({"message" : "Servivico no encontrado", "status" : 404}) , 404
+        
+        else:
+            fecha_datetime = datetime.strptime(request.json["fecha_ejecucion"], '%d-%m-%Y %H:%M:%S')
+            servicio.fecha_ejecucion = fecha_datetime 
+            servicio.id_tipo_servicio = request.json["id_tipo_servicio"]
+            servicio.descripcion = request.json["descripcion"]
+            servicio.observaciones = request.json["observaciones"]
+            imagenes = None
+            informe = None
+
+            db.session.commit()
+            return jsonify({"message" : "Servicio actualizado exitosamente", "status" : 200}) , 200
+    
+    except ValueError as e:
+        return jsonify ({"message" : "Fecha inválida, por favor ingresa una fecha y hora válida."}), 400
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
     
 
 

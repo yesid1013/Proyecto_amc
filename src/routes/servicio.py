@@ -18,3 +18,9 @@ def crear_novedad(id_activo):
 @jwt_required()
 def listar_servicios(id_activo):
     return ServicioController.serivicios_de_un_activo(id_activo)
+
+@cross_origin()
+@servicio.route('/editar_servicio/<id_servicio>', methods=['PUT'])
+@jwt_required()
+def editar_servicio(id_servicio):
+    return ServicioController.editar_servicio(id_servicio)
