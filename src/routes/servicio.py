@@ -11,3 +11,10 @@ servicio = Blueprint('servicio', __name__)
 def crear_novedad(id_activo):
     id_usuario = get_jwt_identity()
     return ServicioController.crear_servicio(id_activo,id_usuario)
+
+
+@cross_origin()
+@servicio.route('/listar_servicios/<id_activo>')
+@jwt_required()
+def listar_servicios(id_activo):
+    return ServicioController.serivicios_de_un_activo(id_activo)

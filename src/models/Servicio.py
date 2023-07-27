@@ -3,6 +3,7 @@ from models.Costo_servicio import Costo_servicio
 from models import Activo
 from models import Usuario
 from models import Tipo_servicio
+import binascii
 
 class Servicio(db.Model):
     __tablename__ = 'servicio'
@@ -37,10 +38,10 @@ class Servicio(db.Model):
 
     def getDatos(self):
         return {
-            "id_servicio" : self.id_servicio,
-            "id_activo" : self.id_activo,
+            "id_servicio" : binascii.hexlify(self.id_servicio).decode(),
+            "id_activo" : binascii.hexlify(self.id_activo).decode(),
             "fecha_ejecucion" : self.fecha_ejecucion,
-            "id_usuario" : self.id_usuario,
+            "id_usuario" : binascii.hexlify(self.id_usuario).decode(),
             "id_tipo_servicio" : self.id_tipo_servicio,
             "descripcion" : self.descripcion,
             "observaciones" : self.observaciones,
