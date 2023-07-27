@@ -37,7 +37,7 @@ def serivicios_de_un_activo(id_activo):
         lista = []
         id_activo_bytes = binascii.unhexlify(id_activo)
 
-        servicios = db.session.query(Servicio.id_servicio, Servicio.id_activo, Servicio.fecha_ejecucion,Tipo_servicio.tipo,Servicio.descripcion,Servicio.observaciones,Servicio.imagenes,Servicio.informe).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Servicio.id_activo == id_activo_bytes).all()
+        servicios = db.session.query(Servicio.id_servicio, Servicio.id_activo, Servicio.fecha_ejecucion,Tipo_servicio.tipo,Servicio.descripcion,Servicio.observaciones,Servicio.imagenes,Servicio.informe).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Servicio.id_activo == id_activo_bytes, Servicio.estado == 1).all()
 
         for servicio in servicios:
             datos = {"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "fecha_ejecucion" : servicio.fecha_ejecucion, "tipo" : servicio.tipo, "descripcion" : servicio.descripcion, "observaciones" : servicio.observaciones, "imagenes" : servicio.imagenes, "informe" : servicio.informe}
@@ -74,6 +74,23 @@ def editar_servicio(id_servicio):
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+def eliminar_servicio(id_servicio):
+    try:
+        id_servicio_bytes = binascii.unhexlify(id_servicio)
+        servicio = Servicio.query.get(id_servicio_bytes)
+
+        if not servicio:
+            return jsonify({"message" : "Servicio no encontrado", "status" : 404}) , 404
+        
+        else:
+            servicio.estado = 0
+            db.session.commit()
+            return jsonify({"message" : "Servicio eliminado", "status" : 200})
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
 
     
 

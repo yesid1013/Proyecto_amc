@@ -24,3 +24,9 @@ def listar_servicios(id_activo):
 @jwt_required()
 def editar_servicio(id_servicio):
     return ServicioController.editar_servicio(id_servicio)
+
+@cross_origin()
+@servicio.route('/eliminar_servicio/<id_servicio>', methods=['DELETE'])
+@jwt_required()
+def eliminar_servicio(id_servicio):
+    return ServicioController.eliminar_servicio(id_servicio)
