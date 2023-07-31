@@ -53,3 +53,33 @@ def editar_cotizacion (id_costo_servicio):
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+def eliminar_cotizacion(id_costo_servicio):
+    try:
+        id_costo_servicio_bytes = binascii.unhexlify(id_costo_servicio)
+        costo_servicio = Costo_servicio.query.get(id_costo_servicio_bytes)
+
+        if not costo_servicio:
+            return jsonify({"message" : "No se encontraron cotizaciones" , "status" : 404}) , 404
+        else:
+            costo_servicio.estado = 0
+            db.session.commit()
+            return jsonify({"message" : "Cotizacion eliminada exitosamente", "status" : 200}) , 200
+        
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+def restaurar_cotizacion(id_costo_servicio):
+    try:
+        id_costo_servicio_bytes = binascii.unhexlify(id_costo_servicio)
+        costo_servicio = Costo_servicio.query.get(id_costo_servicio_bytes)
+
+        if not costo_servicio:
+            return jsonify({"message" : "No se encontraron cotizaciones" , "status" : 404}) , 404
+        else:
+            costo_servicio.estado = 1
+            db.session.commit()
+            return jsonify ({"message" : "Cotizacion restaurada exitosamente", "status" : 200})
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})

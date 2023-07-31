@@ -22,3 +22,16 @@ def cotizacion_de_un_servicio(id_servicio):
 @jwt_required()
 def editar_cotizacion(id_costo_servicio):
     return Costo_servicioController.editar_cotizacion(id_costo_servicio)
+
+@cross_origin()
+@costo_servicio.route("/eliminar_cotizacion/<id_costo_servicio>",methods=['DELETE'])
+@jwt_required()
+def eliminar_cotizacion(id_costo_servicio):
+    return Costo_servicioController.eliminar_cotizacion(id_costo_servicio)
+
+@cross_origin()
+@costo_servicio.route("/restaurar_cotizacion/<id_costo_servicio>",methods=['PUT'])
+@jwt_required()
+def restaurar_cotizacion(id_costo_servicio):
+    return Costo_servicioController.restaurar_cotizacion(id_costo_servicio)
+
