@@ -27,7 +27,7 @@ def cotizacion_de_un_servicio(id_servicio):
         cotizaciones = db.session.query(Costo_servicio.id_costo_servicio,Costo_servicio.costo,Costo_servicio.documento_cotizacion).filter_by(id_servicio = id_servicio_bytes, estado = 1 ).all()
 
         if not cotizaciones:
-            return jsonify({"message" : "No se encontraron activos" , "status" : 404}) , 404
+            return jsonify({"message" : "No se encontraron cotizaciones" , "status" : 404}) , 404
         else:
             for cotizacion in cotizaciones:
                 datos = {"id_costo_servicio" : binascii.hexlify(cotizacion.id_costo_servicio).decode(), "costo" : cotizacion.costo, "documento_cotizacion" : cotizacion.documento_cotizacion}
@@ -37,4 +37,19 @@ def cotizacion_de_un_servicio(id_servicio):
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
-        
+    
+def editar_cotizacion (id_costo_servicio):
+    try:
+        id_costo_servicio_bytes = binascii.unhexlify(id_costo_servicio)
+        costo_servicio = Costo_servicio.query.get(id_costo_servicio_bytes)
+
+        if not costo_servicio:
+            return jsonify({"message" : "No se encontraron cotizaciones" , "status" : 404}) , 404
+        else:
+            costo_servicio.costo = request.json["costo"]
+            #pendiente actualizar documento de cotizacion
+            db.session.commit()
+            return jsonify({"message" : "Cotizacion actualizada exitosamente", "status" : 200}) , 200
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})

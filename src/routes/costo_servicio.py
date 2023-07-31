@@ -16,3 +16,9 @@ def crear_costo_servicio(id_servicio):
 @jwt_required()
 def cotizacion_de_un_servicio(id_servicio):
     return Costo_servicioController.cotizacion_de_un_servicio(id_servicio)
+
+@cross_origin()
+@costo_servicio.route("/editar_cotizacion/<id_costo_servicio>",methods=['PUT'])
+@jwt_required()
+def editar_cotizacion(id_costo_servicio):
+    return Costo_servicioController.editar_cotizacion(id_costo_servicio)
