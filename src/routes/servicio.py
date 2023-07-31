@@ -30,3 +30,9 @@ def editar_servicio(id_servicio):
 @jwt_required()
 def eliminar_servicio(id_servicio):
     return ServicioController.eliminar_servicio(id_servicio)
+
+@cross_origin()
+@servicio.route('/restaurar_servicio/<id_servicio>', methods=['PUT'])
+@jwt_required()
+def restaurar_servicio(id_servicio):
+    return ServicioController.restaurar_servicio(id_servicio)
