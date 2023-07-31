@@ -28,3 +28,9 @@ def editar_novedad(id_novedad):
 @jwt_required()
 def eliminar_novedad(id_novedad):
     return NovedadController.eliminar_novedad(id_novedad)
+
+@cross_origin()
+@novedad.route('/restaurar_novedad/<id_novedad>', methods=['PUT'])
+@jwt_required()
+def restaurar_novedad(id_novedad):
+    return NovedadController.restaurar_novedad(id_novedad)

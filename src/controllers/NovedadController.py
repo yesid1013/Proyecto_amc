@@ -68,3 +68,20 @@ def eliminar_novedad(id_novedad):
         
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+def restaurar_novedad(id_novedad):
+    try:
+        id_novedad_bytes = binascii.unhexlify(id_novedad)
+        novedad = Novedad.query.get(id_novedad_bytes)
+
+        if not novedad:
+            return jsonify({"message" : "Novedad no encontrada", "status" : 404}), 404
+        else:
+            novedad.estado = 1
+            db.session.commit()
+            return jsonify({"message" : "Novedad restaurada exitosamente", "status" : 200})
+        
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+
