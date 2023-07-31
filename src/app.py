@@ -10,6 +10,7 @@ from routes.activo import activo
 from routes.empresa import empresa
 from routes.novedad import novedad
 from routes.servicio import servicio
+from routes.costo_servicio import costo_servicio
 app = Flask(__name__)
 
 CORS(app)
@@ -31,6 +32,7 @@ app.register_blueprint(activo)
 app.register_blueprint(empresa)
 app.register_blueprint(novedad)
 app.register_blueprint(servicio)
+app.register_blueprint(costo_servicio)
 
 def pagina_no_encontrada(error):
     return jsonify({"message" : "Pagina no encontrada"}), 404
