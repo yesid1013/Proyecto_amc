@@ -8,6 +8,7 @@ import binascii
 class Servicio(db.Model):
     __tablename__ = 'servicio'
     id_servicio = db.Column(db.BINARY(16), primary_key=True)
+    numero_servicio = db.Column(db.Integer,unique=True, nullable = False,autoincrement=True)
     id_activo = db.Column(db.BINARY(16), db.ForeignKey('activo.id_activo'), nullable=False)
     fecha_ejecucion = db.Column(db.DateTime,nullable = False)
     id_usuario = db.Column(db.BINARY(16), db.ForeignKey('usuario.id_usuario'), nullable=False)
