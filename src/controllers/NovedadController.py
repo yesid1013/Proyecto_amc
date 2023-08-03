@@ -2,6 +2,10 @@ from flask import jsonify,request
 from models.Novedad import *
 import binascii
 import uuid
+from utils.g_drive_service import GoogleDriveService
+from io import BytesIO
+from googleapiclient.http import MediaIoBaseUpload
+from controllers import GoogleDriveController
 
 def crear_novedad(id_activo):
     try:
@@ -13,7 +17,11 @@ def crear_novedad(id_activo):
         descripcion_reporte = request.json["descripcion_reporte"]
         imagenes = request.json["imagenes"]
 
-        new_novedad = Novedad(id_novedad,id_activo_bytes,nombre_reporta,nombre_empresa,cargo,descripcion_reporte,imagenes)
+        if imagenes:
+            upload_response = GoogleDriveController.uploadJSON(imagenes)
+            id_imagen = upload_response["id"]
+
+        new_novedad = Novedad(id_novedad,id_activo_bytes,nombre_reporta,nombre_empresa,cargo,descripcion_reporte,id_imagen)
         db.session.add(new_novedad)
         db.session.commit()
 

@@ -12,7 +12,7 @@ class Novedad(db.Model):
     nombre_empresa = db.Column(db.String(100),nullable=False)
     cargo = db.Column(db.String(50),nullable=False)
     descripcion_reporte = db.Column(db.String(100),nullable=False)
-    imagenes = db.Column(db.String(255))
+    imagenes = db.Column(db.String(33))
     estado = db.Column(db.SmallInteger,nullable = False, default = 1)
 
     activo = db.relationship('Activo', back_populates="novedad", uselist=False, single_parent=True)
