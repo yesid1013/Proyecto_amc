@@ -1,5 +1,7 @@
 from flask import jsonify, request
 from models.Activo import *
+from controllers import GoogleDriveController
+from models.Codigos_qr import Codigos_qr
 import uuid
 import binascii
 
@@ -9,7 +11,6 @@ def crear_activo(id_usuario):
         id_primario = request.json["id_primario"]
         id_secundario = request.json["id_secundario"]
         id_usuario = id_usuario
-        id_qr = request.json["id_qr"]
         ubicacion = request.json["ubicacion"]
         tipo_de_equipo = request.json["tipo_de_equipo"]
         fabricante = request.json["fabricante"]
@@ -20,28 +21,18 @@ def crear_activo(id_usuario):
         id_subcliente = request.json["id_subcliente"]
         ficha_tecnica = request.json["ficha_tecnica"]
 
-        if id_secundario == "":
-            id_secundario = None
-        
-        if modelo == "":
-            modelo = None
-        
-        if num_serie == "":
-            num_serie = None
-        
-        if datos_relevantes == "":
-            datos_relevantes = None
-        
-        if imagen_equipo == "":
-            imagen_equipo == None
-        
-        if ficha_tecnica == "":
-            ficha_tecnica == None
-
+        id_activo_hex = binascii.hexlify(id_activo).decode()
         id_usuario_bytes = binascii.unhexlify(id_usuario) #El id_usuario de hexadecimal a binario
         id_subcliente_bytes = binascii.unhexlify(id_subcliente) #El id_subcliente de hexadecimal a binario
 
-        new_activo = Activo(id_activo,id_qr,id_primario,id_secundario,id_usuario_bytes,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen_equipo,id_subcliente_bytes,ficha_tecnica)
+        response = GoogleDriveController.uploadQR(id_activo_hex)
+
+        new_code_qr = Codigos_qr(response["id"])
+        db.session.add(new_code_qr)
+        db.session.commit()
+
+        new_activo = Activo(id_activo,new_code_qr.id_qr,id_primario,id_secundario,id_usuario_bytes,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen_equipo,id_subcliente_bytes,ficha_tecnica)
+
         db.session.add(new_activo)
         db.session.commit()
         return jsonify({"message": "Activo creado correctamente", "status" : 200})
