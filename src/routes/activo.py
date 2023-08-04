@@ -19,6 +19,11 @@ def listar_activos():
     return ActivoController.listar_activos()
 
 @cross_origin()
+@activo.route('/info_activo/<id_activo_hex>')
+def info_activo(id_activo_hex):
+    return ActivoController.info_activo(id_activo_hex)
+
+@cross_origin()
 @activo.route('/listar_activos_subcliente/<id_subcliente>')
 @jwt_required()
 def listar_activos_subcliente(id_subcliente):

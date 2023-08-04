@@ -21,7 +21,7 @@ def crear_activo(id_usuario):
         id_subcliente = request.json["id_subcliente"]
         ficha_tecnica = request.json["ficha_tecnica"]
 
-        id_activo_hex = binascii.hexlify(id_activo).decode()
+        id_activo_hex = binascii.hexlify(id_activo).decode() #El id activo que se genera pasarlo de binario a hexadecimal
         id_usuario_bytes = binascii.unhexlify(id_usuario) #El id_usuario de hexadecimal a binario
         id_subcliente_bytes = binascii.unhexlify(id_subcliente) #El id_subcliente de hexadecimal a binario
 
@@ -40,6 +40,22 @@ def crear_activo(id_usuario):
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+
+def info_activo(id_activo_hex): #Funcion para mostrar la informacion del activo escaneando el codigo qr
+    try:
+        id_activo_bytes = binascii.unhexlify(id_activo_hex)
+
+        activo = Activo.query.get(id_activo_bytes)
+
+        if not activo:
+            return jsonify({"message" : "Activo no encontrado"}) , 404
+        else:
+            return jsonify({"id_primario" : activo.id_primario, "id_secundario": activo.id_secundario, "ubicacion" : activo.ubicacion, "tipo_de_equipo" : activo.tipo_de_equipo, "fabricante" : activo.fabricante, "modelo" : activo.modelo, "num_serie" : activo.num_serie, "datos_relevantes" : activo.datos_relevantes, "imagen_equipo" : activo.imagen_equipo, "ficha_tecnica" : activo.ficha_tecnica})
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
     
 
 def listar_activos():
