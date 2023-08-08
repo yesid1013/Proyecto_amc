@@ -5,6 +5,7 @@ import uuid
 from datetime import datetime
 from models.Tipo_servicio import Tipo_servicio
 from models.Usuario import Usuario
+from controllers import GoogleDriveController
 
 def crear_servicio(id_activo,id_usuario):
     try:
@@ -13,7 +14,12 @@ def crear_servicio(id_activo,id_usuario):
         id_tipo_servicio = request.json["id_tipo_servicio"]
         descripcion = request.json["descripcion"]
         observaciones = request.json["observaciones"]
-        informe = None
+        informe = request.json["informe"]
+        
+        if informe:
+            id_folder = "1L5aLI-JdlZ3dDJ2LxnWSbxBn70yt0nPA"
+            response = GoogleDriveController.uploadFile(informe,id_folder)
+            informe = response["webViewLink"]
 
         id_usuario_bytes = binascii.unhexlify(id_usuario)
         id_activo_bytes = binascii.unhexlify(id_activo)
@@ -24,7 +30,7 @@ def crear_servicio(id_activo,id_usuario):
         db.session.add(new_servicio)
         db.session.commit()
 
-        return jsonify({"message": "Servicio creado correctamente", "status" : 200}) , 200
+        return jsonify({"message": "Servicio creado correctamente", "status" : 201}) , 201
     
     except ValueError as e:
         return jsonify ({"message" : "Fecha inválida, por favor ingresa una fecha y hora válida."}), 400
