@@ -5,16 +5,16 @@ from controllers import UsuarioController
 usuario = Blueprint('usuario', __name__)
 
 @cross_origin()
-@usuario.route('/crear_usuario', methods=['POST'])
+@usuario.route('/usuarios', methods=['POST'])
 def crear_usuario():
     return UsuarioController.crear_usuario()
 
 @cross_origin()
-@usuario.route('/listar_usuarios')
+@usuario.route('/usuarios')
 def listar_usuarios():
     return UsuarioController.listar_usuarios()
 
 @cross_origin()
-@usuario.route('/buscar_usuario/<id_usuario>')
+@usuario.route('/usuario/<id_usuario>')
 def buscar_usuario(id_usuario):
     return UsuarioController.buscar_usuario(id_usuario)

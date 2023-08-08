@@ -6,7 +6,7 @@ from controllers import ServicioController
 servicio = Blueprint('servicio', __name__)
 
 @cross_origin()
-@servicio.route('/crear_servicio/<id_activo>', methods=['POST'])
+@servicio.route('/servicios/<id_activo>', methods=['POST'])
 @jwt_required()
 def crear_novedad(id_activo):
     id_usuario = get_jwt_identity()
@@ -14,25 +14,25 @@ def crear_novedad(id_activo):
 
 
 @cross_origin()
-@servicio.route('/listar_servicios/<id_activo>')
+@servicio.route('/servicios/<id_activo>')
 @jwt_required()
 def listar_servicios(id_activo):
     return ServicioController.serivicios_de_un_activo(id_activo)
 
 @cross_origin()
-@servicio.route('/editar_servicio/<id_servicio>', methods=['PUT'])
+@servicio.route('/servicios/<id_servicio>', methods=['PUT'])
 @jwt_required()
 def editar_servicio(id_servicio):
     return ServicioController.editar_servicio(id_servicio)
 
 @cross_origin()
-@servicio.route('/eliminar_servicio/<id_servicio>', methods=['DELETE'])
+@servicio.route('/servicios/<id_servicio>', methods=['DELETE'])
 @jwt_required()
 def eliminar_servicio(id_servicio):
     return ServicioController.eliminar_servicio(id_servicio)
 
 @cross_origin()
-@servicio.route('/restaurar_servicio/<id_servicio>', methods=['PUT'])
+@servicio.route('/servicios/<id_servicio>/restaurar', methods=['PUT'])
 @jwt_required()
 def restaurar_servicio(id_servicio):
     return ServicioController.restaurar_servicio(id_servicio)
