@@ -13,14 +13,13 @@ def crear_servicio(id_activo,id_usuario):
         id_tipo_servicio = request.json["id_tipo_servicio"]
         descripcion = request.json["descripcion"]
         observaciones = request.json["observaciones"]
-        imagenes = None
         informe = None
 
         id_usuario_bytes = binascii.unhexlify(id_usuario)
         id_activo_bytes = binascii.unhexlify(id_activo)
         fecha_datetime = datetime.strptime(fecha_ejecucion, '%d-%m-%Y %H:%M:%S')
 
-        new_servicio = Servicio(id_servicio,id_activo_bytes,fecha_datetime,id_usuario_bytes,id_tipo_servicio,descripcion,observaciones,imagenes,informe)
+        new_servicio = Servicio(id_servicio,id_activo_bytes,fecha_datetime,id_usuario_bytes,id_tipo_servicio,descripcion,observaciones,informe)
 
         db.session.add(new_servicio)
         db.session.commit()

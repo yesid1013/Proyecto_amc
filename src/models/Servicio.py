@@ -16,7 +16,6 @@ class Servicio(db.Model):
     descripcion = db.Column(db.String(100), nullable = False)
     observaciones = db.Column(db.String(100))
     observaciones_usuario = db.Column(db.String(100))
-    imagenes = db.Column(db.String(255))
     informe = db.Column(db.String(255))
     estado = db.Column(db.SmallInteger,nullable = False, default = 1)
 
@@ -26,7 +25,7 @@ class Servicio(db.Model):
 
     costo_servicio = db.relationship('Costo_servicio', back_populates='servicio',cascade="all,delete-orphan")
 
-    def __init__ (self,id_servicio,id_activo,fecha_ejecucion,id_usuario,id_tipo_servicio,descripcion,observaciones,imagenes,informe):
+    def __init__ (self,id_servicio,id_activo,fecha_ejecucion,id_usuario,id_tipo_servicio,descripcion,observaciones,informe):
         self.id_servicio = id_servicio
         self.id_activo = id_activo
         self.fecha_ejecucion = fecha_ejecucion
@@ -34,7 +33,6 @@ class Servicio(db.Model):
         self.id_tipo_servicio = id_tipo_servicio
         self.descripcion = descripcion
         self.observaciones = observaciones
-        self.imagenes = imagenes
         self.informe = informe
         self.estado = 1
 
