@@ -25,17 +25,27 @@ def crear_activo(id_usuario):
         id_usuario_bytes = binascii.unhexlify(id_usuario) #El id_usuario de hexadecimal a binario
         id_subcliente_bytes = binascii.unhexlify(id_subcliente) #El id_subcliente de hexadecimal a binario
 
-        response = GoogleDriveController.uploadQR(id_activo_hex)
+        response = GoogleDriveController.uploadQR(id_activo_hex) #Mando el id del activo en hexadecimal para crear el codigo QR
 
-        new_code_qr = Codigos_qr(response["id"])
+        new_code_qr = Codigos_qr(response["id"],response["webViewLink"])
         db.session.add(new_code_qr)
         db.session.commit()
 
-        new_activo = Activo(id_activo,new_code_qr.id_qr,id_primario,id_secundario,id_usuario_bytes,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen_equipo,id_subcliente_bytes,ficha_tecnica)
+        if request.json["imagen_equipo"]: #Guardar imagen
+            id_folder = "1Y3nYWG7O8OC3D4J9u55I3RokXTbNEeOz" #Id de la carpeta donde se guardara el archivo
+            response = GoogleDriveController.uploadFile(imagen_equipo,id_folder)
+            imagen = response["webContentLink"]
+
+        if request.json["ficha_tecnica"]:
+            id_folder = "1cI5I2nlPzm5bIBLqik3onWcDhijD1mHV"
+            response = GoogleDriveController.uploadFile(ficha_tecnica,id_folder)
+            archivo_ficha_tecnica = response["webViewLink"]
+
+        new_activo = Activo(id_activo,new_code_qr.id_qr,id_primario,id_secundario,id_usuario_bytes,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen,id_subcliente_bytes,archivo_ficha_tecnica)
 
         db.session.add(new_activo)
         db.session.commit()
-        return jsonify({"message": "Activo creado correctamente", "status" : 200})
+        return jsonify({"message": "Activo creado correctamente", "status" : 201}), 201
 
     
     except Exception as e:
@@ -55,8 +65,6 @@ def info_activo(id_activo_hex): #Funcion para mostrar la informacion del activo 
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
-
-    
 
 def listar_activos():
     try:

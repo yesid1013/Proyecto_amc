@@ -16,7 +16,7 @@ def getFileListFromGDrive():
     list_file=g_drive_service.files().list(fields=selected_fields).execute()
     return {"files":list_file.get("files")}
 
-def uploadJSON(file): #Funcion para guardar un archivo en google drive
+def uploadFile(file,id_folder): #Funcion para guardar un archivo en google drive
     try:
 
         file_name = file["name"]
@@ -32,11 +32,11 @@ def uploadJSON(file): #Funcion para guardar un archivo en google drive
         created_at = datetime.now().strftime("%Y%m%d%H%M%S")
         file_metadata = {
             "name": f"{file_name} ({created_at})",
-            "parents": ["1m6h1aZAqPh-vgtMw0sQtEM3RIlEoAFdC"],  # Se guardara en la carpeta imagenes_novedad, se usa el id de la carpeta
+            "parents": [id_folder],  # Se guardara en una carpeta especifica, se usa el id de la carpeta
 
         }
 
-        returned_fields = "id, name, mimeType, webViewLink, exportLinks"
+        returned_fields = "id, name, mimeType, webViewLink, webContentLink"
     
         upload_response = service.files().create(
             body=file_metadata, 

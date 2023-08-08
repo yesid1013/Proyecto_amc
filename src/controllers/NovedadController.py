@@ -18,7 +18,8 @@ def crear_novedad(id_activo):
         imagenes = request.json["imagenes"]
 
         if imagenes:
-            upload_response = GoogleDriveController.uploadJSON(imagenes)
+            id_folder = "1m6h1aZAqPh-vgtMw0sQtEM3RIlEoAFdC"
+            upload_response = GoogleDriveController.uploadFile(imagenes,id_folder)
             id_imagen = upload_response["id"]
 
         new_novedad = Novedad(id_novedad,id_activo_bytes,nombre_reporta,nombre_empresa,cargo,descripcion_reporte,id_imagen)
