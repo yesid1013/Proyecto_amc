@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_cors import cross_origin
 from controllers import UsuarioController
 
-usuario = Blueprint('usuario', __name__)
+usuario = Blueprint('usuario', __name__,url_prefix='/api/v1')
 
 @cross_origin()
 @usuario.route('/usuarios', methods=['POST'])

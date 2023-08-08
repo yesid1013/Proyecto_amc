@@ -3,7 +3,7 @@ from flask_cors import cross_origin
 from controllers import NovedadController
 from flask_jwt_extended import jwt_required
 
-novedad = Blueprint('novedad', __name__)
+novedad = Blueprint('novedad', __name__,url_prefix='/api/v1')
 
 @cross_origin()
 @novedad.route('/novedad/<id_activo>', methods=['POST'])

@@ -3,7 +3,7 @@ from flask_cors import cross_origin
 from controllers import ActivoController
 from flask_jwt_extended import jwt_required,get_jwt_identity
 
-activo = Blueprint('activo', __name__)
+activo = Blueprint('activo', __name__,url_prefix='/api/v1')
 
 @cross_origin()
 @activo.route('/activo', methods=['POST'])

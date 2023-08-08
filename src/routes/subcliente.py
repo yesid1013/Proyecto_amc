@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_cors import cross_origin
 from controllers import SubclienteController
 
-subcliente = Blueprint('subcliente', __name__)
+subcliente = Blueprint('subcliente', __name__,url_prefix='/api/v1')
 
 @cross_origin()
 @subcliente.route('/subclientes', methods=['POST'])

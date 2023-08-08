@@ -3,7 +3,7 @@ from flask_cors import cross_origin
 from controllers import Costo_servicioController
 from flask_jwt_extended import jwt_required,get_jwt_identity
 
-costo_servicio = Blueprint('costo_servicio', __name__)
+costo_servicio = Blueprint('costo_servicio', __name__,url_prefix='/api/v1')
 
 @cross_origin()
 @costo_servicio.route("/costo_servicio/<id_servicio>",methods=['POST'])
