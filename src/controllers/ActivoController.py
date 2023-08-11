@@ -2,11 +2,17 @@ from flask import jsonify, request
 from models.Activo import *
 from controllers import GoogleDriveController
 from models.Codigos_qr import Codigos_qr
+from utils.validation import validation_activo
 import uuid
 import binascii
 
 def crear_activo(id_usuario):
-    try:
+    try: 
+        validation = validation_activo(request.json)
+        
+        if validation is not True:
+            return jsonify({"message": "Datos invalidos", "errors": validation, "status": 400}), 400
+
         id_activo = uuid.uuid4().bytes
         id_primario = request.json["id_primario"]
         id_secundario = request.json["id_secundario"]

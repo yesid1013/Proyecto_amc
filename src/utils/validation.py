@@ -40,6 +40,55 @@ def validation_empresa(json):
     
     except SchemaError as e:
         return str(e)
+    
+def validation_activo(json):
+    try:
+        schema = {
+            "type": "object",
+            "properties":{
+                "id_primario": {"type": "string"},
+                "id_secundario" : {"type" : "string"},
+                "ubicacion" : {"type" : "string"},
+                "tipo_de_equipo" : {"type" : "string"},
+                "fabricante" : {"type" : "string"},
+                "modelo" : {"type" : "string"},
+                "num_serie" : {"type" : "string"},
+                "datos_relevantes" : {"type" : "string"},
+
+                "imagen_equipo" : {
+                    "type": "object",
+                    "properties": {
+                    "name": {"type": "string"},
+                    "mimeType": {"type": "string"},
+                    "content": {"type": "string"}
+                    },
+                    "required" : ["name","mimeType","content"]
+                },
+
+                "ficha_tecnica" : {
+                    "type" : "object",
+                    "properties" : {
+                        "name" : {"type": "string"},
+                        "mimeType": {"type": "string"},
+                        "content": {"type": "string"}
+                    },
+                    "required" : ["name","mimeType","content"]
+                }
+
+        },
+        "required": ["ubicacion","tipo_de_equipo","fabricante"],
+        }
+
+        validate(json,schema=schema)
+        return True
+    
+    except ValidationError as e:
+        return str(e)
+    
+    except SchemaError as e:
+        return str(e)
+    
+
 
         
         
