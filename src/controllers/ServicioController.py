@@ -6,9 +6,14 @@ from datetime import datetime
 from models.Tipo_servicio import Tipo_servicio
 from models.Usuario import Usuario
 from controllers import GoogleDriveController
+from utils.validation import validation_servicio
 
 def crear_servicio(id_activo,id_usuario):
     try:
+        validation = validation_servicio(request.json)
+        if validation is not True:
+            return jsonify({"message": "Datos invalidos", "errors": validation, "status": 400}), 400
+
         id_servicio = uuid.uuid4().bytes
         fecha_ejecucion = request.json["fecha_ejecucion"]
         id_tipo_servicio = request.json["id_tipo_servicio"]

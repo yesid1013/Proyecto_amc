@@ -118,5 +118,38 @@ def validation_novedad(json):
     
     except SchemaError as e:
         return str(e)
+    
+
+def validation_servicio(json):
+    try:
+        schema = {
+            "type": "object",
+            "properties" : {
+                "fecha_ejecucion" : {"type": "string"},
+                "id_tipo_servicio" : {"type": "integer", "minimum": 1, "maximum": 3},
+                "descripcion" : {"type": "string"},
+                "observaciones" : {"type": "string"},
+
+                "informe" : {
+                    "type" : "object",
+                    "properties" : {
+                        "name" : {"type": "string"},
+                        "mimeType" : {"type": "string"},
+                        "content": {"type": "string"}
+                    },
+                    "required" : ["name","mimeType","content"]
+                }
+            },
+            "required" : ["fecha_ejecucion","id_tipo_servicio","descripcion"]
+        }
+
+        validate(json,schema=schema)
+        return True
+    
+    except ValidationError as e:
+        return str(e)
+    
+    except SchemaError as e:
+        return str(e)
 
            
