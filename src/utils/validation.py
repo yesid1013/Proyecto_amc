@@ -88,7 +88,35 @@ def validation_activo(json):
     except SchemaError as e:
         return str(e)
     
+def validation_novedad(json):
+    try:
+        schema = {"type": "object",
+        "properties":{
+            "nombre_reporta": {"type": "string"},
+            "nombre_empresa" : {"type" : "string"},
+            "cargo" : {"type" : "string"},
+            "descripcion_reporte" : {"type" : "string"},
 
+            "imagenes" : {
+                "type" : "object",
+                "properties" : {
+                    "name": {"type": "string"},
+                    "mimeType": {"type": "string"},
+                    "content": {"type": "string"}
+                },
+                "required" : ["name","mimeType","content"]
+            }
+        },
+        "required": ["nombre_reporta","nombre_empresa","cargo","descripcion_reporte"],
+        }
 
-        
-        
+        validate(json,schema=schema)
+        return True
+    
+    except ValidationError as e:
+        return str(e)
+    
+    except SchemaError as e:
+        return str(e)
+
+           

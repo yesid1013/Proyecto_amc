@@ -2,13 +2,16 @@ from flask import jsonify,request
 from models.Novedad import *
 import binascii
 import uuid
-from utils.g_drive_service import GoogleDriveService
 from io import BytesIO
-from googleapiclient.http import MediaIoBaseUpload
 from controllers import GoogleDriveController
+from utils.validation import validation_novedad
 
 def crear_novedad(id_activo):
     try:
+        validation = validation_novedad(request.json)
+        if validation is not True:
+            return jsonify({"message": "Datos invalidos", "errors": validation, "status": 400}), 400
+
         id_novedad = uuid.uuid4().bytes
         id_activo_bytes = binascii.unhexlify(id_activo) # Convierto el id hexadecimal a binario
         nombre_reporta = request.json["nombre_reporta"]
