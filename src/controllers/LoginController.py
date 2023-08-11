@@ -4,7 +4,7 @@ from flask_jwt_extended import create_access_token
 import binascii
 from werkzeug.security import check_password_hash
 from utils.validation import validation_login
-from jsonschema import ValidationError
+
 
 def login():
     try:

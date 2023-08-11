@@ -6,8 +6,8 @@ class Empresa (db.Model):
     __tablename__ = 'empresa'
     id_empresa = db.Column(db.BINARY(16), primary_key=True)
     nombre = db.Column(db.String(50),nullable=False)
-    telefono = db.Column(db.String(10),nullable=False)
-    direccion = db.Column(db.String(50),nullable=False)
+    telefono = db.Column(db.String(10))
+    direccion = db.Column(db.String(50))
 
     subcliente = db.relationship("Subcliente", back_populates="empresa",cascade="all,delete-orphan")
 

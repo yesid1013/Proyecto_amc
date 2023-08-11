@@ -1,10 +1,17 @@
 from flask import jsonify, request
 from models.Empresa import *
+from utils.validation import validation_empresa
 import uuid
 import binascii
 
+
 def crear_empresa():
     try:
+        validation = validation_empresa(request.json)
+
+        if validation is not True:
+            return jsonify({"message": "Datos invalidos", "errors": validation, "status": 400}), 400
+
         id_empresa = uuid.uuid4().bytes
         nombre = request.json['nombre']
         telefono = request.json['telefono']
