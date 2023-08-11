@@ -3,9 +3,16 @@ from models.Usuario import *
 from flask_jwt_extended import create_access_token
 import binascii
 from werkzeug.security import check_password_hash
+from utils.validation import validation_login
+from jsonschema import ValidationError
 
 def login():
     try:
+        validation = validation_login(request.json) #Validacion de datos
+
+        if validation is not True:
+            return jsonify({"message": "Datos invalidos", "errors": validation, "status": 400}), 400
+
         correo = request.json["correo"]
         contrasena = request.json["contrasena"]
 
@@ -20,8 +27,5 @@ def login():
         else:
             return jsonify({"message" : "Correo o contraseña incorrecta" , "status" : 401}) , 401
                                  
-                 
-                
-
     except Exception as e:
-        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e) })
+        return jsonify({"message" : "Ha ocurrido un error inesperadoooo :", "error" : str(e) })
