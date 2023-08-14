@@ -1,4 +1,5 @@
 from jsonschema import validate, ValidationError, SchemaError
+import bleach
 
 def validation_login(json):
     try:
@@ -12,6 +13,7 @@ def validation_login(json):
         }
 
         validate(json,schema=schema)
+
         return True
     
     except ValidationError as e:
@@ -33,6 +35,7 @@ def validation_empresa(json):
         }
 
         validate(json,schema=schema)
+
         return True
     
     except ValidationError as e:
@@ -80,6 +83,7 @@ def validation_activo(json):
         }
 
         validate(json,schema=schema)
+
         return True
     
     except ValidationError as e:

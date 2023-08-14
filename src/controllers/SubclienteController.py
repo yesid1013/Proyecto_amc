@@ -4,6 +4,7 @@ import uuid
 import binascii
 from models.Empresa import Empresa
 from utils.validation import validation_subcliente
+import bleach
 
 def crear_subcliente():
     try:
@@ -13,9 +14,9 @@ def crear_subcliente():
         
         id_subcliente = uuid.uuid4().bytes
         id_empresa = request.json["id_empresa"]
-        nombre = request.json["nombre"]
-        contacto = request.json["contacto"]
-        direccion = request.json["direccion"]
+        nombre = bleach.clean(request.json["nombre"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        contacto = bleach.clean(request.json["contacto"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        direccion = bleach.clean(request.json["direccion"],tags=bleach.sanitizer.ALLOWED_TAGS)
 
         id_empresa_bytes = binascii.unhexlify(id_empresa) #El id_empresa de hexadecimal a binario
 

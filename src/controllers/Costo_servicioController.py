@@ -2,12 +2,13 @@ from flask import request,jsonify
 from models.Costo_servicio import *
 import uuid
 import binascii
+import bleach
 
 def crear_costo_servicio(id_servicio):
     try:
         id_costo_servicio = uuid.uuid4().bytes
         id_servicio_bytes = binascii.unhexlify(id_servicio)
-        costo = request.json["costo"]
+        costo = bleach.clean(request.json["costo"],tags=bleach.sanitizer.ALLOWED_TAGS)
         documento_cotizacion = None
 
         new_costo_servicio = Costo_servicio(id_costo_servicio,id_servicio_bytes,costo,documento_cotizacion)
@@ -46,7 +47,7 @@ def editar_cotizacion (id_costo_servicio):
         if not costo_servicio:
             return jsonify({"message" : "No se encontraron cotizaciones" , "status" : 404}) , 404
         else:
-            costo_servicio.costo = request.json["costo"]
+            costo_servicio.costo = bleach.clean(request.json["fabricante"],tags=bleach.sanitizer.ALLOWED_TAGS)
             #pendiente actualizar documento de cotizacion
             db.session.commit()
             return jsonify({"message" : "Cotizacion actualizada exitosamente", "status" : 200}) , 200

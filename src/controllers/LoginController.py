@@ -4,7 +4,7 @@ from flask_jwt_extended import create_access_token
 import binascii
 from werkzeug.security import check_password_hash
 from utils.validation import validation_login
-
+import bleach
 
 def login():
     try:
@@ -12,9 +12,9 @@ def login():
 
         if validation is not True:
             return jsonify({"message": "Datos invalidos", "errors": validation, "status": 400}), 400
-
-        correo = request.json["correo"]
-        contrasena = request.json["contrasena"]
+        
+        correo = bleach.clean(request.json["correo"],tags=bleach.sanitizer.ALLOWED_TAGS) #Saneamiento de datos
+        contrasena = bleach.clean(request.json["contrasena"],tags=bleach.sanitizer.ALLOWED_TAGS)  
 
         usuario = Usuario.query.filter_by(correo=correo).first()
         if usuario:

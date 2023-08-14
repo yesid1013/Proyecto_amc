@@ -3,14 +3,15 @@ from models.Usuario import *
 import uuid
 import binascii
 from werkzeug.security import generate_password_hash
+import bleach
 def crear_usuario():
     try:
         id_usuario = uuid.uuid4().bytes #Generar una nueva UUID y convertirla a formato binario
-        correo = request.json["correo"]
-        contrasena = request.json["contrasena"]
-        nombre = request.json["nombre"]
-        direccion = request.json["direccion"]
-        telefono = request.json["telefono"]
+        correo = bleach.clean(request.json["correo"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        contrasena = bleach.clean(request.json["contrasena"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        nombre = bleach.clean(request.json["nombre"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        direccion = bleach.clean(request.json["direccion"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        telefono = bleach.clean(request.json["telefono"],tags=bleach.sanitizer.ALLOWED_TAGS)
         
         usuario = Usuario.query.filter_by(correo=correo).first()
 

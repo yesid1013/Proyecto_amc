@@ -5,6 +5,7 @@ import uuid
 from io import BytesIO
 from controllers import GoogleDriveController
 from utils.validation import validation_novedad
+import bleach
 
 def crear_novedad(id_activo):
     try:
@@ -14,10 +15,10 @@ def crear_novedad(id_activo):
 
         id_novedad = uuid.uuid4().bytes
         id_activo_bytes = binascii.unhexlify(id_activo) # Convierto el id hexadecimal a binario
-        nombre_reporta = request.json["nombre_reporta"]
-        nombre_empresa = request.json["nombre_empresa"]
-        cargo = request.json["cargo"]
-        descripcion_reporte = request.json["descripcion_reporte"]
+        nombre_reporta = bleach.clean(request.json["nombre_reporta"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        nombre_empresa = bleach.clean(request.json["nombre_empresa"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        cargo = request.jsonbleach.clean(request.json["cargo"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        descripcion_reporte = bleach.clean(request.json["descripcion_reporte"],tags=bleach.sanitizer.ALLOWED_TAGS)
         imagenes = request.json["imagenes"]
 
         if imagenes:
@@ -53,10 +54,10 @@ def editar_novedad(id_novedad):
         if not novedad:
             return jsonify({"message" : "Novedad no encontrada", "status" : 404}), 404
         else:
-            novedad.nombre_reporta = request.json["nombre_reporta"]
-            novedad.nombre_empresa = request.json["nombre_empresa"]
-            novedad.cargo = request.json["cargo"]
-            novedad.descripcion_reporte = request.json["descripcion_reporte"]
+            novedad.nombre_reporta = bleach.clean(request.json["nombre_reporta"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            novedad.nombre_empresa = bleach.clean(request.json["nombre_empresa"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            novedad.cargo = bleach.clean(request.json["cargo"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            novedad.descripcion_reporte = bleach.clean(request.json["descripcion_reporte"],tags=bleach.sanitizer.ALLOWED_TAGS)
             novedad.imagenes = request.json["imagenes"]
 
             db.session.commit()

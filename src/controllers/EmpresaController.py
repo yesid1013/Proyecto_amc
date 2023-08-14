@@ -3,7 +3,7 @@ from models.Empresa import *
 from utils.validation import validation_empresa
 import uuid
 import binascii
-
+import bleach
 
 def crear_empresa():
     try:
@@ -13,9 +13,9 @@ def crear_empresa():
             return jsonify({"message": "Datos invalidos", "errors": validation, "status": 400}), 400
 
         id_empresa = uuid.uuid4().bytes
-        nombre = request.json['nombre']
-        telefono = request.json['telefono']
-        direccion = request.json['direccion']
+        nombre = bleach.clean(request.json["nombre"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        telefono = bleach.clean(request.json["telefono"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        direccion = bleach.clean(request.json["direccion"],tags=bleach.sanitizer.ALLOWED_TAGS)
 
         new_empresa = Empresa(id_empresa,nombre,telefono,direccion)
         db.session.add(new_empresa)

@@ -5,6 +5,7 @@ from models.Codigos_qr import Codigos_qr
 from utils.validation import validation_activo
 import uuid
 import binascii
+import bleach
 
 def crear_activo(id_usuario):
     try: 
@@ -14,17 +15,17 @@ def crear_activo(id_usuario):
             return jsonify({"message": "Datos invalidos", "errors": validation, "status": 400}), 400
 
         id_activo = uuid.uuid4().bytes
-        id_primario = request.json["id_primario"]
-        id_secundario = request.json["id_secundario"]
-        id_usuario = id_usuario
-        ubicacion = request.json["ubicacion"]
-        tipo_de_equipo = request.json["tipo_de_equipo"]
-        fabricante = request.json["fabricante"]
-        modelo = request.json["modelo"]
-        num_serie = request.json["num_serie"]
-        datos_relevantes = request.json["datos_relevantes"]
+        id_primario = bleach.clean(request.json["id_primario"],tags=bleach.sanitizer.ALLOWED_TAGS) #Saneamiento de datos 
+        id_secundario = bleach.clean(request.json["id_secundario"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        id_usuario = bleach.clean(id_usuario,tags=bleach.sanitizer.ALLOWED_TAGS) 
+        ubicacion = bleach.clean(request.json["ubicacion"],tags=bleach.sanitizer.ALLOWED_TAGS) 
+        tipo_de_equipo = bleach.clean(request.json["tipo_de_equipo"],tags=bleach.sanitizer.ALLOWED_TAGS)  
+        fabricante = bleach.clean(request.json["fabricante"],tags=bleach.sanitizer.ALLOWED_TAGS)   
+        modelo = bleach.clean(request.json["modelo"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        num_serie = bleach.clean(request.json["num_Serie"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        datos_relevantes = bleach.clean(request.json["datos_relevante"],tags=bleach.sanitizer.ALLOWED_TAGS)
         imagen_equipo = request.json["imagen_equipo"]
-        id_subcliente = request.json["id_subcliente"]
+        id_subcliente = bleach.clean(request.json["id_subcliente"],tags=bleach.sanitizer.ALLOWED_TAGS)
         ficha_tecnica = request.json["ficha_tecnica"]
 
         id_activo_hex = binascii.hexlify(id_activo).decode() #El id activo que se genera pasarlo de binario a hexadecimal
@@ -113,14 +114,14 @@ def editar_activo(id_activo):
             return jsonify({"message" : "Activo no encontrado", "status" : 404}) , 404
         
         else:
-            activo.id_primario = request.json["id_primario"]
-            activo.id_secundario = request.json["id_secundario"]
-            activo.ubicacion = request.json["ubicacion"]
-            activo.tipo_de_equipo = request.json["tipo_de_equipo"]
-            activo.fabricante = request.json["fabricante"]
-            activo.modelo = request.json["modelo"]
-            activo.num_serie = request.json["num_serie"]
-            activo.datos_relevantes = request.json["datos_relevantes"]
+            activo.id_primario = bleach.clean(request.json["id_primario"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            activo.id_secundario = bleach.clean(request.json["id_secundario"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            activo.ubicacion = bleach.clean(request.json["ubicacion"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            activo.tipo_de_equipo = bleach.clean(request.json["tipo_de_equipo"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            activo.fabricante = bleach.clean(request.json["fabricante"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            activo.modelo = bleach.clean(request.json["modelo"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            activo.num_serie = bleach.clean(request.json["num_serie"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            activo.datos_relevantes = bleach.clean(request.json["datos_relevantes"],tags=bleach.sanitizer.ALLOWED_TAGS)
             #Pendiente de poder actualizar imagen y ficha tecnica
 
             db.session.commit()

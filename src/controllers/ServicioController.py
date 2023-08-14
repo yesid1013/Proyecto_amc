@@ -7,6 +7,7 @@ from models.Tipo_servicio import Tipo_servicio
 from models.Usuario import Usuario
 from controllers import GoogleDriveController
 from utils.validation import validation_servicio
+import bleach
 
 def crear_servicio(id_activo,id_usuario):
     try:
@@ -17,8 +18,8 @@ def crear_servicio(id_activo,id_usuario):
         id_servicio = uuid.uuid4().bytes
         fecha_ejecucion = request.json["fecha_ejecucion"]
         id_tipo_servicio = request.json["id_tipo_servicio"]
-        descripcion = request.json["descripcion"]
-        observaciones = request.json["observaciones"]
+        descripcion = bleach.clean(request.json["descripcion"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        observaciones = bleach.clean(request.json["observaciones"],tags=bleach.sanitizer.ALLOWED_TAGS)
         informe = request.json["informe"]
         
         if informe:
@@ -72,8 +73,8 @@ def editar_servicio(id_servicio):
             fecha_datetime = datetime.strptime(request.json["fecha_ejecucion"], '%d-%m-%Y %H:%M:%S')
             servicio.fecha_ejecucion = fecha_datetime 
             servicio.id_tipo_servicio = request.json["id_tipo_servicio"]
-            servicio.descripcion = request.json["descripcion"]
-            servicio.observaciones = request.json["observaciones"]
+            servicio.descripcion = bleach.clean(request.json["decripcion"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            servicio.observaciones = bleach.clean(request.json["observaciones"],tags=bleach.sanitizer.ALLOWED_TAGS)
             imagenes = None
             informe = None
 
