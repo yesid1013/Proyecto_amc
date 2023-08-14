@@ -3,9 +3,14 @@ from models.Subcliente import *
 import uuid
 import binascii
 from models.Empresa import Empresa
+from utils.validation import validation_subcliente
 
 def crear_subcliente():
     try:
+        validation = validation_subcliente(request.json)
+        if validation is not True:
+            return jsonify({"message": "Datos invalidos", "errors": validation, "status": 400}), 400
+        
         id_subcliente = uuid.uuid4().bytes
         id_empresa = request.json["id_empresa"]
         nombre = request.json["nombre"]
