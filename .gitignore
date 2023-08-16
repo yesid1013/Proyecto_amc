@@ -6,7 +6,8 @@ venv/
 ENV/
 env.bak/
 
+##Credenciales google drive ##
+credentials.json
 
-credential.json
 
 __pycache__
