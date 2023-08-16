@@ -6,10 +6,7 @@ venv/
 ENV/
 env.bak/
 
-src/utils/credential
-src/utils/credential.json
+
 credential.json
-utils/credential
-utils/credential.json
-credential
+
 __pycache__
