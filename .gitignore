@@ -5,6 +5,8 @@ env/
 venv/
 ENV/
 env.bak/
+
+######
 utils/credential.json
 
 __pycache__
