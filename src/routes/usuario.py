@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask_cors import cross_origin
 from controllers import UsuarioController
+from flask_jwt_extended import jwt_required
 
 usuario = Blueprint('usuario', __name__,url_prefix='/api/v1')
 
@@ -11,10 +12,12 @@ def crear_usuario():
 
 @cross_origin()
 @usuario.route('/usuarios')
+@jwt_required()
 def listar_usuarios():
     return UsuarioController.listar_usuarios()
 
 @cross_origin()
 @usuario.route('/usuario/<id_usuario>')
+@jwt_required()
 def buscar_usuario(id_usuario):
     return UsuarioController.buscar_usuario(id_usuario)
