@@ -1,6 +1,7 @@
 from flask import request,jsonify
 from models.Costo_servicio import *
 from utils.validation import validation_costo_servicio
+from controllers import GoogleDriveController
 import uuid
 import binascii
 import bleach
@@ -13,14 +14,19 @@ def crear_costo_servicio(id_servicio):
 
         id_costo_servicio = uuid.uuid4().bytes
         id_servicio_bytes = binascii.unhexlify(id_servicio)
-        costo = bleach.clean(request.json["costo"],tags=bleach.sanitizer.ALLOWED_TAGS)
-        documento_cotizacion = None
+        costo = request.json["costo"]
+        documento_cotizacion = request.json["documento_cotizacion"]
 
-        new_costo_servicio = Costo_servicio(id_costo_servicio,id_servicio_bytes,costo,documento_cotizacion)
+        if documento_cotizacion:
+            id_folder = "1A-5He-r8oSQUsHxrKoEvHS1lVedFHe8l"
+            response = GoogleDriveController.uploadFile(documento_cotizacion,id_folder)
+            url_documento_cotizacion = response["webViewLink"]
+
+        new_costo_servicio = Costo_servicio(id_costo_servicio,id_servicio_bytes,costo,url_documento_cotizacion)
         db.session.add(new_costo_servicio)
         db.session.commit()
 
-        return jsonify({"message": "Cotizacion creada correctamente", "status" : 200}) , 200
+        return jsonify({"message": "Cotizacion creada correctamente", "status" : 201}) , 201
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
