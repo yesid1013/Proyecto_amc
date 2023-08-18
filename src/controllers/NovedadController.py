@@ -17,7 +17,7 @@ def crear_novedad(id_activo):
         id_activo_bytes = binascii.unhexlify(id_activo) # Convierto el id hexadecimal a binario
         nombre_reporta = bleach.clean(request.json["nombre_reporta"],tags=bleach.sanitizer.ALLOWED_TAGS)
         nombre_empresa = bleach.clean(request.json["nombre_empresa"],tags=bleach.sanitizer.ALLOWED_TAGS)
-        cargo = request.jsonbleach.clean(request.json["cargo"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        cargo = bleach.clean(request.json["cargo"],tags=bleach.sanitizer.ALLOWED_TAGS)
         descripcion_reporte = bleach.clean(request.json["descripcion_reporte"],tags=bleach.sanitizer.ALLOWED_TAGS)
         imagenes = request.json["imagenes"]
 

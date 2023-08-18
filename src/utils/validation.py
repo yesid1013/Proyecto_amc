@@ -178,4 +178,34 @@ def validation_subcliente(json):
     except SchemaError as e:
         return str(e)
 
+def validation_costo_servicio(json):
+    try:
+        schema = {
+            "type": "object",
+            "properties" : {
+                "costo" : {"type" : "integer" , "minimum": 0},
+
+                "documento_cotizacion" : {
+                    "type" : "object",
+                    "properties" : {
+                        "name" : {"type": "string"},
+                        "mimeType" : {"type": "string"},
+                        "content": {"type": "string"}
+                    },
+                    "required" : ["name","mimeType","content"]
+                }   
+            },
+            "required" : ["costo"]
+        }
+
+        validate(json,schema=schema)
+        return True
+    
+    except ValidationError as e:
+        return str(e)
+    
+    except SchemaError as e:
+        return str(e)
+
+
            

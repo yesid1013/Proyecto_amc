@@ -1,11 +1,16 @@
 from flask import request,jsonify
 from models.Costo_servicio import *
+from utils.validation import validation_costo_servicio
 import uuid
 import binascii
 import bleach
 
 def crear_costo_servicio(id_servicio):
     try:
+        validation = validation_costo_servicio(request.json)
+        if validation is not True:
+            return jsonify({"message": "Datos invalidos", "errors": validation, "status": 400}), 400
+
         id_costo_servicio = uuid.uuid4().bytes
         id_servicio_bytes = binascii.unhexlify(id_servicio)
         costo = bleach.clean(request.json["costo"],tags=bleach.sanitizer.ALLOWED_TAGS)
