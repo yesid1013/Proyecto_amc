@@ -19,13 +19,13 @@ def login():
         usuario = Usuario.query.filter_by(correo=correo).first()
         if usuario:
             if usuario.verif_contrasena(contrasena):
-                id_hex = binascii.hexlify(usuario.id_usuario).decode()
+                id_hex = binascii.hexlify(usuario.id_usuario).decode() #El id del usuario lo convierto a hexadecimal
                 access_token = create_access_token(identity=id_hex)                
                 return jsonify({"token" : access_token, "user_id" : id_hex, "nombre" : usuario.nombre})
             else:
-                return jsonify({"message" : "Correo o contraseña incorrecta" , "status" : 401}) , 401
+                return jsonify({"message" : "Correo o contraseña incorrecta" , "status" : 400}) , 400
         else:
-            return jsonify({"message" : "Correo o contraseña incorrecta" , "status" : 401}) , 401
+            return jsonify({"message" : "Correo o contraseña incorrecta" , "status" : 400}) , 400
                                  
     except Exception as e:
-        return jsonify({"message" : "Ha ocurrido un error inesperadoooo :", "error" : str(e) })
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e) })
