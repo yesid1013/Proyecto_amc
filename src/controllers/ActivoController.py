@@ -3,6 +3,7 @@ from models.Activo import *
 from controllers import GoogleDriveController
 from models.Codigos_qr import Codigos_qr
 from models.Subcliente import Subcliente
+from models.Codigos_qr import Codigos_qr
 from utils.validation import validation_activo
 import uuid
 import binascii
@@ -77,12 +78,12 @@ def info_activo(id_activo_hex): #Funcion para mostrar la informacion del activo 
 def listar_activos():
     try:
         lista = []
-        activos = db.session.query(Activo.id_activo,Activo.id_primario,Activo.id_secundario,Activo.tipo_de_equipo,Activo.fabricante, Activo.modelo, Activo.num_serie, Activo.ubicacion, Activo.imagen_equipo, Activo.ficha_tecnica, Activo.fecha_registro, Activo.datos_relevantes, Subcliente.nombre).join(Subcliente,Activo.id_subcliente == Subcliente.id_subcliente).filter(Activo.estado == 1).all()
+        activos = db.session.query(Activo.id_activo,Activo.id_primario,Activo.id_secundario,Activo.tipo_de_equipo,Activo.fabricante, Activo.modelo, Activo.num_serie, Activo.ubicacion, Activo.imagen_equipo, Activo.ficha_tecnica, Activo.fecha_registro, Activo.datos_relevantes, Subcliente.nombre, Codigos_qr.web_view_link).join(Subcliente,Activo.id_subcliente == Subcliente.id_subcliente).join(Codigos_qr, Activo.id_qr == Codigos_qr.id_qr).filter(Activo.estado == 1).all()
         if not activos:
             return jsonify({"message" : "No se encontraron activos" , "status" : 404}) , 404
         else:
             for activo in activos:
-                datos = {"id_activo" : binascii.hexlify(activo.id_activo).decode(),"id_primario" : activo.id_primario, "id_secundario" : activo.id_secundario, "tipo_de_equipo": activo.tipo_de_equipo,"fabricante" : activo.fabricante, "modelo" : activo.modelo, "num_serie" : activo.num_serie, "ubicacion" : activo.ubicacion, "imagen_equipo" : activo.imagen_equipo,"ficha_tecnica" : activo.ficha_tecnica, "fecha_registro" : activo.fecha_registro, "subcliente" : activo.nombre}
+                datos = {"id_activo" : binascii.hexlify(activo.id_activo).decode(),"id_primario" : activo.id_primario, "id_secundario" : activo.id_secundario, "tipo_de_equipo": activo.tipo_de_equipo,"fabricante" : activo.fabricante, "modelo" : activo.modelo, "num_serie" : activo.num_serie, "ubicacion" : activo.ubicacion, "imagen_equipo" : activo.imagen_equipo,"ficha_tecnica" : activo.ficha_tecnica, "fecha_registro" : activo.fecha_registro, "subcliente" : activo.nombre, "codigo_qr" : activo.web_view_link}
                 lista.append(datos)
 
             return jsonify (lista)
