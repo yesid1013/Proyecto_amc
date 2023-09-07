@@ -54,13 +54,8 @@ def validation_activo(json):
                 "ubicacion" : {"type" : "string"},
                 "tipo_de_equipo" : {"type" : "string"},
                 "fabricante" : {"type" : "string"},
-                "modelo" : {
-                    "anyOf" : [
-                        {"type" : "string"},
-                        {"type" : "null"}
-                    ]
-                },
-                "num_serie" : {"type" : "string"},
+                "modelo" : {"type" : ["string","null"]},
+                "num_serie" : {"type" : ["string","null"]},
                 "datos_relevantes" : {"type" : "string"},
 
                 "imagen_equipo" : {

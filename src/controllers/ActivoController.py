@@ -11,30 +11,47 @@ import bleach
 
 def crear_activo(id_usuario):
     try: 
-        validation = validation_activo(request.json)
+        
+        validation = validation_activo(request.json)        
         
         if validation is not True:
             return jsonify({"message": "Datos invalidos", "errors": validation, "status": 400}), 400
-
+        
         id_activo = uuid.uuid4().bytes
         id_primario = bleach.clean(request.json["id_primario"],tags=bleach.sanitizer.ALLOWED_TAGS) #Saneamiento de datos 
         id_secundario = bleach.clean(request.json["id_secundario"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        print(id_secundario)
         id_usuario = bleach.clean(id_usuario,tags=bleach.sanitizer.ALLOWED_TAGS) 
         ubicacion = bleach.clean(request.json["ubicacion"],tags=bleach.sanitizer.ALLOWED_TAGS) 
         tipo_de_equipo = bleach.clean(request.json["tipo_de_equipo"],tags=bleach.sanitizer.ALLOWED_TAGS)  
         fabricante = bleach.clean(request.json["fabricante"],tags=bleach.sanitizer.ALLOWED_TAGS)   
-        modelo = bleach.clean(request.json["modelo"],tags=bleach.sanitizer.ALLOWED_TAGS)
-        num_serie = bleach.clean(request.json["num_serie"],tags=bleach.sanitizer.ALLOWED_TAGS)
-        datos_relevantes = bleach.clean(request.json["datos_relevantes"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        modelo = request.json["modelo"]
+        num_serie = request.json["num_serie"]
+        datos_relevantes = request.json["datos_relevantes"]
         imagen_equipo = request.json["imagen_equipo"]
         id_subcliente = bleach.clean(request.json["id_subcliente"],tags=bleach.sanitizer.ALLOWED_TAGS)
         #ficha_tecnica = request.json["ficha_tecnica"]
+
+        if modelo is not None: #No se hace saneamiento directamente como los demás ya que puede estos pueden ser nulos
+            modelo = bleach.clean(modelo, tags=bleach.sanitizer.ALLOWED_TAGS)
+        else:
+            modelo = None
+        
+        if num_serie is not None:
+            num_serie = bleach.clean(num_serie, tags=bleach.sanitizer.ALLOWED_TAGS)
+        else:
+            num_serie = None
+        
+        if datos_relevantes is not None:
+            datos_relevantes = bleach.clean(datos_relevantes, tags=bleach.sanitizer.ALLOWED_TAGS)
+        else:
+            num_serie = None
 
         id_activo_hex = binascii.hexlify(id_activo).decode() #El id activo que se genera pasarlo de binario a hexadecimal
         id_usuario_bytes = binascii.unhexlify(id_usuario) #El id_usuario de hexadecimal a binario
         id_subcliente_bytes = binascii.unhexlify(id_subcliente) #El id_subcliente de hexadecimal a binario
 
-        response = GoogleDriveController.uploadQR(id_activo_hex) #Mando el id del activo en hexadecimal para crear el codigo QR
+        response = GoogleDriveController.uploadQR(id_activo_hex) #Mando el id del activo en hexadecimal para crear el codigo QR para que la url del codigo qr tenga el id del activo
 
         new_code_qr = Codigos_qr(response["id"],response["webViewLink"])
         db.session.add(new_code_qr)
@@ -52,8 +69,6 @@ def crear_activo(id_usuario):
 
         archivo_ficha_tecnica = None
        
-
-
         new_activo = Activo(id_activo,new_code_qr.id_qr,id_primario,id_secundario,id_usuario_bytes,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen,id_subcliente_bytes,archivo_ficha_tecnica)
 
         db.session.add(new_activo)
