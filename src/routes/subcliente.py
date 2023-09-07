@@ -13,7 +13,6 @@ def crear_subcliente():
 
 @cross_origin()
 @subcliente.route('/subclientes')
-@jwt_required()
 def listar_subclientes():
     return SubclienteController.listar_subclientes()
 

@@ -8,7 +8,7 @@ servicio = Blueprint('servicio', __name__,url_prefix='/api/v1')
 @cross_origin()
 @servicio.route('/servicios/<id_activo>', methods=['POST'])
 @jwt_required()
-def crear_novedad(id_activo):
+def crear_servicio(id_activo):
     id_usuario = get_jwt_identity()
     return ServicioController.crear_servicio(id_activo,id_usuario)
 

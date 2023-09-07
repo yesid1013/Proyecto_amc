@@ -24,11 +24,11 @@ def crear_activo(id_usuario):
         tipo_de_equipo = bleach.clean(request.json["tipo_de_equipo"],tags=bleach.sanitizer.ALLOWED_TAGS)  
         fabricante = bleach.clean(request.json["fabricante"],tags=bleach.sanitizer.ALLOWED_TAGS)   
         modelo = bleach.clean(request.json["modelo"],tags=bleach.sanitizer.ALLOWED_TAGS)
-        num_serie = bleach.clean(request.json["num_Serie"],tags=bleach.sanitizer.ALLOWED_TAGS)
-        datos_relevantes = bleach.clean(request.json["datos_relevante"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        num_serie = bleach.clean(request.json["num_serie"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        datos_relevantes = bleach.clean(request.json["datos_relevantes"],tags=bleach.sanitizer.ALLOWED_TAGS)
         imagen_equipo = request.json["imagen_equipo"]
         id_subcliente = bleach.clean(request.json["id_subcliente"],tags=bleach.sanitizer.ALLOWED_TAGS)
-        ficha_tecnica = request.json["ficha_tecnica"]
+        #ficha_tecnica = request.json["ficha_tecnica"]
 
         id_activo_hex = binascii.hexlify(id_activo).decode() #El id activo que se genera pasarlo de binario a hexadecimal
         id_usuario_bytes = binascii.unhexlify(id_usuario) #El id_usuario de hexadecimal a binario
@@ -45,10 +45,14 @@ def crear_activo(id_usuario):
             response = GoogleDriveController.uploadFile(imagen_equipo,id_folder)
             imagen = response["webContentLink"]
 
-        if request.json["ficha_tecnica"]:
-            id_folder = "1cI5I2nlPzm5bIBLqik3onWcDhijD1mHV"
-            response = GoogleDriveController.uploadFile(ficha_tecnica,id_folder)
-            archivo_ficha_tecnica = response["webViewLink"]
+        # if request.json["ficha_tecnica"]:
+        #     id_folder = "1cI5I2nlPzm5bIBLqik3onWcDhijD1mHV"
+        #     response = GoogleDriveController.uploadFile(ficha_tecnica,id_folder)
+        #     archivo_ficha_tecnica = response["webViewLink"]
+
+        archivo_ficha_tecnica = None
+       
+
 
         new_activo = Activo(id_activo,new_code_qr.id_qr,id_primario,id_secundario,id_usuario_bytes,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen,id_subcliente_bytes,archivo_ficha_tecnica)
 

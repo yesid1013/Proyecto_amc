@@ -54,7 +54,12 @@ def validation_activo(json):
                 "ubicacion" : {"type" : "string"},
                 "tipo_de_equipo" : {"type" : "string"},
                 "fabricante" : {"type" : "string"},
-                "modelo" : {"type" : "string"},
+                "modelo" : {
+                    "anyOf" : [
+                        {"type" : "string"},
+                        {"type" : "null"}
+                    ]
+                },
                 "num_serie" : {"type" : "string"},
                 "datos_relevantes" : {"type" : "string"},
 
@@ -67,19 +72,8 @@ def validation_activo(json):
                     },
                     "required" : ["name","mimeType","content"]
                 },
-
-                "ficha_tecnica" : {
-                    "type" : "object",
-                    "properties" : {
-                        "name" : {"type": "string"},
-                        "mimeType": {"type": "string"},
-                        "content": {"type": "string"}
-                    },
-                    "required" : ["name","mimeType","content"]
-                }
-
         },
-        "required": ["ubicacion","tipo_de_equipo","fabricante"],
+        "required": ["ubicacion","tipo_de_equipo","fabricante","id_primario"],
         }
 
         validate(json,schema=schema)

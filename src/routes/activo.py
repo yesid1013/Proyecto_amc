@@ -1,22 +1,31 @@
-from flask import Blueprint
+from flask import Blueprint,jsonify
 from flask_cors import cross_origin
 from controllers import ActivoController
-from flask_jwt_extended import jwt_required,get_jwt_identity
+from flask_jwt_extended import jwt_required,get_jwt_identity,verify_jwt_in_request
+from flask_jwt_extended.exceptions import NoAuthorizationError,InvalidHeaderError,JWTDecodeError
+
+
 
 activo = Blueprint('activo', __name__,url_prefix='/api/v1')
 
-@cross_origin()
-@activo.route('/activo', methods=['POST'])
-@jwt_required()
-def crear_activo():
-    current_user_id = get_jwt_identity()
-    return ActivoController.crear_activo(current_user_id)
 
 @cross_origin()
-@activo.route('/activos')
+@activo.route('/listar_activos',methods=['GET'])
 @jwt_required()
 def listar_activos():
     return ActivoController.listar_activos()
+
+@cross_origin()
+@activo.route("/create_activo", methods = ['POST'])
+@jwt_required()
+def crear_Activo():
+    try:
+        verify_jwt_in_request()
+        id_usuario = get_jwt_identity()
+        return ActivoController.crear_activo(id_usuario)
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
+
 
 @cross_origin()
 @activo.route('/info_activo/<id_activo_hex>')
