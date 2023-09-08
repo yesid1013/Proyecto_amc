@@ -56,7 +56,7 @@ def validation_activo(json):
                 "fabricante" : {"type" : "string"},
                 "modelo" : {"type" : ["string","null"]},
                 "num_serie" : {"type" : ["string","null"]},
-                "datos_relevantes" : {"type" : "string"},
+                "datos_relevantes" : {"type" : ["string","null"]},
 
                 "imagen_equipo" : {
                     "type": "object",

@@ -45,7 +45,7 @@ def crear_activo(id_usuario):
         if datos_relevantes is not None:
             datos_relevantes = bleach.clean(datos_relevantes, tags=bleach.sanitizer.ALLOWED_TAGS)
         else:
-            num_serie = None
+            datos_relevantes = None
 
         id_activo_hex = binascii.hexlify(id_activo).decode() #El id activo que se genera pasarlo de binario a hexadecimal
         id_usuario_bytes = binascii.unhexlify(id_usuario) #El id_usuario de hexadecimal a binario
@@ -53,7 +53,7 @@ def crear_activo(id_usuario):
 
         response = GoogleDriveController.uploadQR(id_activo_hex) #Mando el id del activo en hexadecimal para crear el codigo QR para que la url del codigo qr tenga el id del activo
 
-        new_code_qr = Codigos_qr(response["id"],response["webViewLink"])
+        new_code_qr = Codigos_qr(response["id"],response["webViewLink"]) #el response me devuelve el id del archivo y el webViewLink que seran los campos que se guardan en la tabla de codigos_qr
         db.session.add(new_code_qr)
         db.session.commit()
 
