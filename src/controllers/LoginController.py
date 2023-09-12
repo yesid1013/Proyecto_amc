@@ -22,7 +22,7 @@ def login():
                 id_hex = binascii.hexlify(usuario.id_usuario).decode() #El id del usuario lo convierto a hexadecimal
                 claims = {"perfil" : usuario.perfil} #ROL DE USUARIO
                 access_token = create_access_token(identity=id_hex,additional_claims= claims)                
-                return jsonify({"token" : access_token})
+                return jsonify({"token" : access_token,"nombre" : usuario.nombre})
             else:
                 return jsonify({"message" : "Correo o contraseña incorrecta" , "status" : 400}) , 400
         else:

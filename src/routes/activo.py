@@ -51,10 +51,16 @@ def editar_activo(id_activo):
     
 
 @cross_origin()
-@activo.route('/activos/<id_activo>',methods=['DELETE'])
+@activo.route('/activo/<id_activo>',methods=['DELETE'])
 @jwt_required()
 def eliminar_activo(id_activo):
-    return ActivoController.eliminar_activo(id_activo)
+    try:
+        verify_jwt_in_request()
+        return ActivoController.eliminar_activo(id_activo)
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
+    
+
 
 @cross_origin()
 @activo.route('/activos/<id_activo>/restaurar',methods=['PUT'])
