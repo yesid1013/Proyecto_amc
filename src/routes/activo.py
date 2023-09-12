@@ -39,10 +39,16 @@ def listar_activos_subcliente(id_subcliente):
     return ActivoController.activos_de_subcliente(id_subcliente)
 
 @cross_origin()
-@activo.route('/activos/<id_activo>',methods=['PUT'])
+@activo.route('/activo/<id_activo>',methods=['PUT'])
 @jwt_required()
 def editar_activo(id_activo):
-    return ActivoController.editar_activo(id_activo)
+    try:
+        verify_jwt_in_request()
+        return ActivoController.editar_activo(id_activo)
+    
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
+    
 
 @cross_origin()
 @activo.route('/activos/<id_activo>',methods=['DELETE'])
