@@ -59,8 +59,16 @@ def eliminar_activo(id_activo):
         return ActivoController.eliminar_activo(id_activo)
     except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
         return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
-    
 
+@cross_origin()
+@activo.route('/activos_eliminados', methods = ['GET'])
+@jwt_required()
+def activos_eliminados():
+    try:
+        verify_jwt_in_request()
+        return ActivoController.get_activos_borrados()
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})   
 
 @cross_origin()
 @activo.route('/activos/<id_activo>/restaurar',methods=['PUT'])

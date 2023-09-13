@@ -160,8 +160,6 @@ def editar_activo(id_activo):
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
     
-
-
 def eliminar_activo(id_activo):
     try:
         id_activo_bytes = binascii.unhexlify(id_activo)
@@ -191,5 +189,21 @@ def restaurar_activo(id_activo):
             db.session.commit()
             return jsonify({"message" : "Activo restaurado", "status" : 200})
         
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+def get_activos_borrados():
+    try:
+        lista = []
+        activos_borrados = db.session.query(Activo.id_activo,Activo.id_primario,Activo.id_secundario,Activo.tipo_de_equipo,Activo.ubicacion).filter_by(estado = 0).all()
+
+        if not activos_borrados:
+            return jsonify({"message" : "No se encontraron activos", "status" : 404}) , 404
+
+
+        lista = [{"id_activo": binascii.hexlify(activo.id_activo).decode(), "id_primario": activo.id_primario, "id_secundario": activo.id_secundario, "tipo_de_equipo": activo.tipo_de_equipo, "ubicacion": activo.ubicacion} for activo in activos_borrados]
+
+        return jsonify(lista)
+    
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
