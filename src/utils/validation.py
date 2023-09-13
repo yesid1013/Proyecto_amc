@@ -61,9 +61,9 @@ def validation_activo(json):
                 "imagen_equipo" : {
                     "type": "object",
                     "properties": {
-                    "name": {"type": "string"},
-                    "mimeType": {"type": "string"},
-                    "content": {"type": "string"}
+                    "name": {"type" : ["string","null"]},
+                    "mimeType": {"type" : ["string","null"]},
+                    "content": {"type" : ["string","null"]}
                     },
                     "required" : ["name","mimeType","content"]
                 },

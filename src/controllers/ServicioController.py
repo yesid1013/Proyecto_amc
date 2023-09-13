@@ -5,6 +5,7 @@ import uuid
 from datetime import datetime
 from models.Tipo_servicio import Tipo_servicio
 from models.Usuario import Usuario
+from models.Activo import Activo
 from controllers import GoogleDriveController
 from utils.validation import validation_servicio
 import bleach
@@ -59,6 +60,20 @@ def serivicios_de_un_activo(id_activo):
 
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+def obtener_servicios():
+    try:
+        servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio,Activo.tipo_de_equipo,Servicio.fecha_ejecucion,Usuario.nombre,Tipo_servicio.tipo,Servicio.descripcion,Servicio.observaciones,Servicio.informe).join(Activo,Servicio.id_activo == Activo.id_activo).join(Usuario, Servicio.id_usuario == Usuario.id_usuario).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Servicio.estado == 1).all()
+
+        if not servicios:
+            return jsonify({"message" : "Servivicos no encontrados", "status" : 404}) , 404
+        else:
+            lista = [{"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "numero_servicio" : servicio.numero_servicio, "activo" : servicio.tipo_de_equipo, "fecha_ejecucion" : servicio.fecha_ejecucion, "nombre_usuario" : servicio.nombre, "tipo_servicio" : servicio.tipo, "descripcion" : servicio.descripcion, "observaciones" : servicio.observaciones, "informe" : servicio.informe} for servicio in servicios]
+            return jsonify(lista)
+
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
     
     
 def editar_servicio(id_servicio):

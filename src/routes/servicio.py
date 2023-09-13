@@ -12,6 +12,12 @@ def crear_servicio(id_activo):
     id_usuario = get_jwt_identity()
     return ServicioController.crear_servicio(id_activo,id_usuario)
 
+@cross_origin()
+@servicio.route('/servicios')
+@jwt_required()
+def obtener_servicios():
+    return ServicioController.obtener_servicios()
+
 
 @cross_origin()
 @servicio.route('/servicios/<id_activo>')

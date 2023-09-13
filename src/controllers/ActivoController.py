@@ -57,10 +57,12 @@ def crear_activo(id_usuario):
         db.session.add(new_code_qr)
         db.session.commit()
 
-        if request.json["imagen_equipo"]: #Guardar imagen
+        if imagen_equipo["name"] != None and imagen_equipo["content"] != None and imagen_equipo["mimeType"] != None: #Guardar imagen
             id_folder = "1Y3nYWG7O8OC3D4J9u55I3RokXTbNEeOz" #Id de la carpeta donde se guardara el archivo
             response = GoogleDriveController.uploadFile(imagen_equipo,id_folder)
             imagen = response["webContentLink"]
+        else:
+            imagen = None
 
         # if request.json["ficha_tecnica"]:
         #     id_folder = "1cI5I2nlPzm5bIBLqik3onWcDhijD1mHV"
