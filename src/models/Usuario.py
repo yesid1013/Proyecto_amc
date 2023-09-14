@@ -11,7 +11,7 @@ class Usuario(db.Model):
     nombre = db.Column(db.String(100), nullable = False)
     direccion = db.Column(db.String(100), nullable = True)
     telefono = db.Column(db.String(10), nullable = True)
-    perfil = db.Column(db.SmallInteger,nullable = False, default = 1)
+    perfil = db.Column(db.SmallInteger,nullable = False, default = 2)
 
     servicio = db.relationship('Servicio', back_populates='usuario',cascade="all, delete-orphan" )
     activo = db.relationship('Activo', back_populates='usuario', cascade="all,delete-orphan")
@@ -23,7 +23,7 @@ class Usuario(db.Model):
         self.nombre = nombre
         self.direccion = direccion
         self.telefono = telefono
-        self.perfil = 1
+        self.perfil = 2
     
     def verif_contrasena(self,contrasena):
         return check_password_hash(self.contrasena,contrasena)

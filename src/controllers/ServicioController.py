@@ -23,10 +23,12 @@ def crear_servicio(id_activo,id_usuario):
         observaciones = bleach.clean(request.json["observaciones"],tags=bleach.sanitizer.ALLOWED_TAGS)
         informe = request.json["informe"]
         
-        if informe:
+        if informe["name"] != None and informe["content"] != None and informe["mimeType"] != None: 
             id_folder = "1L5aLI-JdlZ3dDJ2LxnWSbxBn70yt0nPA"
             response = GoogleDriveController.uploadFile(informe,id_folder)
             informe = response["webViewLink"]
+        else:
+            informe = None
 
         id_usuario_bytes = binascii.unhexlify(id_usuario)
         id_activo_bytes = binascii.unhexlify(id_activo)
@@ -61,7 +63,7 @@ def serivicios_de_un_activo(id_activo):
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
 
-def obtener_servicios():
+def obtener_todos_los_servicios():
     try:
         servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio,Activo.tipo_de_equipo,Servicio.fecha_ejecucion,Usuario.nombre,Tipo_servicio.tipo,Servicio.descripcion,Servicio.observaciones,Servicio.informe).join(Activo,Servicio.id_activo == Activo.id_activo).join(Usuario, Servicio.id_usuario == Usuario.id_usuario).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Servicio.estado == 1).all()
 
@@ -73,6 +75,22 @@ def obtener_servicios():
 
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+
+def obtener_servicios_de_usuario(id_usuario):
+    try:
+        id_usuario_bytes = binascii.unhexlify(id_usuario)
+        servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio,Activo.tipo_de_equipo,Servicio.fecha_ejecucion,Usuario.nombre,Tipo_servicio.tipo,Servicio.descripcion,Servicio.observaciones,Servicio.informe).join(Activo,Servicio.id_activo == Activo.id_activo).join(Usuario, Servicio.id_usuario == Usuario.id_usuario).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Servicio.id_usuario == id_usuario_bytes, Servicio.estado == 1).all()
+
+        if not servicios:
+            return jsonify({"message" : "Servivicos no encontrados", "status" : 404}) , 404
+        else:
+            lista = [{"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "numero_servicio" : servicio.numero_servicio, "activo" : servicio.tipo_de_equipo, "fecha_ejecucion" : servicio.fecha_ejecucion.strftime('%d/%m/%y %H:%M:%S'), "nombre_usuario" : servicio.nombre, "tipo_servicio" : servicio.tipo, "descripcion" : servicio.descripcion, "observaciones" : servicio.observaciones, "informe" : servicio.informe} for servicio in servicios]
+            return jsonify(lista)
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+        
     
     
     

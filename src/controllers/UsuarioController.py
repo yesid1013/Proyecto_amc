@@ -55,6 +55,21 @@ def buscar_usuario(id_usuario):
     except Exception as e: 
         print (str(e))
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+def obtener_perfil_de_usuario(id_usuario):
+    try:
+        id_usuario_bytes = binascii.unhexlify(id_usuario)
+
+        usuario = db.session.query(Usuario.perfil).filter_by(id_usuario = id_usuario_bytes).first()
+        if usuario:
+            print(usuario.perfil)
+            return usuario.perfil
+        else :
+            return jsonify({"message" : "Usuario no encontrado"}) , 404
+    
+    except Exception as e: 
+        print (str(e))
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
         
     
 
