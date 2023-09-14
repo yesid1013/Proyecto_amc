@@ -17,6 +17,7 @@ class Servicio(db.Model):
     observaciones = db.Column(db.String(100))
     observaciones_usuario = db.Column(db.String(100))
     informe = db.Column(db.String(255))
+    orden_de_servicio = db.Column(db.String(255))
     estado = db.Column(db.SmallInteger,nullable = False, default = 1)
 
     activo = db.relationship('Activo', back_populates="servicio", uselist=False, single_parent=True)
@@ -25,7 +26,7 @@ class Servicio(db.Model):
 
     costo_servicio = db.relationship('Costo_servicio', back_populates='servicio',cascade="all,delete-orphan")
 
-    def __init__ (self,id_servicio,id_activo,fecha_ejecucion,id_usuario,id_tipo_servicio,descripcion,observaciones,informe):
+    def __init__ (self,id_servicio,id_activo,fecha_ejecucion,id_usuario,id_tipo_servicio,descripcion,observaciones,informe,orden_de_servicio):
         self.id_servicio = id_servicio
         self.id_activo = id_activo
         self.fecha_ejecucion = fecha_ejecucion
@@ -35,6 +36,7 @@ class Servicio(db.Model):
         self.observaciones = observaciones
         self.informe = informe
         self.estado = 1
+        self.orden_de_servicio = orden_de_servicio
 
     def getDatos(self):
         return {
@@ -45,7 +47,6 @@ class Servicio(db.Model):
             "id_tipo_servicio" : self.id_tipo_servicio,
             "descripcion" : self.descripcion,
             "observaciones" : self.observaciones,
-            "imagenes" : self.imagenes,
             "informe" : self.informe
         }
  

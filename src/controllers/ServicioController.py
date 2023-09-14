@@ -22,6 +22,7 @@ def crear_servicio(id_activo,id_usuario):
         descripcion = bleach.clean(request.json["descripcion"],tags=bleach.sanitizer.ALLOWED_TAGS)
         observaciones = bleach.clean(request.json["observaciones"],tags=bleach.sanitizer.ALLOWED_TAGS)
         informe = request.json["informe"]
+        orden_de_servicio = request.json["orden_de_servicio"]
         
         if informe["name"] != None and informe["content"] != None and informe["mimeType"] != None: 
             id_folder = "1L5aLI-JdlZ3dDJ2LxnWSbxBn70yt0nPA"
@@ -29,12 +30,19 @@ def crear_servicio(id_activo,id_usuario):
             informe = response["webViewLink"]
         else:
             informe = None
+        
+        if orden_de_servicio["name"] != None and orden_de_servicio["content"] != None and orden_de_servicio["mimeType"] != None: 
+            id_folder = "1vVTG_28NG5VL4gSLRSRJtqzzyptl0Ax-"
+            response = GoogleDriveController.uploadFile(orden_de_servicio,id_folder)
+            orden_de_servicio = response["webViewLink"]
+        else:
+            orden_de_servicio = None
 
         id_usuario_bytes = binascii.unhexlify(id_usuario)
         id_activo_bytes = binascii.unhexlify(id_activo)
         fecha_datetime = datetime.strptime(fecha_ejecucion, '%d-%m-%Y %H:%M:%S')
 
-        new_servicio = Servicio(id_servicio,id_activo_bytes,fecha_datetime,id_usuario_bytes,id_tipo_servicio,descripcion,observaciones,informe)
+        new_servicio = Servicio(id_servicio,id_activo_bytes,fecha_datetime,id_usuario_bytes,id_tipo_servicio,descripcion,observaciones,informe,orden_de_servicio)
 
         db.session.add(new_servicio)
         db.session.commit()
@@ -80,12 +88,12 @@ def obtener_todos_los_servicios():
 def obtener_servicios_de_usuario(id_usuario):
     try:
         id_usuario_bytes = binascii.unhexlify(id_usuario)
-        servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio,Activo.tipo_de_equipo,Servicio.fecha_ejecucion,Usuario.nombre,Tipo_servicio.tipo,Servicio.descripcion,Servicio.observaciones,Servicio.informe).join(Activo,Servicio.id_activo == Activo.id_activo).join(Usuario, Servicio.id_usuario == Usuario.id_usuario).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Servicio.id_usuario == id_usuario_bytes, Servicio.estado == 1).all()
+        servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio,Activo.tipo_de_equipo,Servicio.fecha_ejecucion,Usuario.nombre,Tipo_servicio.tipo,Servicio.descripcion,Servicio.observaciones,Servicio.informe,Servicio.orden_de_servicio).join(Activo,Servicio.id_activo == Activo.id_activo).join(Usuario, Servicio.id_usuario == Usuario.id_usuario).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Servicio.id_usuario == id_usuario_bytes, Servicio.estado == 1).all()
 
         if not servicios:
             return jsonify({"message" : "Servivicos no encontrados", "status" : 404}) , 404
         else:
-            lista = [{"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "numero_servicio" : servicio.numero_servicio, "activo" : servicio.tipo_de_equipo, "fecha_ejecucion" : servicio.fecha_ejecucion.strftime('%d/%m/%y %H:%M:%S'), "nombre_usuario" : servicio.nombre, "tipo_servicio" : servicio.tipo, "descripcion" : servicio.descripcion, "observaciones" : servicio.observaciones, "informe" : servicio.informe} for servicio in servicios]
+            lista = [{"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "numero_servicio" : servicio.numero_servicio, "activo" : servicio.tipo_de_equipo, "fecha_ejecucion" : servicio.fecha_ejecucion.strftime('%d/%m/%y %H:%M:%S'), "nombre_usuario" : servicio.nombre, "tipo_servicio" : servicio.tipo, "descripcion" : servicio.descripcion, "observaciones" : servicio.observaciones, "informe" : servicio.informe, "orden_de_servicio" : servicio.orden_de_servicio} for servicio in servicios]
             return jsonify(lista)
     
     except Exception as e:
