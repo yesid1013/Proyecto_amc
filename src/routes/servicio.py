@@ -1,6 +1,6 @@
 from flask import Blueprint,jsonify
 from flask_cors import cross_origin
-from flask_jwt_extended import jwt_required, get_jwt_identity,verify_jwt_in_request
+from flask_jwt_extended import jwt_required, get_jwt_identity,verify_jwt_in_request,get_jwt
 from controllers import ServicioController
 from controllers import UsuarioController
 from flask_jwt_extended.exceptions import NoAuthorizationError,InvalidHeaderError,JWTDecodeError
@@ -22,11 +22,10 @@ def obtener_servicios():
     try:
         verify_jwt_in_request()
         id_usuario = get_jwt_identity()
-        perfil_usuario = UsuarioController.obtener_perfil_de_usuario(id_usuario)
-
-        if perfil_usuario == 1:
+        claims = get_jwt()
+        if claims['perfil'] == 1:
             return ServicioController.obtener_todos_los_servicios()
-        elif perfil_usuario == 2:
+        elif claims['perfil'] == 2:
             return ServicioController.obtener_servicios_de_usuario(id_usuario)
         
     except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
