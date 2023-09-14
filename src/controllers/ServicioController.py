@@ -68,7 +68,7 @@ def obtener_servicios():
         if not servicios:
             return jsonify({"message" : "Servivicos no encontrados", "status" : 404}) , 404
         else:
-            lista = [{"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "numero_servicio" : servicio.numero_servicio, "activo" : servicio.tipo_de_equipo, "fecha_ejecucion" : servicio.fecha_ejecucion, "nombre_usuario" : servicio.nombre, "tipo_servicio" : servicio.tipo, "descripcion" : servicio.descripcion, "observaciones" : servicio.observaciones, "informe" : servicio.informe} for servicio in servicios]
+            lista = [{"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "numero_servicio" : servicio.numero_servicio, "activo" : servicio.tipo_de_equipo, "fecha_ejecucion" : servicio.fecha_ejecucion.strftime('%d/%m/%y %H:%M:%S'), "nombre_usuario" : servicio.nombre, "tipo_servicio" : servicio.tipo, "descripcion" : servicio.descripcion, "observaciones" : servicio.observaciones, "informe" : servicio.informe} for servicio in servicios]
             return jsonify(lista)
 
     except Exception as e:

@@ -104,7 +104,7 @@ def listar_activos():
             return jsonify({"message" : "No se encontraron activos" , "status" : 404}) , 404
         else:
             for activo in activos:
-                datos = {"id_activo" : binascii.hexlify(activo.id_activo).decode(),"id_subcliente" : binascii.hexlify(activo.id_subcliente).decode() ,"id_primario" : activo.id_primario, "id_secundario" : activo.id_secundario, "tipo_de_equipo": activo.tipo_de_equipo,"fabricante" : activo.fabricante, "modelo" : activo.modelo, "num_serie" : activo.num_serie, "ubicacion" : activo.ubicacion, "imagen_equipo" : activo.imagen_equipo,"ficha_tecnica" : activo.ficha_tecnica, "fecha_registro" : activo.fecha_registro,"datos_relevantes" : activo.datos_relevantes, "subcliente" : activo.nombre,"codigo_qr" : activo.web_view_link}
+                datos = {"id_activo" : binascii.hexlify(activo.id_activo).decode(),"id_subcliente" : binascii.hexlify(activo.id_subcliente).decode() ,"id_primario" : activo.id_primario, "id_secundario" : activo.id_secundario, "tipo_de_equipo": activo.tipo_de_equipo,"fabricante" : activo.fabricante, "modelo" : activo.modelo, "num_serie" : activo.num_serie, "ubicacion" : activo.ubicacion, "imagen_equipo" : activo.imagen_equipo,"ficha_tecnica" : activo.ficha_tecnica, "fecha_registro" : activo.fecha_registro.strftime('%d/%m/%y %H:%M:%S'),"datos_relevantes" : activo.datos_relevantes, "subcliente" : activo.nombre,"codigo_qr" : activo.web_view_link}
                 lista.append(datos)
 
             return jsonify (lista)
