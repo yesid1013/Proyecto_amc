@@ -26,7 +26,7 @@ class Servicio(db.Model):
 
     costo_servicio = db.relationship('Costo_servicio', back_populates='servicio',cascade="all,delete-orphan")
 
-    def __init__ (self,id_servicio,id_activo,fecha_ejecucion,id_usuario,id_tipo_servicio,descripcion,observaciones,informe,orden_de_servicio):
+    def __init__ (self,id_servicio,id_activo,fecha_ejecucion,id_usuario,id_tipo_servicio,descripcion,observaciones,observaciones_usuario,informe,orden_de_servicio):
         self.id_servicio = id_servicio
         self.id_activo = id_activo
         self.fecha_ejecucion = fecha_ejecucion
@@ -34,6 +34,7 @@ class Servicio(db.Model):
         self.id_tipo_servicio = id_tipo_servicio
         self.descripcion = descripcion
         self.observaciones = observaciones
+        self.observaciones_usuario = observaciones_usuario
         self.informe = informe
         self.estado = 1
         self.orden_de_servicio = orden_de_servicio

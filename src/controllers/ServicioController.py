@@ -21,15 +21,16 @@ def crear_servicio(id_activo,id_usuario):
         id_tipo_servicio = request.json["id_tipo_servicio"]
         descripcion = bleach.clean(request.json["descripcion"],tags=bleach.sanitizer.ALLOWED_TAGS)
         observaciones = bleach.clean(request.json["observaciones"],tags=bleach.sanitizer.ALLOWED_TAGS)
-        informe = request.json["informe"]
+        observaciones_usuario = bleach.clean(request.json["observaciones_usuario"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        #informe = request.json["informe"]
         orden_de_servicio = request.json["orden_de_servicio"]
         
-        if informe["name"] != None and informe["content"] != None and informe["mimeType"] != None: 
-            id_folder = "1L5aLI-JdlZ3dDJ2LxnWSbxBn70yt0nPA"
-            response = GoogleDriveController.uploadFile(informe,id_folder)
-            informe = response["webViewLink"]
-        else:
-            informe = None
+        # if informe["name"] != None and informe["content"] != None and informe["mimeType"] != None: 
+        #     id_folder = "1L5aLI-JdlZ3dDJ2LxnWSbxBn70yt0nPA"
+        #     response = GoogleDriveController.uploadFile(informe,id_folder)
+        #     informe = response["webViewLink"]
+        # else:
+        informe = None
         
         if orden_de_servicio["name"] != None and orden_de_servicio["content"] != None and orden_de_servicio["mimeType"] != None: 
             id_folder = "1vVTG_28NG5VL4gSLRSRJtqzzyptl0Ax-"
@@ -42,7 +43,7 @@ def crear_servicio(id_activo,id_usuario):
         id_activo_bytes = binascii.unhexlify(id_activo)
         fecha_datetime = datetime.strptime(fecha_ejecucion, '%d-%m-%Y %H:%M:%S')
 
-        new_servicio = Servicio(id_servicio,id_activo_bytes,fecha_datetime,id_usuario_bytes,id_tipo_servicio,descripcion,observaciones,informe,orden_de_servicio)
+        new_servicio = Servicio(id_servicio,id_activo_bytes,fecha_datetime,id_usuario_bytes,id_tipo_servicio,descripcion,observaciones,observaciones_usuario,informe,orden_de_servicio)
 
         db.session.add(new_servicio)
         db.session.commit()

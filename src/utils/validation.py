@@ -123,7 +123,7 @@ def validation_servicio(json):
                 "descripcion" : {"type": "string"},
                 "observaciones" : {"type" : ["string","null"]},
 
-                "informe" : {
+                "orden_de_servicio" : {
                     "type" : "object",
                     "properties" : {
                         "name" : {"type" : ["string","null"]},
