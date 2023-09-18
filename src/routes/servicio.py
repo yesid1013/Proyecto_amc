@@ -12,8 +12,13 @@ servicio = Blueprint('servicio', __name__,url_prefix='/api/v1')
 @servicio.route('/servicios/<id_activo>', methods=['POST'])
 @jwt_required()
 def crear_servicio(id_activo):
-    id_usuario = get_jwt_identity()
-    return ServicioController.crear_servicio(id_activo,id_usuario)
+    try:
+        id_usuario = get_jwt_identity()
+        return ServicioController.crear_servicio(id_activo,id_usuario)
+    
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
+
 
 @cross_origin()
 @servicio.route('/servicios')
