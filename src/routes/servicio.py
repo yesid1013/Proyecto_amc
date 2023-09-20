@@ -54,10 +54,14 @@ def editar_servicio(id_servicio):
         return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
 
 @cross_origin()
-@servicio.route('/servicios/<id_servicio>', methods=['DELETE'])
+@servicio.route('/servicio/<id_servicio>', methods=['DELETE'])
 @jwt_required()
 def eliminar_servicio(id_servicio):
-    return ServicioController.eliminar_servicio(id_servicio)
+    try:
+        verify_jwt_in_request()
+        return ServicioController.eliminar_servicio(id_servicio)
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
 
 @cross_origin()
 @servicio.route('/servicios/<id_servicio>/restaurar', methods=['PUT'])
