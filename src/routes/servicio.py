@@ -44,10 +44,14 @@ def listar_servicios(id_activo):
     return ServicioController.serivicios_de_un_activo(id_activo)
 
 @cross_origin()
-@servicio.route('/servicios/<id_servicio>', methods=['PUT'])
+@servicio.route('/servicio/<id_servicio>', methods=['PUT'])
 @jwt_required()
 def editar_servicio(id_servicio):
-    return ServicioController.editar_servicio(id_servicio)
+    try:
+        verify_jwt_in_request()
+        return ServicioController.editar_servicio(id_servicio)
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
 
 @cross_origin()
 @servicio.route('/servicios/<id_servicio>', methods=['DELETE'])
