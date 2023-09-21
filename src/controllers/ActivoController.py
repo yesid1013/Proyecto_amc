@@ -209,3 +209,18 @@ def get_activos_borrados():
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+
+def activos_sin_ficha_tecnica():
+    try:
+        activos = db.session.query(Activo.id_activo,Activo.id_primario,Activo.id_secundario,Activo.tipo_de_equipo,Subcliente.nombre).join(Subcliente,Activo.id_subcliente == Subcliente.id_subcliente).filter(Activo.ficha_tecnica == None).all()
+
+        if not activos:
+            return jsonify({"message" : "No se encontraron activos", "status" : 404}) , 404
+
+        lista = [{"id_activo" : binascii.hexlify(activo.id_activo).decode(),"id_primario" : activo.id_primario ,"id_secundario" : activo.id_secundario, "tipo_de_equipo" : activo.tipo_de_equipo, "subcliente" : activo.nombre} for activo in activos]
+
+        return jsonify(lista)
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})

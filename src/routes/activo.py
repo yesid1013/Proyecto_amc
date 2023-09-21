@@ -1,7 +1,7 @@
 from flask import Blueprint,jsonify
 from flask_cors import cross_origin
 from controllers import ActivoController
-from flask_jwt_extended import jwt_required,get_jwt_identity,verify_jwt_in_request
+from flask_jwt_extended import jwt_required,get_jwt_identity,verify_jwt_in_request,get_jwt
 from flask_jwt_extended.exceptions import NoAuthorizationError,InvalidHeaderError,JWTDecodeError
 
 
@@ -75,3 +75,18 @@ def activos_eliminados():
 @jwt_required()
 def restaurar_activo(id_activo):
     return ActivoController.restaurar_activo(id_activo)
+
+@cross_origin()
+@activo.route('/activos_sin_ficha',methods=['GET'])
+@jwt_required()
+def activos_sin_ficha_tecnica():
+    try:
+        verify_jwt_in_request()
+        claims = get_jwt()
+        if claims['perfil'] == 1:
+            return ActivoController.activos_sin_ficha_tecnica()
+        else :
+            return jsonify({"message" : "Acceso denegado" , "status" : 401}) , 401
+    
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
