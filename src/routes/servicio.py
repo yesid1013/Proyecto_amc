@@ -68,3 +68,8 @@ def eliminar_servicio(id_servicio):
 @jwt_required()
 def restaurar_servicio(id_servicio):
     return ServicioController.restaurar_servicio(id_servicio)
+
+@cross_origin()
+@servicio.route('/servicios_subcliente/<id_subcliente>')
+def servicios_de_un_subcliente(id_subcliente):
+    return ServicioController.servicios_de_un_subcliente(id_subcliente)

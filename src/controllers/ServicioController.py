@@ -7,6 +7,7 @@ import pytz
 from models.Tipo_servicio import Tipo_servicio
 from models.Usuario import Usuario
 from models.Activo import Activo
+from models.Subcliente import Subcliente
 from controllers import GoogleDriveController
 from utils.validation import validation_servicio
 import bleach
@@ -200,6 +201,18 @@ def restaurar_servicio(id_servicio):
             servicio.estado = 1
             db.session.commit()
             return jsonify({"message" : "Servicio restaurado exitosamente", "status" : 200})
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+def servicios_de_un_subcliente(id_subcliente):
+    try:
+        id_subcliente_bytes = binascii.unhexlify(id_subcliente)
+        servicios = db.session.query(Servicio.descripcion, Subcliente.nombre, Activo.tipo_de_equipo).join(Activo,Servicio.id_activo == Activo.id_activo).join(Subcliente, Activo.id_subcliente == Subcliente.id_subcliente).filter(Subcliente.id_subcliente == id_subcliente_bytes).all()
+
+        lista = [{"descripcion" : servicio.descripcion, "nombre_subcliente" : servicio.nombre, "activo" : servicio.tipo_de_equipo} for servicio in servicios]
+
+        return jsonify(lista)
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
