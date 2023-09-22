@@ -90,3 +90,18 @@ def activos_sin_ficha_tecnica():
     
     except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
         return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
+
+@cross_origin()
+@activo.route('/adjuntar_ficha_tecnica/<id_activo>',methods=['PUT'])
+@jwt_required()
+def adjunar_ficha_tecnica(id_activo):
+    try:
+        verify_jwt_in_request()
+        claims = get_jwt()
+        if claims['perfil'] == 1:
+            return ActivoController.adjuntar_ficha_tecnica(id_activo)
+        else :
+            return jsonify({"message" : "Acceso denegado" , "status" : 401}) , 401
+    
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
