@@ -73,3 +73,18 @@ def restaurar_servicio(id_servicio):
 @servicio.route('/servicios_subcliente/<id_subcliente>')
 def servicios_de_un_subcliente(id_subcliente):
     return ServicioController.servicios_de_un_subcliente(id_subcliente)
+
+@cross_origin()
+@servicio.route('/servicios_sin_informe')
+@jwt_required()
+def servicios_sin_informe():
+    try:
+        verify_jwt_in_request()
+        claims = get_jwt()
+        if claims['perfil'] == 1:
+            return ServicioController.servicios_sin_informe()
+        else:
+            return jsonify({"message" : "Acceso denegado :"}) , 401
+        
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})

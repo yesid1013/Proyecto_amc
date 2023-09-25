@@ -24,7 +24,6 @@ def crear_servicio(id_activo,id_usuario):
         descripcion = bleach.clean(request.json["descripcion"],tags=bleach.sanitizer.ALLOWED_TAGS)
         observaciones = request.json["observaciones"]
         observaciones_usuario = request.json["observaciones_usuario"]
-        #informe = request.json["informe"]
         orden_de_servicio = request.json["orden_de_servicio"]
 
         if observaciones is not None:
@@ -36,12 +35,7 @@ def crear_servicio(id_activo,id_usuario):
             observaciones_usuario = bleach.clean(observaciones_usuario, tags=bleach.sanitizer.ALLOWED_TAGS)
         else:
             observaciones_usuario = None
-        
-        # if informe["name"] != None and informe["content"] != None and informe["mimeType"] != None: 
-        #     id_folder = "1L5aLI-JdlZ3dDJ2LxnWSbxBn70yt0nPA"
-        #     response = GoogleDriveController.uploadFile(informe,id_folder)
-        #     informe = response["webViewLink"]
-        # else:
+
         informe = None
         
         if orden_de_servicio["name"] != None and orden_de_servicio["content"] != None and orden_de_servicio["mimeType"] != None: 
@@ -211,6 +205,20 @@ def servicios_de_un_subcliente(id_subcliente):
         servicios = db.session.query(Servicio.descripcion, Subcliente.nombre, Activo.tipo_de_equipo).join(Activo,Servicio.id_activo == Activo.id_activo).join(Subcliente, Activo.id_subcliente == Subcliente.id_subcliente).filter(Subcliente.id_subcliente == id_subcliente_bytes).all()
 
         lista = [{"descripcion" : servicio.descripcion, "nombre_subcliente" : servicio.nombre, "activo" : servicio.tipo_de_equipo} for servicio in servicios]
+
+        return jsonify(lista)
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+def servicios_sin_informe():
+    try:
+        servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio,Activo.tipo_de_equipo,Servicio.fecha_ejecucion,Tipo_servicio.tipo,Servicio.descripcion).join(Activo,Servicio.id_activo == Activo.id_activo).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Servicio.informe == None).all()
+
+        if not servicios:
+            return jsonify({"message" : "No hay servicios", "status" : 404}) , 404
+
+        lista = [{"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "numero_servicio" : servicio.numero_servicio, "activo" : servicio.tipo_de_equipo, "fecha_ejecucion" : servicio.fecha_ejecucion, "tipo_servicio" : servicio.tipo, "descripcion" : servicio.descripcion} for servicio in servicios]
 
         return jsonify(lista)
     
