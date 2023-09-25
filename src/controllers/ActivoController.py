@@ -142,20 +142,43 @@ def editar_activo(id_activo):
             return jsonify({"message" : "Activo no encontrado", "status" : 404}) , 404
         
         else:
+            if request.json["modelo"] is not None: #No se hace saneamiento directamente como los demás ya que puede estos pueden ser nulos
+                modelo = bleach.clean(request.json["modelo"], tags=bleach.sanitizer.ALLOWED_TAGS)
+            else:
+                modelo = None
+        
+            if request.json["num_serie"] is not None:
+                num_serie = bleach.clean(request.json["num_serie"], tags=bleach.sanitizer.ALLOWED_TAGS)
+            else:
+                num_serie = None
+        
+            if request.json["datos_relevantes"] is not None:
+                datos_relevantes = bleach.clean(request.json["datos_relevantes"], tags=bleach.sanitizer.ALLOWED_TAGS)
+            else:
+                datos_relevantes = None
+
             activo.id_primario = bleach.clean(request.json["id_primario"],tags=bleach.sanitizer.ALLOWED_TAGS)
             activo.id_secundario = bleach.clean(request.json["id_secundario"],tags=bleach.sanitizer.ALLOWED_TAGS)
             activo.ubicacion = bleach.clean(request.json["ubicacion"],tags=bleach.sanitizer.ALLOWED_TAGS)
             activo.tipo_de_equipo = bleach.clean(request.json["tipo_de_equipo"],tags=bleach.sanitizer.ALLOWED_TAGS)
             activo.fabricante = bleach.clean(request.json["fabricante"],tags=bleach.sanitizer.ALLOWED_TAGS)
-            activo.modelo = bleach.clean(request.json["modelo"],tags=bleach.sanitizer.ALLOWED_TAGS)
-            activo.num_serie = bleach.clean(request.json["num_serie"],tags=bleach.sanitizer.ALLOWED_TAGS)
-            activo.datos_relevantes = bleach.clean(request.json["datos_relevantes"],tags=bleach.sanitizer.ALLOWED_TAGS)
             id_subcliente = bleach.clean(request.json["id_subcliente"],tags=bleach.sanitizer.ALLOWED_TAGS)
 
             id_subcliente_bytes = binascii.unhexlify(id_subcliente) #El id_subcliente de hexadecimal a binario
             activo.id_subcliente = id_subcliente_bytes
-            #Pendiente de poder actualizar imagen y ficha tecnica
 
+            activo.modelo = modelo
+            activo.num_serie = num_serie
+            activo.datos_relevantes = datos_relevantes
+
+            imagen_equipo = request.json["imagen_equipo"]
+
+            if imagen_equipo["name"] != None and imagen_equipo["content"] != None and imagen_equipo["mimeType"] != None: #Guardar imagen
+                id_folder = "1Y3nYWG7O8OC3D4J9u55I3RokXTbNEeOz" #Id de la carpeta donde se guardara el archivo
+                response = GoogleDriveController.uploadFile(imagen_equipo,id_folder)
+                imagen = response["webContentLink"]
+                activo.imagen_equipo = imagen
+            
             db.session.commit()
             return jsonify({"message" : "Activo actualizado exitosamente", "status" : 200}) , 200
         
