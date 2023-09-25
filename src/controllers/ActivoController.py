@@ -11,7 +11,6 @@ import bleach
 
 def crear_activo(id_usuario):
     try: 
-        
         validation = validation_activo(request.json)        
         
         if validation is not True:
@@ -20,32 +19,17 @@ def crear_activo(id_usuario):
         id_activo = uuid.uuid4().bytes
         id_primario = bleach.clean(request.json["id_primario"],tags=bleach.sanitizer.ALLOWED_TAGS) #Saneamiento de datos 
         id_secundario = bleach.clean(request.json["id_secundario"],tags=bleach.sanitizer.ALLOWED_TAGS)
-        print(id_secundario)
         id_usuario = bleach.clean(id_usuario,tags=bleach.sanitizer.ALLOWED_TAGS) 
         ubicacion = bleach.clean(request.json["ubicacion"],tags=bleach.sanitizer.ALLOWED_TAGS) 
         tipo_de_equipo = bleach.clean(request.json["tipo_de_equipo"],tags=bleach.sanitizer.ALLOWED_TAGS)  
         fabricante = bleach.clean(request.json["fabricante"],tags=bleach.sanitizer.ALLOWED_TAGS)   
-        modelo = request.json["modelo"]
-        num_serie = request.json["num_serie"]
-        datos_relevantes = request.json["datos_relevantes"]
         imagen_equipo = request.json["imagen_equipo"]
         id_subcliente = bleach.clean(request.json["id_subcliente"],tags=bleach.sanitizer.ALLOWED_TAGS)
-        #ficha_tecnica = request.json["ficha_tecnica"]
 
-        if modelo is not None: #No se hace saneamiento directamente como los demás ya que puede estos pueden ser nulos
-            modelo = bleach.clean(modelo, tags=bleach.sanitizer.ALLOWED_TAGS)
-        else:
-            modelo = None
-        
-        if num_serie is not None:
-            num_serie = bleach.clean(num_serie, tags=bleach.sanitizer.ALLOWED_TAGS)
-        else:
-            num_serie = None
-        
-        if datos_relevantes is not None:
-            datos_relevantes = bleach.clean(datos_relevantes, tags=bleach.sanitizer.ALLOWED_TAGS)
-        else:
-            datos_relevantes = None
+        #No se hace saneamiento directamente como los demás ya que puede estos pueden ser nulos
+        modelo = saneamiento_de_datos(request.json["modelo"])
+        num_serie = saneamiento_de_datos(request.json["num_serie"])
+        datos_relevantes = saneamiento_de_datos(request.json["datos_relevantes"])
 
         id_activo_hex = binascii.hexlify(id_activo).decode() #El id activo que se genera pasarlo de binario a hexadecimal
         id_usuario_bytes = binascii.unhexlify(id_usuario) #El id_usuario de hexadecimal a binario
@@ -64,11 +48,6 @@ def crear_activo(id_usuario):
         else:
             imagen = None
 
-        # if request.json["ficha_tecnica"]:
-        #     id_folder = "1cI5I2nlPzm5bIBLqik3onWcDhijD1mHV"
-        #     response = GoogleDriveController.uploadFile(ficha_tecnica,id_folder)
-        #     archivo_ficha_tecnica = response["webViewLink"]
-
         archivo_ficha_tecnica = None
        
         new_activo = Activo(id_activo,new_code_qr.id_qr,id_primario,id_secundario,id_usuario_bytes,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen,id_subcliente_bytes,archivo_ficha_tecnica)
@@ -77,7 +56,6 @@ def crear_activo(id_usuario):
         db.session.commit()
         return jsonify({"message": "Activo creado correctamente", "status" : 201}), 201
 
-    
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
     
@@ -142,21 +120,11 @@ def editar_activo(id_activo):
             return jsonify({"message" : "Activo no encontrado", "status" : 404}) , 404
         
         else:
-            if request.json["modelo"] is not None: #No se hace saneamiento directamente como los demás ya que puede estos pueden ser nulos
-                modelo = bleach.clean(request.json["modelo"], tags=bleach.sanitizer.ALLOWED_TAGS)
-            else:
-                modelo = None
-        
-            if request.json["num_serie"] is not None:
-                num_serie = bleach.clean(request.json["num_serie"], tags=bleach.sanitizer.ALLOWED_TAGS)
-            else:
-                num_serie = None
-        
-            if request.json["datos_relevantes"] is not None:
-                datos_relevantes = bleach.clean(request.json["datos_relevantes"], tags=bleach.sanitizer.ALLOWED_TAGS)
-            else:
-                datos_relevantes = None
+            modelo = saneamiento_de_datos(request.json["modelo"])
+            num_serie = saneamiento_de_datos(request.json["num_serie"])
+            datos_relevantes = saneamiento_de_datos(request.json["datos_relevantes"])
 
+            imagen_equipo = request.json["imagen_equipo"]
             activo.id_primario = bleach.clean(request.json["id_primario"],tags=bleach.sanitizer.ALLOWED_TAGS)
             activo.id_secundario = bleach.clean(request.json["id_secundario"],tags=bleach.sanitizer.ALLOWED_TAGS)
             activo.ubicacion = bleach.clean(request.json["ubicacion"],tags=bleach.sanitizer.ALLOWED_TAGS)
@@ -165,13 +133,11 @@ def editar_activo(id_activo):
             id_subcliente = bleach.clean(request.json["id_subcliente"],tags=bleach.sanitizer.ALLOWED_TAGS)
 
             id_subcliente_bytes = binascii.unhexlify(id_subcliente) #El id_subcliente de hexadecimal a binario
+            
             activo.id_subcliente = id_subcliente_bytes
-
             activo.modelo = modelo
             activo.num_serie = num_serie
             activo.datos_relevantes = datos_relevantes
-
-            imagen_equipo = request.json["imagen_equipo"]
 
             if imagen_equipo["name"] != None and imagen_equipo["content"] != None and imagen_equipo["mimeType"] != None: #Guardar imagen
                 id_folder = "1Y3nYWG7O8OC3D4J9u55I3RokXTbNEeOz" #Id de la carpeta donde se guardara el archivo
@@ -270,3 +236,6 @@ def adjuntar_ficha_tecnica(id_activo):
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+def saneamiento_de_datos(request):
+    return bleach.clean(request, tags=bleach.sanitizer.ALLOWED_TAGS) if request is not None else None
