@@ -22,19 +22,17 @@ def crear_servicio(id_activo,id_usuario):
         fecha_ejecucion = request.json["fecha_ejecucion"]
         id_tipo_servicio = int(request.json["id_tipo_servicio"])
         descripcion = bleach.clean(request.json["descripcion"],tags=bleach.sanitizer.ALLOWED_TAGS)
-        observaciones = request.json["observaciones"]
-        observaciones_usuario = request.json["observaciones_usuario"]
         orden_de_servicio = request.json["orden_de_servicio"]
 
-        if observaciones is not None:
-            observaciones = bleach.clean(observaciones, tags=bleach.sanitizer.ALLOWED_TAGS)
-        else:
-            observaciones = None
-        
-        if observaciones_usuario is not None:
-            observaciones_usuario = bleach.clean(observaciones_usuario, tags=bleach.sanitizer.ALLOWED_TAGS)
-        else:
-            observaciones_usuario = None
+        observaciones = saneamiento_de_datos(request.json["observaciones"])
+        observaciones_usuario = saneamiento_de_datos(request.json["observaciones_usuario"])
+
+        #Convertir id a binario
+        id_usuario_bytes = binascii.unhexlify(id_usuario)
+        id_activo_bytes = binascii.unhexlify(id_activo)
+
+        #Formateo de fecha
+        fecha = formatear_fecha(fecha_ejecucion)
 
         informe = None
         
@@ -44,12 +42,6 @@ def crear_servicio(id_activo,id_usuario):
             orden_de_servicio = response["webViewLink"]
         else:
             orden_de_servicio = None
-
-        id_usuario_bytes = binascii.unhexlify(id_usuario)
-        id_activo_bytes = binascii.unhexlify(id_activo)
-
-        #Formateo de fecha
-        fecha = formatear_fecha(fecha_ejecucion)
 
         new_servicio = Servicio(id_servicio,id_activo_bytes,fecha,id_usuario_bytes,id_tipo_servicio,descripcion,observaciones,observaciones_usuario,informe,orden_de_servicio)
 
@@ -121,38 +113,26 @@ def editar_servicio(id_servicio):
         
         else:
             fecha_ejecucion = request.json["fecha_ejecucion"]
-            fecha_utc = datetime.fromisoformat(fecha_ejecucion)
-            zona_horaria_colombia = pytz.timezone('America/Bogota')
-            fecha_colombia = fecha_utc.astimezone(zona_horaria_colombia)
-            fecha = fecha_colombia.strftime('%Y-%m-%d %H:%M:%S')
+            fecha = formatear_fecha(fecha_ejecucion)
 
-            if request.json["observaciones"] is not None:
-                observaciones = bleach.clean(request.json["observaciones"], tags=bleach.sanitizer.ALLOWED_TAGS)
-            else:
-                observaciones = None
-        
-            if request.json["observaciones_usuario"] is not None:
-                observaciones_usuario = bleach.clean(request.json["observaciones_usuario"], tags=bleach.sanitizer.ALLOWED_TAGS)
-            else:
-                observaciones_usuario = None
-
-            servicio.fecha_ejecucion = fecha 
-            servicio.id_tipo_servicio = request.json["id_tipo_servicio"]
-            servicio.descripcion = bleach.clean(request.json["descripcion"],tags=bleach.sanitizer.ALLOWED_TAGS)
-            servicio.observaciones = observaciones
-            servicio.observaciones_usuario = observaciones_usuario
+            observaciones = saneamiento_de_datos(request.json["observaciones"])
+            observaciones_usuario = saneamiento_de_datos(request.json["observaciones_usuario"])
 
             id_activo = bleach.clean(request.json["id_activo"],tags=bleach.sanitizer.ALLOWED_TAGS)
             id_activo_bytes = binascii.unhexlify(id_activo)
-            servicio.id_activo = id_activo_bytes
-
+            
             orden_de_servicio = request.json["orden_de_servicio"]
             if orden_de_servicio["name"] != None and orden_de_servicio["content"] != None and orden_de_servicio["mimeType"] != None: 
                 id_folder = "1vVTG_28NG5VL4gSLRSRJtqzzyptl0Ax-"
                 response = GoogleDriveController.uploadFile(orden_de_servicio,id_folder)
                 servicio.orden_de_servicio = response["webViewLink"]
-            else:
-                orden_de_servicio = None
+            
+            servicio.fecha_ejecucion = fecha 
+            servicio.id_tipo_servicio = request.json["id_tipo_servicio"]
+            servicio.descripcion = bleach.clean(request.json["descripcion"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            servicio.observaciones = observaciones
+            servicio.observaciones_usuario = observaciones_usuario
+            servicio.id_activo = id_activo_bytes
 
             db.session.commit()
             return jsonify({"message" : "Servicio actualizado exitosamente", "status" : 200}) , 200
@@ -228,4 +208,8 @@ def formatear_fecha(fecha_ejecucion):
     fecha_colombia = fecha_utc.astimezone(zona_horaria_colombia)
     fecha = fecha_colombia.strftime('%Y-%m-%d %H:%M:%S')
     return fecha
+
+def saneamiento_de_datos(request):
+    return bleach.clean(request, tags=bleach.sanitizer.ALLOWED_TAGS) if request is not None else None
+
 
