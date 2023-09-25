@@ -49,10 +49,7 @@ def crear_servicio(id_activo,id_usuario):
         id_activo_bytes = binascii.unhexlify(id_activo)
 
         #Formateo de fecha
-        fecha_utc = datetime.fromisoformat(fecha_ejecucion)
-        zona_horaria_colombia = pytz.timezone('America/Bogota')
-        fecha_colombia = fecha_utc.astimezone(zona_horaria_colombia)
-        fecha = fecha_colombia.strftime('%Y-%m-%d %H:%M:%S')
+        fecha = formatear_fecha(fecha_ejecucion)
 
         new_servicio = Servicio(id_servicio,id_activo_bytes,fecha,id_usuario_bytes,id_tipo_servicio,descripcion,observaciones,observaciones_usuario,informe,orden_de_servicio)
 
@@ -224,3 +221,11 @@ def servicios_sin_informe():
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+def formatear_fecha(fecha_ejecucion):
+    fecha_utc = datetime.fromisoformat(fecha_ejecucion)
+    zona_horaria_colombia = pytz.timezone('America/Bogota')
+    fecha_colombia = fecha_utc.astimezone(zona_horaria_colombia)
+    fecha = fecha_colombia.strftime('%Y-%m-%d %H:%M:%S')
+    return fecha
+
