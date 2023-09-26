@@ -195,7 +195,7 @@ def servicios_sin_informe():
         if not servicios:
             return jsonify({"message" : "No hay servicios", "status" : 404}) , 404
 
-        lista = [{"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "numero_servicio" : servicio.numero_servicio, "activo" : servicio.tipo_de_equipo, "fecha_ejecucion" : servicio.fecha_ejecucion, "tipo_servicio" : servicio.tipo, "descripcion" : servicio.descripcion} for servicio in servicios]
+        lista = [{"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "numero_servicio" : servicio.numero_servicio, "activo" : servicio.tipo_de_equipo, "fecha_ejecucion" : servicio.fecha_ejecucion.strftime('%Y-%m-%d %H:%M:%S'), "tipo_servicio" : servicio.tipo, "descripcion" : servicio.descripcion} for servicio in servicios]
 
         return jsonify(lista)
     
