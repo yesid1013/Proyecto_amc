@@ -201,6 +201,29 @@ def servicios_sin_informe():
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+def adjuntar_informe_servicio(id_servicio):
+    try:
+        id_servicio_bytes = binascii.unhexlify(id_servicio)
+        servicio = Servicio.query.get(id_servicio_bytes)
+
+        if servicio.informe == None:
+            informe_servicio = request.json["informe_servicio"]
+            if informe_servicio["name"] != None and informe_servicio["content"] != None and informe_servicio["mimeType"] != None: #Guardar informe
+                id_folder = "1L5aLI-JdlZ3dDJ2LxnWSbxBn70yt0nPA" #Id de la carpeta donde se guardara el archivo
+                response = GoogleDriveController.uploadFile(informe_servicio,id_folder)
+                informe = response["webViewLink"]
+                servicio.informe = informe
+                db.session.commit()
+
+                return jsonify({"message" : "Informe adjuntado correctamente", "url_archivo" : informe ,"status" : 200})
+            else:
+                jsonify({"message" : "No se pudo adjuntar ficha tecnica"}) , 400
+        else:
+            return jsonify({"message" : "El servicio ya tiene ficha tecnica"}) , 400
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)}) , 500
     
 def formatear_fecha(fecha_ejecucion):
     fecha_utc = datetime.fromisoformat(fecha_ejecucion)

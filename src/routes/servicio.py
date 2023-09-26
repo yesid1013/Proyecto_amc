@@ -88,3 +88,18 @@ def servicios_sin_informe():
         
     except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
         return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
+
+@cross_origin()
+@servicio.route('/informe_servicio/<id_servicio>',methods=['POST'])
+@jwt_required()
+def adjuntar_informe(id_servicio):
+    try:
+        verify_jwt_in_request()
+        claims = get_jwt()
+        if claims['perfil'] == 1:
+            return ServicioController.adjuntar_informe_servicio(id_servicio)
+        else:
+            return jsonify({"message" : "Acceso denegado :"}) , 401
+        
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
