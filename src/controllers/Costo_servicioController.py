@@ -1,5 +1,8 @@
 from flask import request,jsonify
 from models.Costo_servicio import *
+from models.Servicio import Servicio
+from models.Activo import Activo
+from models.Tipo_servicio import Tipo_servicio
 from utils.validation import validation_costo_servicio
 from controllers import GoogleDriveController
 import uuid
@@ -95,3 +98,17 @@ def restaurar_cotizacion(id_costo_servicio):
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+    
+def servicios_sin_cotizacion():
+    try:
+        servicios_sin_costo  = db.session.query(Servicio.id_servicio, Servicio.numero_servicio,Activo.tipo_de_equipo,Servicio.fecha_ejecucion,Servicio.descripcion,Tipo_servicio.tipo).outerjoin(Costo_servicio).join(Activo, Servicio.id_activo == Activo.id_activo).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Costo_servicio.id_costo_servicio.is_(None)).all()
+
+        if not servicios_sin_costo:
+            return jsonify({"message" : "No hay cotizaciones pendientes" , "status" : 404})
+
+        lista = [{"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "activo" : servicio.tipo_de_equipo, "numero_servicio" : servicio.numero_servicio, "fecha_ejecucion" : servicio.fecha_ejecucion.strftime('%Y-%m-%d %H:%M:%S'), "descripcion" : servicio.descripcion, "tipo_de_servicio" : servicio.tipo} for servicio in servicios_sin_costo]
+
+        return jsonify(lista)
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)})

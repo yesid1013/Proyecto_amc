@@ -35,3 +35,9 @@ def eliminar_cotizacion(id_costo_servicio):
 def restaurar_cotizacion(id_costo_servicio):
     return Costo_servicioController.restaurar_cotizacion(id_costo_servicio)
 
+@cross_origin()
+@costo_servicio.route("/servicios_sin_cotizacion")
+@jwt_required()
+def servicios_sin_cotizacion():
+    return Costo_servicioController.servicios_sin_cotizacion()
+
