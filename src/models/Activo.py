@@ -4,6 +4,7 @@ from models import Servicio
 from models import Subcliente
 from models import Codigos_qr
 from models import Usuario
+from models import Permisos
 from sqlalchemy.sql import func
 import binascii
 
@@ -33,6 +34,7 @@ class Activo(db.Model):
 
     novedad = db.relationship('Novedad', back_populates='activo', cascade="all,delete-orphan")
     servicio = db.relationship('Servicio', back_populates='activo', cascade="all,delete-orphan")
+    permisos = db.relationship('Permisos', back_populates='activo',cascade="all,delete-orphan")
 
     def __init__(self,id_activo,id_qr,id_primario,id_secundario,id_usuario,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen_equipo,id_subcliente,ficha_tecnica):
         self.id_activo = id_activo

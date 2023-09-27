@@ -1,6 +1,7 @@
 from utils.db import db
 from models import Servicio
 from models import Activo
+from models import Permisos
 from werkzeug.security import check_password_hash
 
 class Usuario(db.Model):
@@ -15,6 +16,7 @@ class Usuario(db.Model):
 
     servicio = db.relationship('Servicio', back_populates='usuario',cascade="all, delete-orphan" )
     activo = db.relationship('Activo', back_populates='usuario', cascade="all,delete-orphan")
+    permisos = db.relationship('Permisos', back_populates='usuario',cascade="all,delete-orphan")
 
     def __init__(self,id_usuario,correo,contrasena,nombre,direccion,telefono):
         self.id_usuario = id_usuario
