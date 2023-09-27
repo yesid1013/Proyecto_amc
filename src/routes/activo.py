@@ -13,7 +13,12 @@ activo = Blueprint('activo', __name__,url_prefix='/api/v1')
 @activo.route('/listar_activos',methods=['GET'])
 @jwt_required()
 def listar_activos():
-    return ActivoController.listar_activos()
+    try:
+        verify_jwt_in_request()
+        id_usuario = get_jwt_identity()
+        return ActivoController.listar_activos(id_usuario)
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado", "error" : str(ex)})
 
 @cross_origin()
 @activo.route("/create_activo", methods = ['POST'])
