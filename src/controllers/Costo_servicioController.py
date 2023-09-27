@@ -106,7 +106,7 @@ def servicios_sin_cotizacion():
         if not servicios_sin_costo:
             return jsonify({"message" : "No hay cotizaciones pendientes" , "status" : 404})
 
-        lista = [{"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "activo" : servicio.tipo_de_equipo, "numero_servicio" : servicio.numero_servicio, "fecha_ejecucion" : servicio.fecha_ejecucion.strftime('%Y-%m-%d %H:%M:%S'), "descripcion" : servicio.descripcion, "tipo_de_servicio" : servicio.tipo} for servicio in servicios_sin_costo]
+        lista = [{"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(), "activo" : servicio.tipo_de_equipo, "numero_servicio" : servicio.numero_servicio, "fecha_ejecucion" : servicio.fecha_ejecucion.strftime('%Y-%m-%d %H:%M:%S'), "descripcion" : servicio.descripcion, "tipo_servicio" : servicio.tipo} for servicio in servicios_sin_costo]
 
         return jsonify(lista)
     
