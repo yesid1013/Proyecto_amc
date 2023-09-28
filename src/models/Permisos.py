@@ -14,3 +14,14 @@ class Permisos(db.Model):
 
     activo = db.relationship('Activo', back_populates="permisos", uselist=False, single_parent=True)
     usuario = db.relationship('Usuario', back_populates="permisos", uselist=False, single_parent=True)
+
+    def __init__(self,id_permiso,id_usuario,id_activo,ver_informacion_basica,ver_historial_servicios,ver_novedades,registrar_servicio,registrar_novedad):
+        self.id_permiso = id_permiso
+        self.id_usuario = id_usuario
+        self.id_activo = id_activo
+        self.ver_informacion_basica = ver_informacion_basica
+        self.ver_historial_servicios = ver_historial_servicios
+        self.ver_novedades = ver_novedades
+        self.registrar_servicio = registrar_servicio
+        self.registrar_novedad = registrar_novedad
+

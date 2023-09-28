@@ -12,6 +12,7 @@ from routes.novedad import novedad
 from routes.servicio import servicio
 from routes.costo_servicio import costo_servicio
 from routes.google_drive import google_drive
+from routes.permisos import permiso
 app = Flask(__name__)
 
 CORS(app)
@@ -35,6 +36,7 @@ app.register_blueprint(novedad)
 app.register_blueprint(servicio)
 app.register_blueprint(costo_servicio)
 app.register_blueprint(google_drive)
+app.register_blueprint(permiso)
 
 def pagina_no_encontrada(error):
     return jsonify({"message" : "Pagina no encontrada"}), 404
