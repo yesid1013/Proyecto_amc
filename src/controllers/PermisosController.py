@@ -33,3 +33,18 @@ def registrar_permiso():
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)})
+    
+def permisos_otorgados(id_usuario): #muestra los activos a los que otros usuarios han otorgado permisos
+    try: #El id_usuario que recibo en la función es el usuario que ingreso a la plataforma
+
+        id_usuario_bytes = binascii.unhexlify(id_usuario)
+        permisos = Permisos.query.filter_by(id_usuario = id_usuario_bytes).all() #Busco si el usuario que ingreso le han otorgado permisos
+
+        if not permisos:
+            return jsonify({"message": "No tienes permisos otorgados", "status" : 404})
+        else:
+            lista = [permiso.getDatos() for permiso in permisos]
+            return jsonify(lista)
+        
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)})
