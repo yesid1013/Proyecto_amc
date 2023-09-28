@@ -196,6 +196,32 @@ def validation_costo_servicio(json):
     
     except SchemaError as e:
         return str(e)
+    
+def validation_permiso(json):
+    try:
+        schema = {
+            "type": "object",
+            "properties" : {
+                "id_usuario" : {"type": "string"},
+                "id_activo" : {"type": "string"},
+                "ver_informacion_basica" : {"type": "integer","minimum": 0,"maximum": 1},
+                "ver_historial_servicios" : {"type": "integer","minimum": 0,"maximum": 1},
+                "ver_novedades" : {"type": "integer","minimum": 0,"maximum": 1},
+                "registrar_servicio" : {"type": "integer","minimum": 0,"maximum": 1},
+                "registrar_novedad" : {"type": "integer","minimum": 0,"maximum": 1}
+            },
+            "required": ["id_usuario","id_activo"]
+        }
+
+        validate(json,schema=schema)
+        return True
+    
+    except ValidationError as e:
+        return str(e)
+    
+    except SchemaError as e:
+        return str(e)
+    
 
 
            
