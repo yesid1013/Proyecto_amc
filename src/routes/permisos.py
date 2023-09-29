@@ -47,3 +47,13 @@ def editar_permiso(id_permiso):
         return PermisosController.editar_permiso(id_permiso)
     except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
         return jsonify({"message" : "Acceso denegado", "error" : str(ex)})
+    
+@cross_origin()
+@permiso.route('/permiso/<id_permiso>', methods=['DELETE'])
+@jwt_required()
+def eliminar_permiso(id_permiso):
+    try:
+        verify_jwt_in_request()
+        return PermisosController.eliminar_permiso(id_permiso)
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado", "error" : str(ex)})

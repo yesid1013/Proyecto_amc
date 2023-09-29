@@ -99,3 +99,20 @@ def editar_permiso(id_permiso):
 
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)})
+
+def eliminar_permiso(id_permiso):
+    try:
+        id_permiso_bytes = binascii.unhexlify(id_permiso)
+        permiso = Permisos.query.get(id_permiso_bytes)
+
+        if not permiso:
+            return jsonify({"message" : "Permiso no encontrado", "status" : 404}) , 404
+        
+        db.session.delete(permiso)
+        db.session.commit()
+
+        return jsonify({"message": "Permiso eliminado correctamente", "status" : 200}), 200
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)})
+
