@@ -65,5 +65,37 @@ def permisos_creados(id_usuario): #Ver los permisos que un usuario ha creado
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)})
+    
+def editar_permiso(id_permiso):
+    try: 
+        id_permiso_bytes = binascii.unhexlify(id_permiso)
+        permiso = Permisos.query.get(id_permiso_bytes)
 
+        if not permiso:
+            return jsonify({"message" : "Permiso no encontrado", "status" : 404}) , 404
+        else:
+            id_usuario = bleach.clean(request.json['id_usuario'],tags=bleach.sanitizer.ALLOWED_TAGS)
+            id_activo = bleach.clean(request.json['id_activo'],tags=bleach.sanitizer.ALLOWED_TAGS)
+            ver_informacion_basica = request.json['ver_informacion_basica']
+            ver_historial_servicios = request.json['ver_historial_servicios']
+            ver_novedades = request.json['ver_novedades']
+            registrar_servicio = request.json['registrar_servicio']
+            registrar_novedad = request.json['registrar_novedad']
 
+            id_usuario_bytes = binascii.unhexlify(id_usuario)
+            id_activo_bytes = binascii.unhexlify(id_activo)
+            
+            permiso.id_usuario = id_usuario_bytes
+            permiso.id_activo = id_activo_bytes
+            permiso.ver_informacion_basica = ver_informacion_basica
+            permiso.ver_historial_servicios = ver_historial_servicios
+            permiso.ver_novedades = ver_novedades
+            permiso.registrar_servicio = registrar_servicio
+            permiso.registrar_novedad = registrar_novedad
+
+            db.session.commit()
+
+            return jsonify({"message": "Permiso editado correctamente", "status" : 200}), 200
+
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)})
