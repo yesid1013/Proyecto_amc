@@ -27,11 +27,7 @@ def obtener_servicios():
     try:
         verify_jwt_in_request()
         id_usuario = get_jwt_identity()
-        claims = get_jwt()
-        if claims['perfil'] == 1:
-            return ServicioController.obtener_todos_los_servicios()
-        elif claims['perfil'] == 2:
-            return ServicioController.obtener_servicios_de_usuario(id_usuario)
+        return ServicioController.obtener_servicios_de_usuario(id_usuario)
         
     except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
         return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
@@ -80,11 +76,7 @@ def servicios_de_un_subcliente(id_subcliente):
 def servicios_sin_informe():
     try:
         verify_jwt_in_request()
-        claims = get_jwt()
-        if claims['perfil'] == 1:
-            return ServicioController.servicios_sin_informe()
-        else:
-            return jsonify({"message" : "Acceso denegado :"}) , 401
+        return ServicioController.servicios_sin_informe()
         
     except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
         return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
@@ -95,11 +87,7 @@ def servicios_sin_informe():
 def adjuntar_informe(id_servicio):
     try:
         verify_jwt_in_request()
-        claims = get_jwt()
-        if claims['perfil'] == 1:
-            return ServicioController.adjuntar_informe_servicio(id_servicio)
-        else:
-            return jsonify({"message" : "Acceso denegado :"}) , 401
+        return ServicioController.adjuntar_informe_servicio(id_servicio)
         
     except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
         return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})

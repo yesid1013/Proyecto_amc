@@ -87,11 +87,7 @@ def restaurar_activo(id_activo):
 def activos_sin_ficha_tecnica():
     try:
         verify_jwt_in_request()
-        claims = get_jwt()
-        if claims['perfil'] == 1:
-            return ActivoController.activos_sin_ficha_tecnica()
-        else :
-            return jsonify({"message" : "Acceso denegado" , "status" : 401}) , 401
+        return ActivoController.activos_sin_ficha_tecnica()
     
     except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
         return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
@@ -102,11 +98,7 @@ def activos_sin_ficha_tecnica():
 def adjunar_ficha_tecnica(id_activo):
     try:
         verify_jwt_in_request()
-        claims = get_jwt()
-        if claims['perfil'] == 1:
-            return ActivoController.adjuntar_ficha_tecnica(id_activo)
-        else :
-            return jsonify({"message" : "Acceso denegado" , "status" : 401}) , 401
+        return ActivoController.adjuntar_ficha_tecnica(id_activo)
     
     except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
         return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
