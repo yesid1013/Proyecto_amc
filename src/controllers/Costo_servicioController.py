@@ -29,7 +29,7 @@ def crear_costo_servicio(id_servicio):
         db.session.add(new_costo_servicio)
         db.session.commit()
 
-        return jsonify({"message": "Cotizacion creada correctamente", "status" : 201}) , 201
+        return jsonify({"message": "Cotizacion creada correctamente","url_archivo" : url_documento_cotizacion ,"status" : 201}) , 201
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})

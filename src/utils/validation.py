@@ -173,7 +173,7 @@ def validation_costo_servicio(json):
         schema = {
             "type": "object",
             "properties" : {
-                "costo" : {"type" : "integer" , "minimum": 0},
+                "costo" : {"type" : "number" , "minimum": 0},
 
                 "documento_cotizacion" : {
                     "type" : "object",
