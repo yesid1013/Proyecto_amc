@@ -87,7 +87,8 @@ def restaurar_activo(id_activo):
 def activos_sin_ficha_tecnica():
     try:
         verify_jwt_in_request()
-        return ActivoController.activos_sin_ficha_tecnica()
+        id_usuario = get_jwt_identity()
+        return ActivoController.activos_sin_ficha_tecnica(id_usuario)
     
     except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
         return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})

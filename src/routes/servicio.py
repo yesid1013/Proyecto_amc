@@ -76,7 +76,8 @@ def servicios_de_un_subcliente(id_subcliente):
 def servicios_sin_informe():
     try:
         verify_jwt_in_request()
-        return ServicioController.servicios_sin_informe()
+        id_usuario = get_jwt_identity()
+        return ServicioController.servicios_sin_informe(id_usuario)
         
     except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
         return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})

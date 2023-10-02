@@ -188,9 +188,11 @@ def servicios_de_un_subcliente(id_subcliente):
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
 
-def servicios_sin_informe():
+def servicios_sin_informe(id_usuario):
     try:
-        servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio,Activo.tipo_de_equipo,Servicio.fecha_ejecucion,Tipo_servicio.tipo,Servicio.descripcion).join(Activo,Servicio.id_activo == Activo.id_activo).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Servicio.informe == None).all()
+        id_usuario_bytes = binascii.unhexlify(id_usuario)
+
+        servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio,Activo.tipo_de_equipo,Servicio.fecha_ejecucion,Tipo_servicio.tipo,Servicio.descripcion).join(Activo,Servicio.id_activo == Activo.id_activo).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Servicio.informe == None, Servicio.id_usuario == id_usuario_bytes).all()
 
         if not servicios:
             return jsonify({"message" : "No hay servicios", "status" : 404}) , 404
