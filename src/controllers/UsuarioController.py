@@ -34,7 +34,7 @@ def listar_usuarios():
         users = db.session.query(Usuario).all()
         for user in users:
             id_hex = binascii.hexlify(user.id_usuario).decode() #Convierto el id binario que me da la base de datos a hexadecimal
-            datos = {"id" : id_hex, "nombre" : user.nombre, "correo" : user.correo, "contraseña" : user.contrasena, "direccion" : user.direccion, "telefono" : user.telefono, "perfil" : user.perfil}
+            datos = {"id_usuario" : id_hex, "nombre" : user.nombre, "correo" : user.correo, "direccion" : user.direccion, "telefono" : user.telefono, "perfil" : user.perfil}
             lista.append(datos)
             
         return jsonify(lista)
