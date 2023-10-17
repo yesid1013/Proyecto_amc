@@ -28,6 +28,16 @@ def permisos_otorgados():
         return jsonify({"message" : "Acceso denegado", "error" : str(ex)})
 
 @cross_origin()
+@permiso.route('/permiso/<id_permiso>', methods=['GET'])
+@jwt_required()
+def obtener_un_permiso(id_permiso):
+    try:
+        verify_jwt_in_request()
+        return PermisosController.obtener_un_permiso(id_permiso)
+    except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
+        return jsonify({"message" : "Acceso denegado", "error" : str(ex)})
+
+@cross_origin()
 @permiso.route('/permisos_creados', methods=['GET'])
 @jwt_required()
 def permisos_crados():

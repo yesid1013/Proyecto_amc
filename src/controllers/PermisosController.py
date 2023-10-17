@@ -54,6 +54,22 @@ def permisos_recibidos(id_usuario): #muestra los activos a los que otros usuario
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)})
 
+def obtener_un_permiso(id_permiso):
+    try:
+        id_permiso_bytes = binascii.unhexlify(id_permiso)
+        permiso = Permisos.query.get(id_permiso_bytes)
+        
+        if not permiso:
+            return jsonify({"message": "Permiso no encontrado", "status" : 404}), 404
+
+        permiso.getDatos()
+        datos = permiso.getDatos()
+
+        return jsonify(datos)
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)})
+
 def permisos_creados(id_usuario): #Ver los permisos que un usuario ha creado
     try:
         id_usuario_bytes = binascii.unhexlify(id_usuario)
