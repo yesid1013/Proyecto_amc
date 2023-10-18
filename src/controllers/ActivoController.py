@@ -60,11 +60,11 @@ def crear_activo(id_usuario):
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
     
 
-def info_activo(id_activo_hex): #Funcion para mostrar la informacion del activo escaneando el codigo qr
-    try:
+def info_activo(id_activo_hex): #Funcion para mostrar la informacion de un activo
+    try: 
         id_activo_bytes = binascii.unhexlify(id_activo_hex)
 
-        activo = Activo.query.get(id_activo_bytes)
+        activo = db.session.query(Activo.id_primario,Activo.id_secundario,Activo.tipo_de_equipo,Activo.fabricante, Activo.modelo, Activo.num_serie, Activo.ubicacion, Activo.imagen_equipo, Activo.ficha_tecnica, Activo.fecha_registro, Activo.datos_relevantes,Activo.id_subcliente, Subcliente.nombre, Codigos_qr.web_view_link).join(Subcliente,Activo.id_subcliente == Subcliente.id_subcliente).join(Codigos_qr, Activo.id_qr == Codigos_qr.id_qr).filter(Activo.id_activo == id_activo_bytes).first()
 
         if not activo:
             return jsonify({"message" : "Activo no encontrado"}) , 404

@@ -86,10 +86,10 @@ def obtener_todos_los_servicios():
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
 
 
-def obtener_servicios_de_usuario(id_usuario):
+def obtener_servicios_de_usuario(id_usuario): #Obtener los servicio de los activos del usuario
     try:
         id_usuario_bytes = binascii.unhexlify(id_usuario)
-        servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio,Activo.tipo_de_equipo,Activo.id_primario,Servicio.fecha_ejecucion,Usuario.nombre,Tipo_servicio.tipo,Servicio.id_tipo_servicio,Servicio.descripcion,Servicio.observaciones,Servicio.observaciones_usuario,Servicio.informe,Servicio.orden_de_servicio).join(Activo,Servicio.id_activo == Activo.id_activo).join(Usuario, Servicio.id_usuario == Usuario.id_usuario).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Servicio.id_usuario == id_usuario_bytes, Servicio.estado == 1).all()
+        servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio,Activo.tipo_de_equipo,Activo.id_primario,Servicio.fecha_ejecucion,Usuario.nombre,Tipo_servicio.tipo,Servicio.id_tipo_servicio,Servicio.descripcion,Servicio.observaciones,Servicio.observaciones_usuario,Servicio.informe,Servicio.orden_de_servicio).join(Activo,Servicio.id_activo == Activo.id_activo).join(Usuario, Servicio.id_usuario == Usuario.id_usuario).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Activo.id_usuario == id_usuario_bytes, Servicio.estado == 1).all()
 
         if not servicios:
             return jsonify({"message" : "Servivicos no encontrados", "status" : 404}) , 404
