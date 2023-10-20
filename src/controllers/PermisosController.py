@@ -77,7 +77,7 @@ def permisos_creados(id_usuario): #Ver los permisos que un usuario ha creado
         permisos = db.session.query(Permisos.id_permiso,Activo.id_primario,Activo.tipo_de_equipo,Usuario.nombre,Usuario.correo,Permisos.ver_informacion_basica,Permisos.ver_historial_servicios,Permisos.ver_novedades,Permisos.registrar_servicio,Permisos.registrar_novedad).join(Activo, Activo.id_activo == Permisos.id_activo).join(Usuario, Usuario.id_usuario == Permisos.id_usuario).filter(Activo.id_usuario == id_usuario_bytes).all()
 
         if not permisos:
-            return jsonify({"message": "No haz creados permisos", "status" : 404})
+            return jsonify({"message": "No haz creados permisos", "status" : 204}) , 204
         else:
             lista = [{"id_permiso" :  binascii.hexlify(permiso.id_permiso).decode(),"activo" : permiso.tipo_de_equipo,"activo_id_primario" : permiso.id_primario,"usuario" : permiso.nombre,"usuario_correo" : permiso.correo,"ver_informacion_basica" : permiso.ver_informacion_basica, "ver_historial_servicios" : permiso.ver_historial_servicios, "ver_novedades" : permiso.ver_novedades, "registrar_servicio" : permiso.registrar_servicio, "registrar_novedad" : permiso.registrar_novedad} for permiso in permisos]
             return jsonify(lista)
