@@ -21,12 +21,12 @@ def crear_novedad(id_activo):
         descripcion_reporte = bleach.clean(request.json["descripcion_reporte"],tags=bleach.sanitizer.ALLOWED_TAGS)
         imagenes = request.json["imagenes"]
 
-        if imagenes:
+        if imagenes["name"] != None and imagenes["content"] != None and imagenes["mimeType"] != None: 
             id_folder = "1m6h1aZAqPh-vgtMw0sQtEM3RIlEoAFdC"
             upload_response = GoogleDriveController.uploadFile(imagenes,id_folder)
-            id_imagen = upload_response["id"]
+            imagen_link = upload_response["webViewLink"]
 
-        new_novedad = Novedad(id_novedad,id_activo_bytes,nombre_reporta,nombre_empresa,cargo,descripcion_reporte,id_imagen)
+        new_novedad = Novedad(id_novedad,id_activo_bytes,nombre_reporta,nombre_empresa,cargo,descripcion_reporte,imagen_link)
         db.session.add(new_novedad)
         db.session.commit()
 
