@@ -103,7 +103,7 @@ def servicios_sin_cotizacion(id_usuario):
     try:
         id_usuario_bytes = binascii.unhexlify(id_usuario)
 
-        servicios_sin_costo  = db.session.query(Servicio.id_servicio, Servicio.numero_servicio,Activo.tipo_de_equipo,Servicio.fecha_ejecucion,Servicio.descripcion,Tipo_servicio.tipo).outerjoin(Costo_servicio).join(Activo, Servicio.id_activo == Activo.id_activo).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Costo_servicio.id_costo_servicio.is_(None),Servicio.id_usuario == id_usuario_bytes).all()
+        servicios_sin_costo  = db.session.query(Servicio.id_servicio, Servicio.numero_servicio,Activo.tipo_de_equipo,Servicio.fecha_ejecucion,Servicio.descripcion,Tipo_servicio.tipo).outerjoin(Costo_servicio).join(Activo, Servicio.id_activo == Activo.id_activo).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).filter(Costo_servicio.id_costo_servicio.is_(None),Servicio.id_usuario == id_usuario_bytes, Activo.id_usuario == id_usuario_bytes).all()
 
         if not servicios_sin_costo:
             return jsonify({"message" : "No hay cotizaciones pendientes" , "status" : 404})
