@@ -32,7 +32,7 @@ class Novedad(db.Model):
         return {
             "id_novedad" : binascii.hexlify(self.id_novedad).decode() ,
             "id_activo" : binascii.hexlify(self.id_activo).decode(),
-            "fecha" : self.fecha,
+            "fecha" : self.fecha.strftime('%Y-%m-%d %H:%M:%S'),
             "nombre_reporta" : self.nombre_reporta,
             "nombre_empresa" : self.nombre_empresa,
             "cargo" : self.cargo,
