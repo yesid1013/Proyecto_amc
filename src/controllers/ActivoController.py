@@ -80,13 +80,13 @@ def listar_activos(id_usuario):#Activos que el usuario registró
         id_usuario_bytes = binascii.unhexlify(id_usuario)
 
         lista = []
-        activos = db.session.query(Activo.id_activo,Activo.id_primario,Activo.id_secundario,Activo.tipo_de_equipo,Activo.fabricante, Activo.modelo, Activo.num_serie, Activo.ubicacion, Activo.imagen_equipo, Activo.ficha_tecnica, Activo.fecha_registro, Activo.datos_relevantes,Activo.id_subcliente, Subcliente.nombre, Codigos_qr.web_view_link).join(Subcliente,Activo.id_subcliente == Subcliente.id_subcliente).join(Codigos_qr, Activo.id_qr == Codigos_qr.id_qr).filter(Activo.estado == 1,Activo.id_usuario == id_usuario_bytes).all()
+        activos = db.session.query(Activo.id_activo,Activo.id_primario,Activo.id_secundario,Activo.tipo_de_equipo,Activo.fabricante, Activo.modelo, Activo.num_serie, Activo.ubicacion, Activo.imagen_equipo, Activo.ficha_tecnica, Activo.fecha_registro, Activo.datos_relevantes,Activo.id_subcliente, Subcliente.nombre, Codigos_qr.web_view_link,Activo.publico).join(Subcliente,Activo.id_subcliente == Subcliente.id_subcliente).join(Codigos_qr, Activo.id_qr == Codigos_qr.id_qr).filter(Activo.estado == 1,Activo.id_usuario == id_usuario_bytes).all()
         
         if not activos:
             return jsonify({"message" : "No se encontraron activos" , "status" : 404}) , 404
         else:
             for activo in activos:
-                datos = {"id_activo" : binascii.hexlify(activo.id_activo).decode(),"id_subcliente" : binascii.hexlify(activo.id_subcliente).decode() ,"id_primario" : activo.id_primario, "id_secundario" : activo.id_secundario, "tipo_de_equipo": activo.tipo_de_equipo,"fabricante" : activo.fabricante, "modelo" : activo.modelo, "num_serie" : activo.num_serie, "ubicacion" : activo.ubicacion, "imagen_equipo" : activo.imagen_equipo,"ficha_tecnica" : activo.ficha_tecnica, "fecha_registro" : activo.fecha_registro.strftime('%d/%m/%y %H:%M:%S'),"datos_relevantes" : activo.datos_relevantes, "subcliente" : activo.nombre,"codigo_qr" : activo.web_view_link}
+                datos = {"id_activo" : binascii.hexlify(activo.id_activo).decode(),"id_subcliente" : binascii.hexlify(activo.id_subcliente).decode() ,"id_primario" : activo.id_primario, "id_secundario" : activo.id_secundario, "tipo_de_equipo": activo.tipo_de_equipo,"fabricante" : activo.fabricante, "modelo" : activo.modelo, "num_serie" : activo.num_serie, "ubicacion" : activo.ubicacion, "imagen_equipo" : activo.imagen_equipo,"ficha_tecnica" : activo.ficha_tecnica, "fecha_registro" : activo.fecha_registro.strftime('%d/%m/%y %H:%M:%S'),"datos_relevantes" : activo.datos_relevantes, "subcliente" : activo.nombre,"codigo_qr" : activo.web_view_link, "publico" : activo.publico}
                 lista.append(datos)
 
             return jsonify (lista)
@@ -134,7 +134,7 @@ def editar_activo(id_activo):
             activo.ubicacion = bleach.clean(request.json["ubicacion"],tags=bleach.sanitizer.ALLOWED_TAGS)
             activo.tipo_de_equipo = bleach.clean(request.json["tipo_de_equipo"],tags=bleach.sanitizer.ALLOWED_TAGS)
             activo.fabricante = bleach.clean(request.json["fabricante"],tags=bleach.sanitizer.ALLOWED_TAGS)
-            activo.publico = bleach.clean(request.json["publico"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            activo.publico = request.json["publico"]
             id_subcliente = bleach.clean(request.json["id_subcliente"],tags=bleach.sanitizer.ALLOWED_TAGS)
             
 
