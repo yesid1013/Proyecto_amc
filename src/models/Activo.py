@@ -25,6 +25,7 @@ class Activo(db.Model):
     imagen_equipo = db.Column(db.String(255),nullable = True)
     id_subcliente = db.Column(db.BINARY(16), db.ForeignKey('subcliente.id_subcliente'), nullable=False)
     ficha_tecnica = db.Column(db.String(255),nullable = True)
+    publico = db.Column(db.SmallInteger,nullable = False, default = 0)
     estado = db.Column(db.SmallInteger,nullable = False, default = 1)
 
     subcliente = db.relationship('Subcliente', back_populates="activo", uselist=False, single_parent=True)
