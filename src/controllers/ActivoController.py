@@ -25,6 +25,7 @@ def crear_activo(id_usuario):
         fabricante = bleach.clean(request.json["fabricante"],tags=bleach.sanitizer.ALLOWED_TAGS)   
         imagen_equipo = request.json["imagen_equipo"]
         id_subcliente = bleach.clean(request.json["id_subcliente"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        publico = bleach.clean(request.json["publico"],tags=bleach.sanitizer.ALLOWED_TAGS)
 
         #No se hace saneamiento directamente como los demás ya que puede estos pueden ser nulos
         modelo = saneamiento_de_datos(request.json["modelo"])
@@ -50,7 +51,7 @@ def crear_activo(id_usuario):
 
         archivo_ficha_tecnica = None
        
-        new_activo = Activo(id_activo,new_code_qr.id_qr,id_primario,id_secundario,id_usuario_bytes,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen,id_subcliente_bytes,archivo_ficha_tecnica)
+        new_activo = Activo(id_activo,new_code_qr.id_qr,id_primario,id_secundario,id_usuario_bytes,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen,id_subcliente_bytes,archivo_ficha_tecnica,publico)
 
         db.session.add(new_activo)
         db.session.commit()
@@ -133,7 +134,9 @@ def editar_activo(id_activo):
             activo.ubicacion = bleach.clean(request.json["ubicacion"],tags=bleach.sanitizer.ALLOWED_TAGS)
             activo.tipo_de_equipo = bleach.clean(request.json["tipo_de_equipo"],tags=bleach.sanitizer.ALLOWED_TAGS)
             activo.fabricante = bleach.clean(request.json["fabricante"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            activo.publico = bleach.clean(request.json["publico"],tags=bleach.sanitizer.ALLOWED_TAGS)
             id_subcliente = bleach.clean(request.json["id_subcliente"],tags=bleach.sanitizer.ALLOWED_TAGS)
+            
 
             id_subcliente_bytes = binascii.unhexlify(id_subcliente) #El id_subcliente de hexadecimal a binario
             

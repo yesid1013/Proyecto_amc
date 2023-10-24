@@ -37,7 +37,7 @@ class Activo(db.Model):
     servicio = db.relationship('Servicio', back_populates='activo', cascade="all,delete-orphan")
     permisos = db.relationship('Permisos', back_populates='activo',cascade="all,delete-orphan")
 
-    def __init__(self,id_activo,id_qr,id_primario,id_secundario,id_usuario,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen_equipo,id_subcliente,ficha_tecnica):
+    def __init__(self,id_activo,id_qr,id_primario,id_secundario,id_usuario,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen_equipo,id_subcliente,ficha_tecnica,publico):
         self.id_activo = id_activo
         self.id_qr = id_qr
         self.id_primario = id_primario
@@ -52,6 +52,7 @@ class Activo(db.Model):
         self.imagen_equipo = imagen_equipo
         self.id_subcliente = id_subcliente
         self.ficha_tecnica = ficha_tecnica
+        self.publico = publico
         self.estado = 1
     
     def getDatos(self):
