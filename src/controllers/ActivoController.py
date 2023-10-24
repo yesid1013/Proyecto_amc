@@ -25,7 +25,7 @@ def crear_activo(id_usuario):
         fabricante = bleach.clean(request.json["fabricante"],tags=bleach.sanitizer.ALLOWED_TAGS)   
         imagen_equipo = request.json["imagen_equipo"]
         id_subcliente = bleach.clean(request.json["id_subcliente"],tags=bleach.sanitizer.ALLOWED_TAGS)
-        publico = bleach.clean(request.json["publico"],tags=bleach.sanitizer.ALLOWED_TAGS)
+        publico = request.json["publico"]
 
         #No se hace saneamiento directamente como los demás ya que puede estos pueden ser nulos
         modelo = saneamiento_de_datos(request.json["modelo"])
