@@ -5,12 +5,16 @@ import uuid
 from datetime import datetime
 import pytz
 from models.Tipo_servicio import Tipo_servicio
+from models.Costo_servicio import Costo_servicio
 from models.Usuario import Usuario
 from models.Activo import Activo
 from models.Subcliente import Subcliente
 from controllers import GoogleDriveController
 from utils.validation import validation_servicio
 import bleach
+from sqlalchemy.orm import aliased
+
+
 
 def crear_servicio(id_activo,id_usuario):
     try:
@@ -61,10 +65,40 @@ def serivicios_de_un_activo(id_activo):
         lista = []
         id_activo_bytes = binascii.unhexlify(id_activo)
 
-        servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio, Servicio.id_activo, Servicio.fecha_ejecucion,Tipo_servicio.tipo,Usuario.nombre,Servicio.descripcion,Servicio.observaciones,Servicio.informe).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).join(Usuario,Servicio.id_usuario == Usuario.id_usuario).filter(Servicio.id_activo == id_activo_bytes, Servicio.estado == 1).all()
+        # servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio, Servicio.id_activo, Servicio.fecha_ejecucion,Tipo_servicio.tipo,Usuario.nombre,Servicio.descripcion,Servicio.observaciones,Servicio.informe, Costo_servicio.documento_cotizacion).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).join(Costo_servicio, Servicio.id_servicio == Costo_servicio.id_servicio).join(Usuario,Servicio.id_usuario == Usuario.id_usuario).filter(Servicio.id_activo == id_activo_bytes, Servicio.estado == 1).all()
+
+        costo_servicio_alias = aliased(Costo_servicio)
+
+        servicios = db.session.query(
+        Servicio.id_servicio,
+        Servicio.numero_servicio,
+        Servicio.id_activo,
+        Servicio.fecha_ejecucion,
+        Tipo_servicio.tipo,
+        Usuario.nombre,
+        Servicio.descripcion,
+        Servicio.observaciones,
+        Servicio.informe,
+        costo_servicio_alias.documento_cotizacion
+        ).join(
+            Tipo_servicio,
+            Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio
+        ).join(
+            Usuario,
+            Servicio.id_usuario == Usuario.id_usuario
+        ).outerjoin(
+            costo_servicio_alias,
+            Servicio.id_servicio == costo_servicio_alias.id_servicio
+        ).filter(
+            Servicio.id_activo == id_activo_bytes,
+            Servicio.estado == 1
+        ).all()
+
+        
+
 
         for servicio in servicios:
-            datos = {"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(),"numero_servicio" : servicio.numero_servicio ,"fecha_ejecucion" : servicio.fecha_ejecucion.strftime('%Y-%m-%d %H:%M:%S'), "tipo" : servicio.tipo, "descripcion" : servicio.descripcion, "observaciones" : servicio.observaciones, "informe" : servicio.informe,"nombre_usuario" : servicio.nombre}
+            datos = {"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(),"numero_servicio" : servicio.numero_servicio ,"fecha_ejecucion" : servicio.fecha_ejecucion.strftime('%Y-%m-%d %H:%M:%S'), "tipo" : servicio.tipo, "descripcion" : servicio.descripcion, "observaciones" : servicio.observaciones, "informe" : servicio.informe,"nombre_usuario" : servicio.nombre, "costo" : servicio.documento_cotizacion }
             lista.append(datos)
             
         return jsonify(lista)
