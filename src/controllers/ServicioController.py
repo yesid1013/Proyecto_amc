@@ -259,7 +259,7 @@ def adjuntar_informe_servicio(id_servicio):
             return jsonify({"message" : "El servicio ya tiene ficha tecnica"}) , 400
     
     except Exception as e:
-        return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)}) , 500
+        return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)})
     
 def formatear_fecha(fecha_ejecucion):
     fecha_utc = datetime.fromisoformat(fecha_ejecucion)
