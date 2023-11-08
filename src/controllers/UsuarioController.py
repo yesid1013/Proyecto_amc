@@ -28,10 +28,11 @@ def crear_usuario():
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
 
-def listar_usuarios():
+def listar_usuarios(id_usuario):
     try:
         lista = []
-        users = db.session.query(Usuario).all()
+        id_usuario_bytes = binascii.unhexlify(id_usuario)
+        users = db.session.query(Usuario).filter(Usuario.id_usuario != id_usuario_bytes)
         for user in users:
             id_hex = binascii.hexlify(user.id_usuario).decode() #Convierto el id binario que me da la base de datos a hexadecimal
             datos = {"id_usuario" : id_hex, "nombre" : user.nombre, "correo" : user.correo, "direccion" : user.direccion, "telefono" : user.telefono, "perfil" : user.perfil}

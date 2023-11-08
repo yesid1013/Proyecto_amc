@@ -18,7 +18,8 @@ def crear_usuario():
 def listar_usuarios():
     try:
         verify_jwt_in_request()
-        return UsuarioController.listar_usuarios()
+        id_usuario = get_jwt_identity()
+        return UsuarioController.listar_usuarios(id_usuario)
     except (NoAuthorizationError,JWTDecodeError,InvalidHeaderError,RuntimeError,KeyError) as ex:
         return jsonify({"message" : "Acceso denegado :", "error" : str(ex)})
 
