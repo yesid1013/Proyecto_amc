@@ -122,7 +122,6 @@ def editar_permiso(id_permiso):
             return jsonify({"message" : "Permiso no encontrado", "status" : 404}) , 404
         else:
             id_usuario = bleach.clean(request.json['id_usuario'],tags=bleach.sanitizer.ALLOWED_TAGS)
-            id_activo = bleach.clean(request.json['id_activo'],tags=bleach.sanitizer.ALLOWED_TAGS)
             ver_informacion_basica = request.json['ver_informacion_basica']
             ver_historial_servicios = request.json['ver_historial_servicios']
             ver_novedades = request.json['ver_novedades']
@@ -130,10 +129,8 @@ def editar_permiso(id_permiso):
             registrar_novedad = request.json['registrar_novedad']
 
             id_usuario_bytes = binascii.unhexlify(id_usuario)
-            id_activo_bytes = binascii.unhexlify(id_activo)
             
             permiso.id_usuario = id_usuario_bytes
-            permiso.id_activo = id_activo_bytes
             permiso.ver_informacion_basica = ver_informacion_basica
             permiso.ver_historial_servicios = ver_historial_servicios
             permiso.ver_novedades = ver_novedades
