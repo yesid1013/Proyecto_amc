@@ -11,6 +11,7 @@ class Permisos(db.Model):
     ver_informacion_basica = db.Column(db.SmallInteger,default = 0)
     ver_historial_servicios = db.Column(db.SmallInteger,default = 0)
     ver_novedades = db.Column(db.SmallInteger,default = 0)
+    ver_costo_servicio = db.Column(db.SmallInteger,default = 0)
     registrar_servicio = db.Column(db.SmallInteger,default = 0)
     registrar_novedad = db.Column(db.SmallInteger,default = 0)
 
