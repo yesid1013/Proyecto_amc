@@ -21,6 +21,7 @@ def registrar_permiso():
         ver_informacion_basica = request.json['ver_informacion_basica']
         ver_historial_servicios = request.json['ver_historial_servicios']
         ver_novedades = request.json['ver_novedades']
+        ver_costo_servicio = request.json["ver_costo_servicio"]
         registrar_servicio = request.json['registrar_servicio']
         registrar_novedad = request.json['registrar_novedad']
 
@@ -30,7 +31,7 @@ def registrar_permiso():
         permiso = db.session.query(Permisos.id_permiso).filter(Permisos.id_usuario == id_usuario_bytes, Permisos.id_activo == id_activo_bytes).first() # Verificar si el usuario que tendrá los permisos ya tiene permisos del activo escogido
 
         if not permiso :
-            new_permiso = Permisos(id_permiso,id_usuario_bytes,id_activo_bytes,ver_informacion_basica,ver_historial_servicios,ver_novedades,registrar_servicio,registrar_novedad)
+            new_permiso = Permisos(id_permiso,id_usuario_bytes,id_activo_bytes,ver_informacion_basica,ver_historial_servicios,ver_novedades,registrar_servicio,registrar_novedad,ver_costo_servicio)
 
             db.session.add(new_permiso)
             db.session.commit()
