@@ -75,6 +75,23 @@ def info_activo(id_activo_hex): #Funcion para mostrar la informacion de un activ
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
 
+def info_activo_qr(id_activo_hex):
+    try:
+        id_activo_bytes = binascii.unhexlify(id_activo_hex)
+
+        activo = db.session.query(Activo.id_primario,Activo.id_secundario,Activo.tipo_de_equipo,Activo.fabricante, Activo.modelo, Activo.num_serie, Activo.ubicacion, Activo.imagen_equipo, Activo.fecha_registro, Activo.datos_relevantes,Activo.id_subcliente, Subcliente.nombre).join(Subcliente,Activo.id_subcliente == Subcliente.id_subcliente).filter(Activo.id_activo == id_activo_bytes, Activo.publico == 1).first()
+
+        if not activo:
+            return jsonify({"message" : "El activo no es publico"}) , 403
+        
+        else:
+            return jsonify({"id_primario" : activo.id_primario, "id_secundario": activo.id_secundario, "ubicacion" : activo.ubicacion, "tipo_de_equipo" : activo.tipo_de_equipo, "fabricante" : activo.fabricante, "modelo" : activo.modelo, "num_serie" : activo.num_serie, "datos_relevantes" : activo.datos_relevantes, "imagen_equipo" : activo.imagen_equipo})
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+
+
 def listar_activos(id_usuario):#Activos que el usuario registró
     try:
         id_usuario_bytes = binascii.unhexlify(id_usuario)
