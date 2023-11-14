@@ -37,6 +37,7 @@ class Permisos(db.Model):
             "ver_informacion_basica" : self.ver_informacion_basica,
             "ver_historial_servicios" : self.ver_historial_servicios,
             "ver_novedades" : self.ver_novedades,
+            "ver_costo_servicio" : self.ver_costo_servicio,
             "registrar_servicio" : self.registrar_servicio,
             "registrar_novedad" : self.registrar_novedad,
         }
