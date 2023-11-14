@@ -94,12 +94,12 @@ def buscar_permisos_de_activo(id_activo):
     try:
         id_activo_bytes = binascii.unhexlify(id_activo)
 
-        permisos = db.session.query(Permisos.id_permiso,Usuario.correo,Usuario.nombre, Permisos.ver_informacion_basica,Permisos.ver_historial_servicios, Permisos.ver_novedades, Permisos.registrar_servicio, Permisos.registrar_novedad).join(Usuario,Usuario.id_usuario == Permisos.id_usuario).filter(Permisos.id_activo == id_activo_bytes).all()
+        permisos = db.session.query(Permisos.id_permiso,Usuario.correo,Usuario.nombre, Permisos.ver_informacion_basica,Permisos.ver_historial_servicios, Permisos.ver_novedades,Permisos.ver_costo_servicio, Permisos.registrar_servicio, Permisos.registrar_novedad).join(Usuario,Usuario.id_usuario == Permisos.id_usuario).filter(Permisos.id_activo == id_activo_bytes).all()
 
         if not permisos:
             return jsonify({"message" : "El activo no tiene permisos creados", "status" : 204}) , 204
         else:
-            lista = [{"id_permiso" : binascii.hexlify(permiso.id_permiso).decode(), "usuario_correo" : permiso.correo, "usuario_nombre" : permiso.nombre,"ver_informacion_basica" : permiso.ver_informacion_basica, "ver_historial_servicios" : permiso.ver_historial_servicios, "ver_novedades" : permiso.ver_novedades,"registrar_servicio" : permiso.registrar_servicio, "registrar_novedad" : permiso.registrar_novedad } for permiso in permisos]
+            lista = [{"id_permiso" : binascii.hexlify(permiso.id_permiso).decode(), "usuario_correo" : permiso.correo, "usuario_nombre" : permiso.nombre,"ver_informacion_basica" : permiso.ver_informacion_basica, "ver_historial_servicios" : permiso.ver_historial_servicios, "ver_novedades" : permiso.ver_novedades,"ver_costo_servicio" : permiso.ver_costo_servicio,"registrar_servicio" : permiso.registrar_servicio, "registrar_novedad" : permiso.registrar_novedad } for permiso in permisos]
 
             print(lista)
 
