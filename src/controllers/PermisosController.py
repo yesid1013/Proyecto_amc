@@ -121,6 +121,7 @@ def editar_permiso(id_permiso):
             ver_informacion_basica = request.json['ver_informacion_basica']
             ver_historial_servicios = request.json['ver_historial_servicios']
             ver_novedades = request.json['ver_novedades']
+            ver_costo_servicio = request.json['ver_costo_servicio']
             registrar_servicio = request.json['registrar_servicio']
             registrar_novedad = request.json['registrar_novedad']
 
@@ -130,6 +131,7 @@ def editar_permiso(id_permiso):
             permiso.ver_informacion_basica = ver_informacion_basica
             permiso.ver_historial_servicios = ver_historial_servicios
             permiso.ver_novedades = ver_novedades
+            permiso.ver_costo_servicio = ver_costo_servicio
             permiso.registrar_servicio = registrar_servicio
             permiso.registrar_novedad = registrar_novedad
 
