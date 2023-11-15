@@ -40,6 +40,11 @@ def serivicios_de_un_activo_con_costo(id_activo):
     return ServicioController.serivicios_de_un_activo_con_costo(id_activo)
 
 @cross_origin()
+@servicio.route('/servicios_sin_costo/<id_activo>')
+def serivicios_de_un_activo_sin_costo(id_activo):
+    return ServicioController.serivicios_de_un_activo_sin_costo(id_activo)
+
+@cross_origin()
 @servicio.route('/servicio/<id_servicio>', methods=['PUT'])
 @jwt_required()
 def editar_servicio(id_servicio):

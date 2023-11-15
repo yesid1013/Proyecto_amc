@@ -103,6 +103,21 @@ def serivicios_de_un_activo_con_costo(id_activo):
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
 
+def serivicios_de_un_activo_sin_costo(id_activo):
+    try:
+        id_activo_bytes = binascii.unhexlify(id_activo)
+
+        servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio, Servicio.id_activo, Servicio.fecha_ejecucion,Tipo_servicio.tipo,Usuario.nombre,Servicio.descripcion,Servicio.observaciones,Servicio.informe).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).join(Usuario,Servicio.id_usuario == Usuario.id_usuario).filter(Servicio.id_activo == id_activo_bytes, Servicio.estado == 1).all()
+
+        if not servicios:
+            return jsonify({"message" : "Servivicos no encontrados", "status" : 404}) , 404
+
+
+        lista = [{"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(),"numero_servicio" : servicio.numero_servicio ,"fecha_ejecucion" : servicio.fecha_ejecucion.strftime('%Y-%m-%d %H:%M:%S'), "tipo" : servicio.tipo, "descripcion" : servicio.descripcion, "observaciones" : servicio.observaciones, "informe" : servicio.informe,"nombre_usuario" : servicio.nombre} for servicio in servicios]
+        return jsonify(lista)
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
 
 
 def obtener_todos_los_servicios():
