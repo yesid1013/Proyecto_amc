@@ -36,8 +36,8 @@ def obtener_servicios():
 @cross_origin()
 @servicio.route('/servicios/<id_activo>')
 @jwt_required()
-def listar_servicios(id_activo):
-    return ServicioController.serivicios_de_un_activo(id_activo)
+def serivicios_de_un_activo_con_costo(id_activo):
+    return ServicioController.serivicios_de_un_activo_con_costo(id_activo)
 
 @cross_origin()
 @servicio.route('/servicio/<id_servicio>', methods=['PUT'])

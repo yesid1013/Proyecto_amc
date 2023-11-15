@@ -60,7 +60,7 @@ def crear_servicio(id_activo,id_usuario):
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)}), 500
     
-def serivicios_de_un_activo(id_activo):
+def serivicios_de_un_activo_con_costo(id_activo):
     try:
         lista = []
         id_activo_bytes = binascii.unhexlify(id_activo)
@@ -94,9 +94,6 @@ def serivicios_de_un_activo(id_activo):
             Servicio.estado == 1
         ).all()
 
-        
-
-
         for servicio in servicios:
             datos = {"id_servicio" : binascii.hexlify(servicio.id_servicio).decode(),"numero_servicio" : servicio.numero_servicio ,"fecha_ejecucion" : servicio.fecha_ejecucion.strftime('%Y-%m-%d %H:%M:%S'), "tipo" : servicio.tipo, "descripcion" : servicio.descripcion, "observaciones" : servicio.observaciones, "informe" : servicio.informe,"nombre_usuario" : servicio.nombre, "costo" : servicio.documento_cotizacion }
             lista.append(datos)
@@ -105,6 +102,8 @@ def serivicios_de_un_activo(id_activo):
 
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
+
+
 
 def obtener_todos_los_servicios():
     try:
