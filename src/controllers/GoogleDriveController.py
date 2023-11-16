@@ -51,7 +51,7 @@ def uploadFile(file,id_folder): #Funcion para guardar un archivo en google drive
     
 def uploadQR(id_activo_hex):
     try:
-        qr_code_image = qrcode.make(f"http://127.0.0.1:5000/info_activo/{id_activo_hex}")  # Generar el código QR con la URL que que redirigira
+        qr_code_image = qrcode.make(f"http://127.0.0.1:5000/qractivo/{id_activo_hex}")  # Generar el código QR con la URL que que redirigira
         qr_code_io = io.BytesIO()  # Crear un objeto BytesIO para guardar la imagen en memoria
         qr_code_image.save(qr_code_io)
 
