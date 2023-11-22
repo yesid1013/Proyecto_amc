@@ -59,6 +59,25 @@ def permisos_recibidos(id_usuario): #muestra los activos a los que otros usuario
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)})
 
+def buscar_permiso_por_activo_y_usuario(id_usuario, id_activo): #Funcion para buscar el id_permiso del activo al iniciar sesión desde la interfaz de qractivo, se buscar por el id_activo y el id_usario que ingresa
+    try:
+        id_usuario_bytes = binascii.unhexlify(id_usuario)
+        id_activo_bytes = binascii.unhexlify(id_activo)
+
+        permiso = db.session.query(Permisos.id_permiso).filter(Permisos.id_usuario == id_usuario_bytes, Permisos.id_activo == id_activo_bytes).first()
+
+        if not permiso:
+            return jsonify({"message": "No tienes permisos otorgados", "status" : 403})
+        else:
+            return jsonify({"id_permiso" : binascii.hexlify(permiso.id_permiso).decode(), "status" : 200})
+    
+    except Exception as e:
+        return jsonify({"message" : "Ha ocurrido un error inesperado", "error" : str(e)})
+        
+
+
+
+
 def obtener_un_permiso(id_permiso):
     try:
         id_permiso_bytes = binascii.unhexlify(id_permiso)
