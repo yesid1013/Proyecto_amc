@@ -25,6 +25,8 @@ def crear_novedad(id_activo):
             id_folder = "1m6h1aZAqPh-vgtMw0sQtEM3RIlEoAFdC"
             upload_response = GoogleDriveController.uploadFile(imagenes,id_folder)
             imagen_link = upload_response["webViewLink"]
+        else:
+            imagen_link = None
 
         new_novedad = Novedad(id_novedad,id_activo_bytes,nombre_reporta,nombre_empresa,cargo,descripcion_reporte,imagen_link)
         db.session.add(new_novedad)
