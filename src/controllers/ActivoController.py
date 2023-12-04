@@ -75,7 +75,7 @@ def info_activo(id_activo_hex): #Funcion para mostrar la informacion de un activ
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
 
-def info_activo_qr(id_activo_hex):
+def info_activo_qr(id_activo_hex): #Funcion para devolver la informacion del activo cuando se escanea el codigo qr verificando si el activo es publico
     try:
         id_activo_bytes = binascii.unhexlify(id_activo_hex)
 
