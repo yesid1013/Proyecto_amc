@@ -18,7 +18,6 @@ def crear_activo(id_usuario):
         
         id_activo = uuid.uuid4().bytes
         id_primario = bleach.clean(request.json["id_primario"],tags=bleach.sanitizer.ALLOWED_TAGS) #Saneamiento de datos 
-        id_secundario = bleach.clean(request.json["id_secundario"],tags=bleach.sanitizer.ALLOWED_TAGS)
         id_usuario = bleach.clean(id_usuario,tags=bleach.sanitizer.ALLOWED_TAGS) 
         ubicacion = bleach.clean(request.json["ubicacion"],tags=bleach.sanitizer.ALLOWED_TAGS) 
         tipo_de_equipo = bleach.clean(request.json["tipo_de_equipo"],tags=bleach.sanitizer.ALLOWED_TAGS)  
@@ -31,6 +30,7 @@ def crear_activo(id_usuario):
         modelo = saneamiento_de_datos(request.json["modelo"])
         num_serie = saneamiento_de_datos(request.json["num_serie"])
         datos_relevantes = saneamiento_de_datos(request.json["datos_relevantes"])
+        id_secundario = saneamiento_de_datos(request.json["id_secundario"])
 
         id_activo_hex = binascii.hexlify(id_activo).decode() #El id activo que se genera pasarlo de binario a hexadecimal
         id_usuario_bytes = binascii.unhexlify(id_usuario) #El id_usuario de hexadecimal a binario

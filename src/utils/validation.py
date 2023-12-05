@@ -50,7 +50,7 @@ def validation_activo(json):
             "type": "object",
             "properties":{
                 "id_primario": {"type": "string"},
-                "id_secundario" : {"type" : "string"},
+                "id_secundario" : {"type" : ["string","null"]},
                 "ubicacion" : {"type" : "string"},
                 "tipo_de_equipo" : {"type" : "string"},
                 "fabricante" : {"type" : "string"},
