@@ -63,7 +63,7 @@ def uploadQR(id_activo_hex):
             "parents": ["1os7McQE069GqnfzlgAjMYC0fQZnaM9bn"],  # ID de la carpeta en Google Drive donde deseas guardar las imágenes
             }
 
-        returned_fields = "id, name, mimeType, webViewLink, exportLinks"
+        returned_fields = "id, name, mimeType, webViewLink, webContentLink "
 
         upload_response = service.files().create(
                 body=file_metadata,
