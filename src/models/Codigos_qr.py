@@ -15,7 +15,7 @@ class Codigos_qr (db.Model):
     def __init__ (self,google_drive_id,web_view_link,web_content_link):
         self.google_drive_id = google_drive_id
         self.web_view_link = web_view_link
-        self.web_content_link
+        self.web_content_link = web_content_link
     
     def getDatos(self):
         return {
