@@ -38,7 +38,7 @@ def crear_activo(id_usuario):
 
         response = GoogleDriveController.uploadQR(id_activo_hex) #Mando el id del activo en hexadecimal para crear el codigo QR para que la url del codigo qr tenga el id del activo
 
-        new_code_qr = Codigos_qr(response["id"],response["webViewLink"]) #el response me devuelve el id del archivo y el webViewLink que seran los campos que se guardan en la tabla de codigos_qr
+        new_code_qr = Codigos_qr(response["id"], response["webViewLink"],response["webContentLink"]) #el response me devuelve el id del archivo y el webViewLink que seran los campos que se guardan en la tabla de codigos_qr
         db.session.add(new_code_qr)
         db.session.commit()
 
