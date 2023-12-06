@@ -28,6 +28,12 @@ def registrar_permiso():
         id_usuario_bytes = binascii.unhexlify(id_usuario)
         id_activo_bytes = binascii.unhexlify(id_activo)
 
+        usuario = db.session.query(Usuario.id_usuario).filter(Usuario.id_usuario == id_usuario_bytes).first()
+
+        if not usuario :
+            return jsonify({"message": "El usuario seleccionado no existe", "status" : 404}), 404
+
+
         permiso = db.session.query(Permisos.id_permiso).filter(Permisos.id_usuario == id_usuario_bytes, Permisos.id_activo == id_activo_bytes).first() # Verificar si el usuario que tendrá los permisos ya tiene permisos del activo escogido
 
         if not permiso :
