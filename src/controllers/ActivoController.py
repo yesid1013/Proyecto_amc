@@ -4,6 +4,7 @@ from controllers import GoogleDriveController
 from models.Codigos_qr import Codigos_qr
 from models.Subcliente import Subcliente
 from models.Codigos_qr import Codigos_qr
+from models.Usuario import Usuario
 from utils.validation import validation_activo
 import uuid
 import binascii
@@ -65,12 +66,14 @@ def info_activo(id_activo_hex): #Funcion para mostrar la informacion de un activ
     try: 
         id_activo_bytes = binascii.unhexlify(id_activo_hex)
 
-        activo = db.session.query(Activo.id_primario,Activo.id_secundario,Activo.tipo_de_equipo,Activo.fabricante, Activo.modelo, Activo.num_serie, Activo.ubicacion, Activo.imagen_equipo, Activo.ficha_tecnica, Activo.fecha_registro, Activo.datos_relevantes,Activo.id_subcliente, Subcliente.nombre, Codigos_qr.web_view_link, Codigos_qr.web_content_link).join(Subcliente,Activo.id_subcliente == Subcliente.id_subcliente).join(Codigos_qr, Activo.id_qr == Codigos_qr.id_qr).filter(Activo.id_activo == id_activo_bytes).first()
+        activo = db.session.query(Activo.id_primario,Activo.id_secundario,Activo.tipo_de_equipo,Activo.fabricante, Activo.modelo, Activo.num_serie, Activo.ubicacion, Activo.imagen_equipo, Activo.ficha_tecnica, Activo.fecha_registro, Activo.datos_relevantes,Activo.id_subcliente, Subcliente.nombre, Codigos_qr.web_view_link, Codigos_qr.web_content_link, Usuario.correo).join(Subcliente,Activo.id_subcliente == Subcliente.id_subcliente).join(Usuario, Usuario.id_usuario == Activo.id_usuario).join(Codigos_qr, Activo.id_qr == Codigos_qr.id_qr).filter(Activo.id_activo == id_activo_bytes).first()
+
 
         if not activo:
             return jsonify({"message" : "Activo no encontrado"}) , 404
         else:
-            return jsonify({"id_primario" : activo.id_primario, "id_secundario": activo.id_secundario, "ubicacion" : activo.ubicacion, "tipo_de_equipo" : activo.tipo_de_equipo, "fabricante" : activo.fabricante, "modelo" : activo.modelo, "num_serie" : activo.num_serie, "datos_relevantes" : activo.datos_relevantes, "imagen_equipo" : activo.imagen_equipo, "ficha_tecnica" : activo.ficha_tecnica, "codigo_qr" : activo.web_view_link, "codigo_qr_content_link" : activo.web_content_link })
+            return jsonify({"id_primario" : activo.id_primario, "id_secundario": activo.id_secundario, "ubicacion" : activo.ubicacion, "tipo_de_equipo" : activo.tipo_de_equipo, "fabricante" : activo.fabricante, "modelo" : activo.modelo, "num_serie" : activo.num_serie, "datos_relevantes" : activo.datos_relevantes, "imagen_equipo" : activo.imagen_equipo, "ficha_tecnica" : activo.ficha_tecnica, "codigo_qr" : activo.web_view_link, "codigo_qr_content_link" : activo.web_content_link, "usuario_propietario" : activo.correo })
+        
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
