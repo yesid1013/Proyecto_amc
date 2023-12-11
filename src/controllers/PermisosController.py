@@ -51,15 +51,16 @@ def permisos_recibidos(id_usuario): #muestra los activos a los que otros usuario
     try: #El id_usuario que recibo en la función es el usuario que ingreso a la plataforma
 
         id_usuario_bytes = binascii.unhexlify(id_usuario)
-        #permisos = Permisos.query.filter_by(id_usuario = id_usuario_bytes).all() #Busco si el usuario que ingreso le han otorgado permisos
+        
 
-        permisos = db.session.query(Permisos.id_permiso,Permisos.id_activo,Permisos.ver_informacion_basica,Permisos.ver_historial_servicios,Permisos.ver_novedades,Permisos.registrar_servicio,Permisos.registrar_novedad,Permisos.ver_costo_servicio,Activo.id_primario,Activo.tipo_de_equipo).join(Activo, Permisos.id_activo == Activo.id_activo).filter(Permisos.id_usuario == id_usuario_bytes).all()
+        permisos = db.session.query(Permisos.id_permiso,Permisos.id_activo,Permisos.ver_informacion_basica,Permisos.ver_historial_servicios,Permisos.ver_novedades,Permisos.registrar_servicio,Permisos.registrar_novedad,Permisos.ver_costo_servicio,Activo.id_primario,Activo.tipo_de_equipo, Usuario.correo).join(Activo, Permisos.id_activo == Activo.id_activo).join(Usuario, Activo.id_usuario == Usuario.id_usuario).filter(Permisos.id_usuario == id_usuario_bytes).all()
+        
 
 
         if not permisos:
             return jsonify({"message": "No tienes permisos otorgados", "status" : 404})
         else:
-            lista = [{"id_permiso" : binascii.hexlify(permiso.id_permiso).decode(), "id_activo" : binascii.hexlify(permiso.id_activo).decode(), "ver_informacion_basica" : permiso.ver_informacion_basica, "ver_historial_servicios" : permiso.ver_historial_servicios, "ver_novedades" : permiso.ver_novedades,"ver_costo_servicio" : permiso.ver_costo_servicio, "registrar_servicio" : permiso.registrar_servicio, "registrar_novedad" : permiso.registrar_novedad, "activo_id_primario" : permiso.id_primario, "activo_tipo_de_equipo" : permiso.tipo_de_equipo} for permiso in permisos]
+            lista = [{"id_permiso" : binascii.hexlify(permiso.id_permiso).decode(), "id_activo" : binascii.hexlify(permiso.id_activo).decode(), "ver_informacion_basica" : permiso.ver_informacion_basica, "ver_historial_servicios" : permiso.ver_historial_servicios, "ver_novedades" : permiso.ver_novedades,"ver_costo_servicio" : permiso.ver_costo_servicio, "registrar_servicio" : permiso.registrar_servicio, "registrar_novedad" : permiso.registrar_novedad, "activo_id_primario" : permiso.id_primario, "activo_tipo_de_equipo" : permiso.tipo_de_equipo, "usuario_dueño" : permiso.correo} for permiso in permisos]
             return jsonify(lista)
         
     except Exception as e:
