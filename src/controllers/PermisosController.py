@@ -60,7 +60,7 @@ def permisos_recibidos(id_usuario): #muestra los activos a los que otros usuario
         if not permisos:
             return jsonify({"message": "No tienes permisos otorgados", "status" : 404})
         else:
-            lista = [{"id_permiso" : binascii.hexlify(permiso.id_permiso).decode(), "id_activo" : binascii.hexlify(permiso.id_activo).decode(), "ver_informacion_basica" : permiso.ver_informacion_basica, "ver_historial_servicios" : permiso.ver_historial_servicios, "ver_novedades" : permiso.ver_novedades,"ver_costo_servicio" : permiso.ver_costo_servicio, "registrar_servicio" : permiso.registrar_servicio, "registrar_novedad" : permiso.registrar_novedad, "activo_id_primario" : permiso.id_primario, "activo_tipo_de_equipo" : permiso.tipo_de_equipo, "usuario_dueño" : permiso.correo} for permiso in permisos]
+            lista = [{"id_permiso" : binascii.hexlify(permiso.id_permiso).decode(), "id_activo" : binascii.hexlify(permiso.id_activo).decode(), "ver_informacion_basica" : permiso.ver_informacion_basica, "ver_historial_servicios" : permiso.ver_historial_servicios, "ver_novedades" : permiso.ver_novedades,"ver_costo_servicio" : permiso.ver_costo_servicio, "registrar_servicio" : permiso.registrar_servicio, "registrar_novedad" : permiso.registrar_novedad, "activo_id_primario" : permiso.id_primario, "activo_tipo_de_equipo" : permiso.tipo_de_equipo, "usuario_propietario" : permiso.correo} for permiso in permisos]
             return jsonify(lista)
         
     except Exception as e:
