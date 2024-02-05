@@ -58,15 +58,9 @@ def validation_activo(json):
                 "num_serie" : {"type" : ["string","null"]},
                 "datos_relevantes" : {"type" : ["string","null"]},
 
-                "imagen_equipo" : {
-                    "type": "object",
-                    "properties": {
-                    "name": {"type" : ["string","null"]},
-                    "mimeType": {"type" : ["string","null"]},
-                    "content": {"type" : ["string","null"]}
-                    },
-                    "required" : ["name","mimeType","content"]
-                },
+                "imagen_equipo" : {"type" : ["string","null"]}
+                    
+                
         },
         "required": ["ubicacion","tipo_de_equipo","fabricante","id_primario"],
         }
