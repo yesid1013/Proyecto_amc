@@ -43,16 +43,16 @@ def crear_activo(id_usuario):
         db.session.add(new_code_qr)
         db.session.commit()
 
-        if imagen_equipo["name"] != None and imagen_equipo["content"] != None and imagen_equipo["mimeType"] != None: #Guardar imagen
-            id_folder = "1Y3nYWG7O8OC3D4J9u55I3RokXTbNEeOz" #Id de la carpeta donde se guardara el archivo
-            response = GoogleDriveController.uploadFile(imagen_equipo,id_folder)
-            imagen = response["webContentLink"]
-        else:
-            imagen = None
+        # if imagen_equipo["name"] != None and imagen_equipo["content"] != None and imagen_equipo["mimeType"] != None: #Guardar imagen
+        #     id_folder = "1Y3nYWG7O8OC3D4J9u55I3RokXTbNEeOz" #Id de la carpeta donde se guardara el archivo
+        #     response = GoogleDriveController.uploadFile(imagen_equipo,id_folder)
+        #     imagen = response["webContentLink"]
+        # else:
+        #     imagen = None
 
         archivo_ficha_tecnica = None
        
-        new_activo = Activo(id_activo,new_code_qr.id_qr,id_primario,id_secundario,id_usuario_bytes,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen,id_subcliente_bytes,archivo_ficha_tecnica,publico)
+        new_activo = Activo(id_activo,new_code_qr.id_qr,id_primario,id_secundario,id_usuario_bytes,ubicacion,tipo_de_equipo,fabricante,modelo,num_serie,datos_relevantes,imagen_equipo,id_subcliente_bytes,archivo_ficha_tecnica,publico)
 
         db.session.add(new_activo)
         db.session.commit()
