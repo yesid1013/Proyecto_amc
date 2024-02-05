@@ -8,6 +8,7 @@ env.bak/
 
 ##Credenciales google drive ##
 credentials.json
+serviceAccountKey.json
 
 
 __pycache__
