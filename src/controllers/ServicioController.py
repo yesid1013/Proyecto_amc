@@ -40,13 +40,6 @@ def crear_servicio(id_activo,id_usuario):
 
         informe = None
         
-        if orden_de_servicio["name"] != None and orden_de_servicio["content"] != None and orden_de_servicio["mimeType"] != None: 
-            id_folder = "1vVTG_28NG5VL4gSLRSRJtqzzyptl0Ax-"
-            response = GoogleDriveController.uploadFile(orden_de_servicio,id_folder)
-            orden_de_servicio = response["webViewLink"]
-        else:
-            orden_de_servicio = None
-
         new_servicio = Servicio(id_servicio,id_activo_bytes,fecha,id_usuario_bytes,id_tipo_servicio,descripcion,observaciones,observaciones_usuario,informe,orden_de_servicio)
 
         db.session.add(new_servicio)
