@@ -118,15 +118,7 @@ def validation_servicio(json):
                 "observaciones" : {"type" : ["string","null"]},
                 "observaciones_usuario" : {"type" : ["string","null"]},
 
-                "orden_de_servicio" : {
-                    "type" : "object",
-                    "properties" : {
-                        "name" : {"type" : ["string","null"]},
-                        "mimeType" : {"type" : ["string","null"]},
-                        "content": {"type" : ["string","null"]}
-                    },
-                    "required" : ["name","mimeType","content"]
-                }
+                "orden_de_servicio" : {"type" : ["string","null"]}
             },
             "required" : ["fecha_ejecucion","id_tipo_servicio","descripcion"]
         }
