@@ -249,16 +249,11 @@ def adjuntar_ficha_tecnica(id_activo):
 
         if activo.ficha_tecnica == None:
             ficha_tecnica = request.json["ficha_tecnica"]
-            if ficha_tecnica["name"] != None and ficha_tecnica["content"] != None and ficha_tecnica["mimeType"] != None: #Guardar imagen
-                id_folder = "1cI5I2nlPzm5bIBLqik3onWcDhijD1mHV" #Id de la carpeta donde se guardara el archivo
-                response = GoogleDriveController.uploadFile(ficha_tecnica,id_folder)
-                ficha = response["webViewLink"]
-                activo.ficha_tecnica = ficha
-                db.session.commit()
+            activo.ficha_tecnica = ficha_tecnica
+            db.session.commit()
 
-                return jsonify({"message" : "Ficha tecnica adjuntada correctamente", "url_archivo" : ficha ,"status" : 200})
-            else:
-                jsonify({"message" : "No se pudo adjuntar ficha tecnica"}) , 400
+            return jsonify({"message" : "Ficha tecnica adjuntada correctamente", "url_archivo" : ficha_tecnica ,"status" : 200})
+
         else:
             return jsonify({"message" : "El activo ya tiene ficha tecnica"}) , 400
     
