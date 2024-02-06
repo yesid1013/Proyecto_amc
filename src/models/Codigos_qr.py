@@ -4,18 +4,15 @@ from models import Activo
 class Codigos_qr (db.Model):
     __tablename__ = 'codigos_qr'
     id_qr = db.Column(db.Integer, primary_key=True, nullable=False)
-    google_drive_id = db.Column(db.String(255),nullable=False)
-    web_view_link = db.Column(db.String(255),nullable=False)
-    web_content_link = db.Column(db.String(255),nullable=False)
+    ruta_imagen = db.Column(db.String(255),nullable=False)
+
 
     activo = db.relationship('Activo',uselist=False,
     back_populates="codigos_qr",cascade="all, delete-orphan",single_parent=True)
 
 
-    def __init__ (self,google_drive_id,web_view_link,web_content_link):
-        self.google_drive_id = google_drive_id
-        self.web_view_link = web_view_link
-        self.web_content_link = web_content_link
+    def __init__ (self,ruta_imagen):
+        self.ruta_imagen = ruta_imagen
     
     def getDatos(self):
         return {
