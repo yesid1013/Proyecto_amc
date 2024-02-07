@@ -254,6 +254,8 @@ def adjuntar_informe_servicio(id_servicio):
             informe_servicio = request.json["informe_servicio"]
             servicio.informe = informe_servicio
             db.session.commit()
+            return jsonify({"message" : "Informe adjuntado correctamente", "url_archivo" : informe_servicio ,"status" : 200})
+
         else:
             return jsonify({"message" : "El servicio ya tiene informe"}) , 400
     
