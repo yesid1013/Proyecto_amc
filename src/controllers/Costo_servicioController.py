@@ -18,18 +18,13 @@ def crear_costo_servicio(id_servicio):
         id_costo_servicio = uuid.uuid4().bytes
         id_servicio_bytes = binascii.unhexlify(id_servicio)
         costo = request.json["costo"]
-        documento_cotizacion = request.json["documento_cotizacion"]
+        documento_cotizacion = request.json["documento_cotizacion"] 
 
-        if documento_cotizacion:
-            id_folder = "1A-5He-r8oSQUsHxrKoEvHS1lVedFHe8l"
-            response = GoogleDriveController.uploadFile(documento_cotizacion,id_folder)
-            url_documento_cotizacion = response["webViewLink"]
-
-        new_costo_servicio = Costo_servicio(id_costo_servicio,id_servicio_bytes,costo,url_documento_cotizacion)
+        new_costo_servicio = Costo_servicio(id_costo_servicio,id_servicio_bytes,costo,documento_cotizacion)
         db.session.add(new_costo_servicio)
         db.session.commit()
 
-        return jsonify({"message": "Cotizacion creada correctamente","url_archivo" : url_documento_cotizacion ,"status" : 201}) , 201
+        return jsonify({"message": "Cotizacion creada correctamente","url_archivo" : documento_cotizacion ,"status" : 201}) , 201
     
     except Exception as e:
         return jsonify({"message" : "Ha ocurrido un error inesperado :", "error" : str(e)})
