@@ -6,7 +6,7 @@ class Costo_servicio(db.Model):
     id_costo_servicio = db.Column(db.BINARY(16), primary_key=True)
     id_servicio = db.Column(db.BINARY(16), db.ForeignKey('servicio.id_servicio'), nullable=False)
     costo = db.Column(db.Integer, nullable=False)
-    documento_cotizacion = db.Column(db.String(255))
+    documento_cotizacion = db.Column(db.String(255), nullable=False)
     estado = db.Column(db.SmallInteger,nullable = False, default = 1)
 
     servicio = db.relationship('Servicio', back_populates="costo_servicio", uselist=False, single_parent=True)
