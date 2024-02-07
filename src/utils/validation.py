@@ -171,7 +171,7 @@ def validation_costo_servicio(json):
                     "required" : ["name","mimeType","content"]
                 }   
             },
-            "required" : ["costo"]
+            "required" : ["costo", "documento_cotizacion"]
         }
 
         validate(json,schema=schema)
