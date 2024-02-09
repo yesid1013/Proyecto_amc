@@ -148,7 +148,6 @@ def editar_activo(id_activo):
             num_serie = saneamiento_de_datos(request.json["num_serie"])
             datos_relevantes = saneamiento_de_datos(request.json["datos_relevantes"])
 
-            imagen_equipo = request.json["imagen_equipo"]
             activo.id_primario = bleach.clean(request.json["id_primario"],tags=bleach.sanitizer.ALLOWED_TAGS)
             activo.id_secundario = bleach.clean(request.json["id_secundario"],tags=bleach.sanitizer.ALLOWED_TAGS)
             activo.ubicacion = bleach.clean(request.json["ubicacion"],tags=bleach.sanitizer.ALLOWED_TAGS)
@@ -165,11 +164,6 @@ def editar_activo(id_activo):
             activo.num_serie = num_serie
             activo.datos_relevantes = datos_relevantes
 
-            if imagen_equipo["name"] != None and imagen_equipo["content"] != None and imagen_equipo["mimeType"] != None: #Guardar imagen
-                id_folder = "1Y3nYWG7O8OC3D4J9u55I3RokXTbNEeOz" #Id de la carpeta donde se guardara el archivo
-                response = GoogleDriveController.uploadFile(imagen_equipo,id_folder)
-                imagen = response["webContentLink"]
-                activo.imagen_equipo = imagen
             
             db.session.commit()
             return jsonify({"message" : "Activo actualizado exitosamente", "status" : 200}) , 200
