@@ -55,7 +55,8 @@ def validar_token_acceso_google(token_google):
         info_usuario = id_token.verify_oauth2_token(
             token_google,
             requests.Request(),
-            audience= config('ID_CLIENT')
+            audience= config('ID_CLIENT'),
+            clock_skew_in_seconds= 10
         )
 
         # Si el token es válido, devolver la información del usuario
@@ -64,7 +65,7 @@ def validar_token_acceso_google(token_google):
 
     except ValueError as e:
         # El token no es válido
-        raise ValueError("Token no válido")
+        raise ValueError("Token no válido "+ str(e))
 
 def crear_usuario_de_google(info_usuario):
     try:
