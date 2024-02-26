@@ -58,7 +58,7 @@ def serivicios_de_un_activo_con_costo(id_activo):
         lista = []
         id_activo_bytes = binascii.unhexlify(id_activo)
 
-        # servicios = db.session.query(Servicio.id_servicio,Servicio.numero_servicio, Servicio.id_activo, Servicio.fecha_ejecucion,Tipo_servicio.tipo,Usuario.nombre,Servicio.descripcion,Servicio.observaciones,Servicio.informe, Costo_servicio.documento_cotizacion).join(Tipo_servicio, Servicio.id_tipo_servicio == Tipo_servicio.id_tipo_servicio).join(Costo_servicio, Servicio.id_servicio == Costo_servicio.id_servicio).join(Usuario,Servicio.id_usuario == Usuario.id_usuario).filter(Servicio.id_activo == id_activo_bytes, Servicio.estado == 1).all()
+
 
         costo_servicio_alias = aliased(Costo_servicio)
 
